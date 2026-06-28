@@ -18,3 +18,11 @@ todo / in-progress / done / tested / blocked
   - notes: Added "Code Layout" section documenting lib/ responsibilities and how to run tests.
 - [x] Commit & push to GitHub — status: done
   - notes: Committed (8c64981) and pushed to origin/main. Working tree clean, branch up to date.
+- [x] Re-verify stability (3 follow-up sessions) — status: done
+  - notes: Three subsequent sessions re-ran git status/log, node -c syntax checks, and the full 29-test suite — all clean/passing each time, no drift, no leftover artifacts (one stray gitignored README.md.bak was found and deleted once).
+- [x] Add formal JSON-RPC schema validation + error codes (-32602/-32603) — status: tested
+  - notes: (1) `ToolError` class with `.code` field added to lib/executeTool.js; (2) `validateArgs(name, args)` checks required fields from TOOLS_ALL inputSchema before dispatch, throws -32602 on missing/empty field, -32601 for unknown tool; (3) policy refusals (read-only, exec disabled) throw -32001; (4) `getErrorCode(err)` helper returns err.code or -32603 fallback; (5) server-http.js tools/call catch block now includes both `error: { code, message }` (proper JSON-RPC error envelope) and the MCP `result.content isError` envelope for backward compat; (6) test suite extended with 13 new tests in block [6] covering all code paths — 42/42 passing.
+- [ ] Add utility tools: zip/archive directory, file checksum (MD5/SHA256), JSON/YAML parse-and-query — status: todo
+  - notes: Common developer-agent needs not yet covered. zip via Node.js built-in zlib (deflate), checksum via built-in crypto, JSON via JSON.parse, YAML parser (zero-dep hand-rolled or skip YAML for now). Each needs inputSchema + validateArgs coverage + tests.
+- [ ] Add git metadata tools: current branch, last N commits, file blame summary — status: todo
+  - notes: Useful for agents navigating repos. Implemented via `run_command` subprocess calls to `git` (requires git in PATH). Output structured as JSON. gated behind MCP_ALLOW_EXEC=true like other exec tools (or expose as read-only since they're non-destructive).

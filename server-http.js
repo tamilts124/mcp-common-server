@@ -50,7 +50,7 @@ const crypto = require("crypto");
 
 const { PORT, AUTH_TOKEN, READ_ONLY, ALLOW_EXEC, CMD_TIMEOUT, IGNORE_PATTERNS } = require("./lib/config");
 const { ROOTS, buildRoots } = require("./lib/roots");
-const { TOOLS, executeTool } = require("./lib/executeTool");
+const { TOOLS, executeTool, getErrorCode } = require("./lib/executeTool");
 
 buildRoots();
 
@@ -171,11 +171,20 @@ const server = http.createServer((req, res) => {
             content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
           }});
         } catch (e) {
-          console.error(`[TOOL ERROR] ${name}: ${e.message}`);
-          return respond({ jsonrpc: "2.0", id, result: {
-            content: [{ type: "text", text: `Error: ${e.message}` }],
-            isError: true,
-          }});
+          const code = getErrorCode(e);
+          console.error(`[TOOL ERROR] ${name} (code ${code}): ${e.message}`);
+          return respond({ jsonrpc: "2.0", id,
+            // Surface a proper JSON-RPC error for -32601/-32602 (method not
+            // found / invalid params) so clients can distinguish those from
+            // internal errors (-32603) and policy refusals (-32001).
+            error: { code, message: e.message },
+            // Also keep the MCP content envelope so older/tolerant clients
+            // that read result.content still get a human-readable error.
+            result: {
+              content: [{ type: "text", text: `Error (${code}): ${e.message}` }],
+              isError: true,
+            },
+          });
         }
       }
 
