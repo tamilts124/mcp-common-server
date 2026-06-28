@@ -59,8 +59,8 @@ todo / in-progress / done / tested / blocked
 - [x] Add `append_file` tool — append content to an existing file without rewriting it — status: tested
   - notes: See truncate_file notes above — both tools implemented together in the same session.
 
-- [ ] Add `env_info` tool (read-only system info) — status: todo
-  - notes: Returns structured info about the server environment: Node.js version, platform, architecture, OS hostname, uptime, configured roots, READ_ONLY/ALLOW_EXEC flags, and CMD_TIMEOUT. Useful for agents to orient themselves about the host without running shell commands. Always available, no exec needed, no security risk (no secrets exposed — env vars are not returned).
+- [x] Add `env_info` tool (read-only system info) — status: tested
+  - notes: Implemented this session. `envInfo()` added to lib/utilOps.js — calls `os.hostname()`, `process.version/platform/arch/uptime()`, reads ROOTS keys (aliases only, no raw paths), and returns READ_ONLY/ALLOW_EXEC/CMD_TIMEOUT config flags. No env vars or secrets exposed. Schema added (no required fields), dispatch case added, `env_info` added to execute_pipeline enum. One subtle test fix: the initial "secret leakage" test checked `MCP_READ_ONLY`'s value (`"false"`) against the JSON output, which legitimately contained the boolean `false` — fixed by excluding short/trivial env var values from the check. 26 tests in test/sections/11-env-info.js across Normal/Medium/High/Critical/Extreme. Full suite: **262 passed, 0 failed** (236 prior + 26 new). README updated.
 
 - [ ] Extend git tools: add `git_diff` tool — status: todo
   - notes: Returns the diff of working tree vs HEAD (or between two refs) as a structured result (diff text + changed file list). Read-only, no MCP_ALLOW_EXEC needed. Uses `git diff` with shell-safety sanitization same as existing git tools. Useful for agents reviewing pending changes.

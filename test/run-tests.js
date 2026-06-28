@@ -20,6 +20,7 @@
  *   08-stdio-protocol.js      [12] stdio transport message framing/dispatch
  *   09-diff-files.js          [13] diff_files tool (pure-JS Myers diff)
  *   10-truncate-append.js     [14] truncate_file and append_file tools
+ *   11-env-info.js             [15] env_info tool (read-only server environment snapshot)
  *
  * Run with: node test/run-tests.js
  */
@@ -35,6 +36,7 @@ require("./sections/07-block-scalars");
 require("./sections/08-stdio-protocol");
 require("./sections/09-diff-files");
 require("./sections/10-truncate-append");
+require("./sections/11-env-info");
 
 console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
 
