@@ -1,13 +1,16 @@
 {
   "name": "mcp-common-server",
-  "version": "3.0.0",
-  "description": "Universal MCP server — multi-root, HTTP+SSE, exec/pipeline support, zero dependencies",
+  "version": "3.1.0",
+  "description": "Universal MCP server — multi-root, HTTP+SSE + stdio transport, exec/pipeline support, zero dependencies",
   "main": "server-http.js",
   "bin": {
-    "mcp-file-server": "./server-http.js"
+    "mcp-file-server": "./server-http.js",
+    "mcp-file-server-stdio": "./server-stdio.js"
   },
   "scripts": {
-    "start": "node server-http.js"
+    "start": "node server-http.js",
+    "start:stdio": "node server-stdio.js",
+    "test": "node test/run-tests.js"
   },
   "engines": {
     "node": ">=18"

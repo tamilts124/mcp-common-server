@@ -59,6 +59,45 @@ To let the browser client at `claude.ai` reach your local server:
 
 ---
 
+## ⚡ Using the stdio Transport
+
+The stdio transport is ideal for **local MCP clients** that launch the server as a child process and communicate over stdin/stdout — including **Claude Desktop**, **Claude Code**, and any `"command" + "args"` style MCP launcher.
+
+### Start the stdio Server
+```bash
+# Single root, no exec (read-only exploration)
+MCP_ROOT_DIR=D:/myproject node server-stdio.js
+
+# Multi-root, exec enabled
+MCP_ALLOW_EXEC=true MCP_ROOTS=D:/proj1,D:/proj2 node server-stdio.js
+
+# Or rely on your .env file
+node server-stdio.js
+```
+
+### Claude Desktop / Code config (`claude_desktop_config.json`)
+```json
+{
+  "mcpServers": {
+    "my-workspace": {
+      "command": "node",
+      "args": ["D:/ClaudeDir/mcp-common-server/server-stdio.js"],
+      "env": {
+        "MCP_ROOTS": "D:/proj1,D:/proj2",
+        "MCP_ALLOW_EXEC": "true"
+      }
+    }
+  }
+}
+```
+
+The stdio transport **never** writes anything non-JSON-RPC to stdout (logs go to stderr only), so it is safe to pipe directly into any MCP client. It supports the full tool set — all tools available on the HTTP transport are equally available here, dispatched through the same `lib/executeTool.js` logic.
+
+> **Note:** `PORT` and `MCP_AUTH_TOKEN` are not used by the stdio transport — authentication is handled by OS-level process ownership (only processes that can spawn `server-stdio.js` get access).
+
+---
+
+
 ## ⚙️ Environment Variables
 
 Configure the server behavior by setting these variables:
@@ -136,6 +175,7 @@ The server logic is split into small, single-purpose modules under `lib/`:
 | File | Responsibility |
 |---|---|
 | `server-http.js` | HTTP + SSE transport, JSON-RPC routing (entry point) |
+| `server-stdio.js` | stdio transport — newline-delimited JSON-RPC over stdin/stdout (for Claude Desktop/Code) |
 | `lib/config.js` | `.env` loading and environment variable config |
 | `lib/roots.js` | Multi-root setup, path jailing/safety, ignore-pattern checks |
 | `lib/fileOps.js` | File/directory read, write, search, glob-find, replace helpers |
@@ -146,6 +186,7 @@ The server logic is split into small, single-purpose modules under `lib/`:
 | `lib/toolsSchema.js` | JSON-RPC tool schema declarations (`TOOLS_ALL`) |
 | `lib/errors.js` | Shared `ToolError` class + `getErrorCode` helper (no circular deps) |
 | `lib/executeTool.js` | Tool dispatch switch + `execute_pipeline` |
+| `lib/stdioProtocol.js` | Pure (no I/O) stdio message-framing/dispatch logic shared by `server-stdio.js` |
 
 Isolated functional tests (no live server/inspector) live in `test/run-tests.js`, split into per-feature files under `test/sections/` sharing `test/test-harness.js` — run with `node test/run-tests.js`.
 
