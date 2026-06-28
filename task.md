@@ -16,5 +16,5 @@ todo / in-progress / done / tested / blocked
   - notes: .gitignore already covered *.bak; deleted stray README.md.bak, server-http.js.bak, test/run-tests.js.bak that accumulated from write_file's auto-backup behavior during this session. Test suite cleans its own temp sandbox dir on exit.
 - [x] Update README for new module layout — status: done
   - notes: Added "Code Layout" section documenting lib/ responsibilities and how to run tests.
-- [ ] Commit & push to GitHub — status: in-progress
-  - notes: about to run git add/commit/push.
+- [x] Commit & push to GitHub — status: done
+  - notes: Committed (8c64981) and pushed to origin/main. Working tree clean, branch up to date.
