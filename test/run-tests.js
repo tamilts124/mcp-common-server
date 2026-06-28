@@ -16,6 +16,7 @@
  *   04-git-tools.js           [8] git_status, git_log, git_blame
  *   05-yaml-query.js          [9] query_data (JSON/YAML), lib/yamlOps.js parser
  *   06-audit-fixes.js         [10] processOps/fileOps/roots audit fixes
+ *   07-block-scalars.js       [11] YAML block scalars (|/>) in lib/yamlOps.js
  *
  * Run with: node test/run-tests.js
  */
@@ -27,6 +28,7 @@ require("./sections/03-utility-tools");
 require("./sections/04-git-tools");
 require("./sections/05-yaml-query");
 require("./sections/06-audit-fixes");
+require("./sections/07-block-scalars");
 
 console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
 
