@@ -116,6 +116,24 @@ Each folder mapped in `MCP_ROOTS` is assigned a lowercased **alias** (derived fr
 
 ---
 
+## 🧩 Code Layout
+
+The server logic is split into small, single-purpose modules under `lib/`:
+
+| File | Responsibility |
+|---|---|
+| `server-http.js` | HTTP + SSE transport, JSON-RPC routing (entry point) |
+| `lib/config.js` | `.env` loading and environment variable config |
+| `lib/roots.js` | Multi-root setup, path jailing/safety, ignore-pattern checks |
+| `lib/fileOps.js` | File/directory read, write, search, glob-find, replace helpers |
+| `lib/processOps.js` | `run_command` and background process management |
+| `lib/toolsSchema.js` | JSON-RPC tool schema declarations (`TOOLS_ALL`) |
+| `lib/executeTool.js` | Tool dispatch switch + `execute_pipeline` |
+
+Isolated functional tests (no live server/inspector) live in `test/run-tests.js` — run with `node test/run-tests.js`.
+
+---
+
 ## 🛡️ License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
