@@ -96,6 +96,11 @@ Each folder mapped in `MCP_ROOTS` is assigned a lowercased **alias** (derived fr
 - **`search_files`**: Run fast text search patterns (similar to grep/ripgrep) across files.
 - **`find_files`**: Glob-based file finder.
 
+### 1b. Utility Tools (Always Available)
+- **`file_checksum`**: Compute MD5, SHA-1, SHA-256 (default), or SHA-512 digest of any file. Useful for integrity checks, change detection, and deduplication.
+- **`zip_directory`**: Archive a directory tree to a `.zip` file using DEFLATE compression. Pure Node.js — zero dependencies.
+- **`query_json`**: Parse a JSON file and extract a value by dot-notation path (e.g. `dependencies.lodash`, `users.0.name`). Returns the value and its type.
+
 ### 2. Write Tools (Disabled when `MCP_READ_ONLY=true`)
 - **`write_file`**: Write/overwrite files (supports partial line range replacements).
 - **`write_files`**: Batch-write content updates across multiple files.
@@ -127,6 +132,7 @@ The server logic is split into small, single-purpose modules under `lib/`:
 | `lib/roots.js` | Multi-root setup, path jailing/safety, ignore-pattern checks |
 | `lib/fileOps.js` | File/directory read, write, search, glob-find, replace helpers |
 | `lib/processOps.js` | `run_command` and background process management |
+| `lib/utilOps.js` | Utility helpers: `file_checksum`, `zip_directory`, `query_json` |
 | `lib/toolsSchema.js` | JSON-RPC tool schema declarations (`TOOLS_ALL`) |
 | `lib/executeTool.js` | Tool dispatch switch + `execute_pipeline` |
 
