@@ -18,6 +18,7 @@
  *   06-audit-fixes.js         [10] processOps/fileOps/roots audit fixes
  *   07-block-scalars.js       [11] YAML block scalars (|/>) in lib/yamlOps.js
  *   08-stdio-protocol.js      [12] stdio transport message framing/dispatch
+ *   09-diff-files.js          [13] diff_files tool (pure-JS Myers diff)
  *
  * Run with: node test/run-tests.js
  */
@@ -31,6 +32,7 @@ require("./sections/05-yaml-query");
 require("./sections/06-audit-fixes");
 require("./sections/07-block-scalars");
 require("./sections/08-stdio-protocol");
+require("./sections/09-diff-files");
 
 console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
 

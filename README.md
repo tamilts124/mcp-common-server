@@ -140,6 +140,7 @@ Each folder mapped in `MCP_ROOTS` is assigned a lowercased **alias** (derived fr
 - **`zip_directory`**: Archive a directory tree to a `.zip` file using DEFLATE compression. Pure Node.js — zero dependencies.
 - **`query_json`**: Parse a JSON file and extract a value by dot-notation path (e.g. `dependencies.lodash`, `users.0.name`). Returns the value and its type.
 - **`query_data`**: Parse a JSON *or* YAML file and extract a value by dot-notation path, with format auto-detected from the file extension (`.json` → JSON, `.yaml`/`.yml` → YAML) or forced via an optional `format` argument. YAML parsing uses a minimal, zero-dependency parser (`lib/yamlOps.js`) covering block/flow mappings and sequences, scalars (strings/numbers/booleans/null), comments, and block scalars (`|` literal / `>` folded, with `-`/`+` chomping indicators and explicit indentation digits) — enough for typical config files (package-manifest-style, docker-compose-style, simple CI configs, multi-line scripts/certs). Not supported: anchors/aliases (`&`/`*`), multi-document streams (`---`/`...`), and YAML tags (`!!str` etc.) — these throw a descriptive error rather than silently misparsing. `query_json` remains available as a JSON-only, backward-compatible entry point.
+- **`diff_files`**: Compute a unified diff between two text files inside the jail. Uses a pure-JS LCS-based Myers diff (zero dependencies). Returns the diff as a unified-diff string plus a structured summary (`hunks`, `additions`, `deletions`, `identical`). The `context` parameter controls surrounding context lines (default: 3). Always available — does not require `MCP_ALLOW_EXEC`.
 
 ### 1c. Git Metadata Tools (Always Available, Read-Only)
 - **`git_status`**: Structured branch/tracking summary — current branch, upstream, ahead/behind counts, and staged/unstaged/untracked/conflicted file counts and entries.
@@ -180,7 +181,7 @@ The server logic is split into small, single-purpose modules under `lib/`:
 | `lib/roots.js` | Multi-root setup, path jailing/safety, ignore-pattern checks |
 | `lib/fileOps.js` | File/directory read, write, search, glob-find, replace helpers |
 | `lib/processOps.js` | `run_command` and background process management |
-| `lib/utilOps.js` | Utility helpers: `file_checksum`, `zip_directory`, `query_json`, `query_data` |
+| `lib/utilOps.js` | Utility helpers: `file_checksum`, `zip_directory`, `query_json`, `query_data`, `diff_files` |
 | `lib/yamlOps.js` | Minimal zero-dependency YAML parser used by `query_data` |
 | `lib/gitOps.js` | Read-only git metadata helpers: `git_status`, `git_log`, `git_blame` |
 | `lib/toolsSchema.js` | JSON-RPC tool schema declarations (`TOOLS_ALL`) |
