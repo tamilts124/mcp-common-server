@@ -14,6 +14,7 @@
  *   02-jsonrpc-validation.js  [6] JSON-RPC schema validation / ToolError codes
  *   03-utility-tools.js       [7] file_checksum, zip_directory, query_json
  *   04-git-tools.js           [8] git_status, git_log, git_blame
+ *   05-yaml-query.js          [9] query_data (JSON/YAML), lib/yamlOps.js parser
  *
  * Run with: node test/run-tests.js
  */
@@ -23,6 +24,7 @@ require("./sections/01-core-ops");
 require("./sections/02-jsonrpc-validation");
 require("./sections/03-utility-tools");
 require("./sections/04-git-tools");
+require("./sections/05-yaml-query");
 
 console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
 

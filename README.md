@@ -100,6 +100,7 @@ Each folder mapped in `MCP_ROOTS` is assigned a lowercased **alias** (derived fr
 - **`file_checksum`**: Compute MD5, SHA-1, SHA-256 (default), or SHA-512 digest of any file. Useful for integrity checks, change detection, and deduplication.
 - **`zip_directory`**: Archive a directory tree to a `.zip` file using DEFLATE compression. Pure Node.js — zero dependencies.
 - **`query_json`**: Parse a JSON file and extract a value by dot-notation path (e.g. `dependencies.lodash`, `users.0.name`). Returns the value and its type.
+- **`query_data`**: Parse a JSON *or* YAML file and extract a value by dot-notation path, with format auto-detected from the file extension (`.json` → JSON, `.yaml`/`.yml` → YAML) or forced via an optional `format` argument. YAML parsing uses a minimal, zero-dependency parser (`lib/yamlOps.js`) covering block/flow mappings and sequences, scalars (strings/numbers/booleans/null), and comments — enough for typical config files (package-manifest-style, docker-compose-style, simple CI configs). Not supported: anchors/aliases (`&`/`*`), multi-document streams (`---`/`...`), block scalars (`|`/`>`), and YAML tags (`!!str` etc.) — these throw a descriptive error rather than silently misparsing. `query_json` remains available as a JSON-only, backward-compatible entry point.
 
 ### 1c. Git Metadata Tools (Always Available, Read-Only)
 - **`git_status`**: Structured branch/tracking summary — current branch, upstream, ahead/behind counts, and staged/unstaged/untracked/conflicted file counts and entries.
@@ -139,12 +140,13 @@ The server logic is split into small, single-purpose modules under `lib/`:
 | `lib/roots.js` | Multi-root setup, path jailing/safety, ignore-pattern checks |
 | `lib/fileOps.js` | File/directory read, write, search, glob-find, replace helpers |
 | `lib/processOps.js` | `run_command` and background process management |
-| `lib/utilOps.js` | Utility helpers: `file_checksum`, `zip_directory`, `query_json` |
+| `lib/utilOps.js` | Utility helpers: `file_checksum`, `zip_directory`, `query_json`, `query_data` |
+| `lib/yamlOps.js` | Minimal zero-dependency YAML parser used by `query_data` |
 | `lib/gitOps.js` | Read-only git metadata helpers: `git_status`, `git_log`, `git_blame` |
 | `lib/toolsSchema.js` | JSON-RPC tool schema declarations (`TOOLS_ALL`) |
 | `lib/executeTool.js` | Tool dispatch switch + `execute_pipeline` |
 
-Isolated functional tests (no live server/inspector) live in `test/run-tests.js` — run with `node test/run-tests.js`.
+Isolated functional tests (no live server/inspector) live in `test/run-tests.js`, split into per-feature files under `test/sections/` sharing `test/test-harness.js` — run with `node test/run-tests.js`.
 
 ---
 
