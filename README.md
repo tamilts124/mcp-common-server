@@ -144,6 +144,7 @@ The server logic is split into small, single-purpose modules under `lib/`:
 | `lib/yamlOps.js` | Minimal zero-dependency YAML parser used by `query_data` |
 | `lib/gitOps.js` | Read-only git metadata helpers: `git_status`, `git_log`, `git_blame` |
 | `lib/toolsSchema.js` | JSON-RPC tool schema declarations (`TOOLS_ALL`) |
+| `lib/errors.js` | Shared `ToolError` class + `getErrorCode` helper (no circular deps) |
 | `lib/executeTool.js` | Tool dispatch switch + `execute_pipeline` |
 
 Isolated functional tests (no live server/inspector) live in `test/run-tests.js`, split into per-feature files under `test/sections/` sharing `test/test-harness.js` — run with `node test/run-tests.js`.

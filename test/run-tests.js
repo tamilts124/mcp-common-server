@@ -15,6 +15,7 @@
  *   03-utility-tools.js       [7] file_checksum, zip_directory, query_json
  *   04-git-tools.js           [8] git_status, git_log, git_blame
  *   05-yaml-query.js          [9] query_data (JSON/YAML), lib/yamlOps.js parser
+ *   06-audit-fixes.js         [10] processOps/fileOps/roots audit fixes
  *
  * Run with: node test/run-tests.js
  */
@@ -25,6 +26,7 @@ require("./sections/02-jsonrpc-validation");
 require("./sections/03-utility-tools");
 require("./sections/04-git-tools");
 require("./sections/05-yaml-query");
+require("./sections/06-audit-fixes");
 
 console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
 
