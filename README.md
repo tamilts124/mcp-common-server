@@ -101,6 +101,13 @@ Each folder mapped in `MCP_ROOTS` is assigned a lowercased **alias** (derived fr
 - **`zip_directory`**: Archive a directory tree to a `.zip` file using DEFLATE compression. Pure Node.js — zero dependencies.
 - **`query_json`**: Parse a JSON file and extract a value by dot-notation path (e.g. `dependencies.lodash`, `users.0.name`). Returns the value and its type.
 
+### 1c. Git Metadata Tools (Always Available, Read-Only)
+- **`git_status`**: Structured branch/tracking summary — current branch, upstream, ahead/behind counts, and staged/unstaged/untracked/conflicted file counts and entries.
+- **`git_log`**: Last N commits as structured JSON (hash, short hash, author, email, ISO date, subject, body). Supports filtering by file path and reading from a specific branch/ref.
+- **`git_blame`**: Per-line authorship for a file — line number, content, commit hash, author, date, and commit summary. Supports an optional `from_line`/`to_line` range.
+
+These three never require `MCP_ALLOW_EXEC` (they only read repo metadata via `git`, never modify the working tree) and are jailed through the same root/path safety as every other tool. Arguments passed through to `git` are validated against shell metacharacters before use.
+
 ### 2. Write Tools (Disabled when `MCP_READ_ONLY=true`)
 - **`write_file`**: Write/overwrite files (supports partial line range replacements).
 - **`write_files`**: Batch-write content updates across multiple files.
@@ -133,6 +140,7 @@ The server logic is split into small, single-purpose modules under `lib/`:
 | `lib/fileOps.js` | File/directory read, write, search, glob-find, replace helpers |
 | `lib/processOps.js` | `run_command` and background process management |
 | `lib/utilOps.js` | Utility helpers: `file_checksum`, `zip_directory`, `query_json` |
+| `lib/gitOps.js` | Read-only git metadata helpers: `git_status`, `git_log`, `git_blame` |
 | `lib/toolsSchema.js` | JSON-RPC tool schema declarations (`TOOLS_ALL`) |
 | `lib/executeTool.js` | Tool dispatch switch + `execute_pipeline` |
 
