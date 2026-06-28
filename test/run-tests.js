@@ -19,6 +19,7 @@
  *   07-block-scalars.js       [11] YAML block scalars (|/>) in lib/yamlOps.js
  *   08-stdio-protocol.js      [12] stdio transport message framing/dispatch
  *   09-diff-files.js          [13] diff_files tool (pure-JS Myers diff)
+ *   10-truncate-append.js     [14] truncate_file and append_file tools
  *
  * Run with: node test/run-tests.js
  */
@@ -33,6 +34,7 @@ require("./sections/06-audit-fixes");
 require("./sections/07-block-scalars");
 require("./sections/08-stdio-protocol");
 require("./sections/09-diff-files");
+require("./sections/10-truncate-append");
 
 console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
 

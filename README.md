@@ -158,6 +158,8 @@ These three never require `MCP_ALLOW_EXEC` (they only read repo metadata via `gi
 - **`move_file` / `copy_file`**: Relocate or duplicate files inside the jail.
 - **`create_directory` / `delete_directory`**: Create and remove folders recursively.
 - **`replace_in_file`**: Find-and-replace strings across files or folders.
+- **`truncate_file`**: Shrink a file to its first N lines (`lines` param) or first N bytes (`bytes` param). Exactly one must be supplied. If the file is already shorter than the limit it is left untouched (`truncated: false`).
+- **`append_file`**: Append text to the end of a file. Creates the file (and any missing parent directories) if it does not exist.
 
 ### 3. Execution Tools (Enabled when `MCP_ALLOW_EXEC=true`)
 - **`run_command`**: Runs a shell command synchronously and returns `exitCode`, `stdout`, and `stderr`.
@@ -179,7 +181,7 @@ The server logic is split into small, single-purpose modules under `lib/`:
 | `server-stdio.js` | stdio transport — newline-delimited JSON-RPC over stdin/stdout (for Claude Desktop/Code) |
 | `lib/config.js` | `.env` loading and environment variable config |
 | `lib/roots.js` | Multi-root setup, path jailing/safety, ignore-pattern checks |
-| `lib/fileOps.js` | File/directory read, write, search, glob-find, replace helpers |
+| `lib/fileOps.js` | File/directory read, write, search, glob-find, replace, truncate, append helpers |
 | `lib/processOps.js` | `run_command` and background process management |
 | `lib/utilOps.js` | Utility helpers: `file_checksum`, `zip_directory`, `query_json`, `query_data`, `diff_files` |
 | `lib/yamlOps.js` | Minimal zero-dependency YAML parser used by `query_data` |

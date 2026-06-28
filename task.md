@@ -53,11 +53,11 @@ todo / in-progress / done / tested / blocked
 - [x] Add `diff_files` tool — compute unified diff between two files inside the jail — status: tested
   - notes: Implemented this session (previous session was cut off mid-commit). lib/utilOps.js gained `diffFiles` (pure-JS LCS/Myers diff, zero deps) and `computeEdits` helpers. Schema + dispatch added. Two bugs found and fixed vs previous session's uncommitted code: (1) missing `gitOps` import in executeTool.js (deleted by accident in the previous diff), which caused all git_* tools to throw "undefined is not iterable" at runtime; (2) trailing empty-element from `split("\n")` on newline-terminated files caused wrong additions/deletions counts and spurious context lines with context=0 — fixed by stripping the trailing `""` after split. 22 tests in test/sections/09-diff-files.js (Normal/Medium/High/Critical/Extreme). Full suite: **203 passed, 0 failed** (181 prior + 22 new).
 
-- [ ] Add `truncate_file` tool — shrink a file to the first N lines or N bytes — status: todo
-  - notes: Useful when agents need to trim output files or reset append-only logs. Write-gated (MCP_READ_ONLY blocks it). Schema: `{ path, lines?, bytes? }`. Tests for line mode, byte mode, truncate-to-zero, path traversal, missing path.
+- [x] Add `truncate_file` tool — shrink a file to the first N lines or N bytes — status: tested
+  - notes: Implemented this session (previous session left functions in fileOps.js but missed dispatch cases in executeTool.js, WRITE_TOOLS set in toolsSchema.js, and pipeline enum entries). Fixed all three gaps. One real bug found: `append_file` had `content` in its JSON schema `required` array, causing `validateArgs` to reject `content: ""` (a valid empty-string append). Fixed by removing `content` from required (making it optional with `?? ""` default in the dispatch). 33 tests in test/sections/10-truncate-append.js across Normal/Medium/High/Critical/Extreme. Full suite: **236 passed, 0 failed** (203 prior + 33 new).
 
-- [ ] Add `append_file` tool — append content to an existing file without rewriting it — status: todo
-  - notes: Complements write_file (which replaces). Useful for logging, accumulating results. Write-gated. Schema: `{ path, content }`. Tests: append to existing, append creates if not exists, path traversal blocked.
+- [x] Add `append_file` tool — append content to an existing file without rewriting it — status: tested
+  - notes: See truncate_file notes above — both tools implemented together in the same session.
 
 - [ ] Add `env_info` tool (read-only system info) — status: todo
   - notes: Returns structured info about the server environment: Node.js version, platform, architecture, OS hostname, uptime, configured roots, READ_ONLY/ALLOW_EXEC flags, and CMD_TIMEOUT. Useful for agents to orient themselves about the host without running shell commands. Always available, no exec needed, no security risk (no secrets exposed — env vars are not returned).
