@@ -20,8 +20,9 @@
  *   08-stdio-protocol.js      [12] stdio transport message framing/dispatch
  *   09-diff-files.js          [13] diff_files tool (pure-JS Myers diff)
  *   10-truncate-append.js     [14] truncate_file and append_file tools
- *   11-env-info.js             [15] env_info tool (read-only server environment snapshot)
- *   12-git-diff.js             [16] git_diff tool (unified diff, staged/unstaged/commit-to-commit)
+ *   11-env-info.js            [15] env_info tool (read-only server environment snapshot)
+ *   12-git-diff.js            [16] git_diff tool (unified diff, staged/unstaged/commit-to-commit)
+ *   13-read-archive.js        [17] read_archive tool (ZIP manifest inspection)
  *
  * Run with: node test/run-tests.js
  */
@@ -39,6 +40,7 @@ require("./sections/09-diff-files");
 require("./sections/10-truncate-append");
 require("./sections/11-env-info");
 require("./sections/12-git-diff");
+require("./sections/13-read-archive");
 
 console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
 

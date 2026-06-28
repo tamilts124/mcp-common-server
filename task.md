@@ -70,6 +70,11 @@ todo / in-progress / done / tested / blocked
 
 - [ ] Proactive: add `find_duplicates` tool — status: todo
   - notes: Scan a directory and group files by SHA-256 hash, reporting sets of duplicate files. Builds on file_checksum internals. Useful for disk-space audits and deduplication.
+- [x] Proactive: add `read_archive` tool — status: tested
+  - notes: Implemented (previous session committed archiveOps.js + schema/dispatch but session cut off before final commit + task update). lib/archiveOps.js (166 lines) — pure Node.js ZIP Central Directory reader (no npm deps): scans EOCD record, walks CDFH headers, decodes DOS timestamps to ISO 8601, resolves compression method names, returns structured manifest with fileCount/totalUncompressedBytes/totalCompressedBytes/entries. Returns { path, fileCount, totalUncompressedBytes, totalCompressedBytes, entries[] } where each entry has { name, isDirectory, size, compressedSize, compressionMethod, crc32, lastModified }. Schema already in toolsSchema.js, dispatch already in executeTool.js, `read_archive` already in execute_pipeline enum. test/sections/13-read-archive.js — 31 tests across Normal/Medium/High/Critical/Extreme including synthetic hand-crafted ZIP (directory entry with isDirectory=true), 200-entry ZIP, 100KB large-file compressed-size check, concurrent reads, JSON-serializability, path-traversal/injection blocking, EOCD-not-found errors, null-byte path rejection. Full suite: **320 passed, 0 failed** (289 prior + 31 new). README entry for read_archive already present in toolsSchema. Cleaned 7 stray .bak files.
 
-- [ ] Proactive: add `read_archive` tool — status: todo
-  - notes: List the contents of a ZIP file (path, size, compressed size, CRC) without extracting it. Complements zip_directory. Pure Node.js, zero dependencies (reads ZIP central directory directly).
+- [ ] Proactive: add `git_stash_list` tool — status: todo
+  - notes: List git stash entries in the repo (stash@{0}, stash@{1}, etc.) with message, author, and date. Read-only. Useful for agents that need to inspect saved work-in-progress without calling run_command.
+
+- [ ] Proactive: add `find_duplicates` tool — status: todo
+  - notes: Scan a directory and group files by SHA-256 hash, reporting sets of duplicate files. Builds on file_checksum internals. Useful for disk-space audits and deduplication.
