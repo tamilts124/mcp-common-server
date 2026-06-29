@@ -33,6 +33,7 @@
  *   21-json-patch.js          [25-A/B] json_patch tool Normal+Medium (RFC 6902)
  *   22-json-patch-hce.js      [25-C/D/E] json_patch tool High+Critical+Extreme
  *   23-read-line-range.js     [26] read_file/read_files structured line-range output
+ *   24-apply-patch.js         [27] apply_patch tool (unified diff applier)
  *
  * Run with: node test/run-tests.js
  */
@@ -63,6 +64,7 @@ require("./sections/20-search-lines");
 require("./sections/21-json-patch");
 require("./sections/22-json-patch-hce");
 require("./sections/23-read-line-range");
+require("./sections/24-apply-patch");
 
 console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
 
