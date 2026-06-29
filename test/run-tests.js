@@ -134,6 +134,8 @@ async function main() {
 
   require("./sections/32-file-diff-dir");
 
+  require("./sections/33-query-path");
+
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);
   if (counters.fail > 0) process.exit(1);
