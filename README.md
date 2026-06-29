@@ -1,4 +1,4 @@
-# 🚀 MCP Common Server (HTTP + SSE) — v3.3.0
+# 🚀 MCP Common Server (HTTP + SSE) — v3.4.0
 
 [![Protocol](https://img.shields.io/badge/MCP-Protocol-orange.svg)](https://modelcontextprotocol.io/)
 [![Runtime](https://img.shields.io/badge/node-%3E%3D18.0.0-green.svg)](https://nodejs.org/)
@@ -128,6 +128,7 @@ Each folder mapped in `MCP_ROOTS` is assigned a lowercased **alias** (derived fr
 - **`read_allfiles`**: Bulk dump full contents of files matching specific extensions (e.g. `[".js", ".ts"]`).
 - **`file_info`**: Fetch detailed metadata (size, permissions, timestamps, line counts).
 - **`search_files`**: Run fast text search patterns (similar to grep/ripgrep) across files.
+- **`search_lines`**: Grep-like line-level search — for each matching line in a file (or recursively in a directory), returns the 1-based line number, the matching line text, and optional surrounding context lines (`context` param, 0–10). Complements `search_files` (which returns file names) by pinpointing exact lines. Supports literal substring or regex matching, case-insensitive mode (`ignore_case`), extension filtering in directory mode, and a configurable result cap (`max_matches`, default 200). MCP_IGNORE'd directories are skipped automatically. Always available — does not require `MCP_ALLOW_EXEC`.
 - **`find_files`**: Glob-based file finder.
 
 ### 1b. Utility Tools (Always Available)

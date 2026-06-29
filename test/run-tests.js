@@ -29,6 +29,7 @@
  *   17-new-tools.js           [21] count_lines, file_tree, hash_directory tools
  *   18-encoding-text-tools.js [22] base64_encode/decode, json_format, text_transform tools
  *   19-file-stats-csv.js      [23] file_stats (directory analytics) and csv_query tools
+ *   20-search-lines.js        [24] search_lines tool (grep-like line search with context)
  *
  * Run with: node test/run-tests.js
  */
@@ -55,6 +56,7 @@ require("./sections/16-compare-directories");
 require("./sections/17-new-tools");
 require("./sections/18-encoding-text-tools");
 require("./sections/19-file-stats-csv");
+require("./sections/20-search-lines");
 
 console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
 
