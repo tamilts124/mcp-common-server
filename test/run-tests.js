@@ -30,6 +30,8 @@
  *   18-encoding-text-tools.js [22] base64_encode/decode, json_format, text_transform tools
  *   19-file-stats-csv.js      [23] file_stats (directory analytics) and csv_query tools
  *   20-search-lines.js        [24] search_lines tool (grep-like line search with context)
+ *   21-json-patch.js          [25-A/B] json_patch tool Normal+Medium (RFC 6902)
+ *   22-json-patch-hce.js      [25-C/D/E] json_patch tool High+Critical+Extreme
  *
  * Run with: node test/run-tests.js
  */
@@ -57,6 +59,8 @@ require("./sections/17-new-tools");
 require("./sections/18-encoding-text-tools");
 require("./sections/19-file-stats-csv");
 require("./sections/20-search-lines");
+require("./sections/21-json-patch");
+require("./sections/22-json-patch-hce");
 
 console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
 

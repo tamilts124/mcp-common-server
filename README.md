@@ -1,4 +1,4 @@
-# 🚀 MCP Common Server (HTTP + SSE) — v3.4.0
+# 🚀 MCP Common Server (HTTP + SSE) — v3.5.0
 
 [![Protocol](https://img.shields.io/badge/MCP-Protocol-orange.svg)](https://modelcontextprotocol.io/)
 [![Runtime](https://img.shields.io/badge/node-%3E%3D18.0.0-green.svg)](https://nodejs.org/)
@@ -147,6 +147,7 @@ Each folder mapped in `MCP_ROOTS` is assigned a lowercased **alias** (derived fr
 - **`base64_encode`**: Read a file and return its contents as a base64 string (standard RFC 4648 or URL-safe alphabet via `url_safe: true`). Useful for embedding binary files in JSON payloads, data URIs, or API requests. Always available — does not require `MCP_ALLOW_EXEC`.
 - **`json_format`**: Parse a JSON file and re-serialise it with consistent formatting — pretty-print with a configurable `indent` (default 2) or minify (`indent: 0`). Returns the formatted string plus original/new byte sizes. Read-only by default; pass `in_place: true` to write the result back to the file (write-gated, see below).
 - **`text_transform`**: Apply one or more named transforms to a file's text in sequence — `uppercase`, `lowercase`, `trim_lines`, `sort_lines`, `sort_lines_desc`, `dedupe_lines` (keeps first occurrence), `reverse_lines`, `remove_blank_lines`. Returns the transformed text plus before/after line and byte counts. Read-only by default; pass `in_place: true` to write the result back to the file (write-gated, see below).
+- **`json_patch`**: Apply RFC 6902 JSON Patch operations (`add`, `remove`, `replace`, `move`, `copy`, `test`) to a JSON file. Path pointers use RFC 6901 JSON Pointer syntax (e.g. `/dependencies/lodash`, `/scripts/build`, `/items/0`). All operations are applied atomically in memory; a failing `test` op aborts the entire patch (no partial writes). Pass `apply: false` for a dry-run that returns the patched document without touching the file. The file is written back pretty-printed at the original indent level. Write-gated: blocked when `MCP_READ_ONLY=true`.
 - **`file_stats`**: Compute aggregate statistics for a directory tree: total file count, total/average/max/min byte sizes, breakdown by file extension (sorted by total bytes descending), and a configurable top-N list of the largest files (`top_n`, default 10, max 100). MCP_IGNORE'd directories are excluded. Optional `extensions` filter narrows the analysis to matching file types. Useful for understanding project composition, finding bloated file types, or auditing disk usage. Always available — does not require `MCP_ALLOW_EXEC`.
 - **`csv_query`**: Parse a CSV file (RFC 4180-compliant — handles quoted fields with embedded commas and newlines, CRLF line endings, double-quote escaping `""` → `"`, optional BOM) and return rows as structured JSON objects. Supports `columns` projection (select a subset of columns), row slicing (`offset` + `limit`, max 10000), and a simple equality filter (`filter_col` + `filter_val`, exact case-sensitive string match). The first row is treated as a header by default; set `has_header: false` for header-less files (columns are named `col0`, `col1`, …). Returns `{ path, columns, totalRows, returnedRows, rows }`. Always available — does not require `MCP_ALLOW_EXEC`.
 
@@ -208,6 +209,7 @@ The server logic is split into small, single-purpose modules under `lib/`:
 | `lib/utilOps.js` | Utility helpers: `file_checksum`, `zip_directory`, `query_json`, `query_data`, `diff_files`, `env_info` |
 | `lib/encodingOps.js` | Base64 encode/decode helpers: `base64Encode`, `base64Decode` |
 | `lib/textOps.js` | JSON formatting and text-transform helpers: `jsonFormat`, `textTransform` |
+| `lib/jsonPatchOps.js` | RFC 6902 JSON Patch engine: `jsonPatch` (all 6 ops, JSON Pointer RFC 6901, atomic apply, dry-run, indent-preserving) |
 | `lib/archiveOps.js` | ZIP Central Directory reader: `read_archive` (no extraction, no deps) |
 | `lib/duplicateOps.js` | Duplicate-file detection: `find_duplicates` (size-prefilter + content-hash grouping) |
 | `lib/compareOps.js` | Two-directory-tree comparison: `compare_directories` (added/removed/modified/unchanged by content hash) |
