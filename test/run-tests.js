@@ -26,6 +26,7 @@
  *   14-git-stash-list.js     [18] git_stash_list tool (list git stash entries)
  *   15-find-duplicates.js     [19] find_duplicates tool (content-hash duplicate detection)
  *   16-compare-directories.js [20] compare_directories tool (two-tree content-hash diff)
+ *   17-new-tools.js           [21] count_lines, file_tree, hash_directory tools
  *
  * Run with: node test/run-tests.js
  */
@@ -34,6 +35,7 @@ const { fs, counters, TMP, cleanupDir } = require("./test-harness");
 require("./sections/01-core-ops");
 require("./sections/02-jsonrpc-validation");
 require("./sections/03-utility-tools");
+
 require("./sections/04-git-tools");
 require("./sections/05-yaml-query");
 require("./sections/06-audit-fixes");
@@ -47,6 +49,7 @@ require("./sections/13-read-archive");
 require("./sections/14-git-stash-list");
 require("./sections/15-find-duplicates");
 require("./sections/16-compare-directories");
+require("./sections/17-new-tools");
 
 console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
 

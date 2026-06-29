@@ -143,6 +143,9 @@ Each folder mapped in `MCP_ROOTS` is assigned a lowercased **alias** (derived fr
 - **`diff_files`**: Compute a unified diff between two text files inside the jail. Uses a pure-JS LCS-based Myers diff (zero dependencies). Returns the diff as a unified-diff string plus a structured summary (`hunks`, `additions`, `deletions`, `identical`). The `context` parameter controls surrounding context lines (default: 3). Always available — does not require `MCP_ALLOW_EXEC`.
 - **`find_duplicates`**: Scan a directory recursively and find duplicate files by content hash (MD5/SHA-1/SHA-256/SHA-512). Files are first grouped by size (cheap to stat) and only files that share an exact size with at least one sibling are actually hashed, so unique-sized files are skipped entirely. Returns duplicate sets sorted by wasted disk space, each with `hash`, `size`, `count`, `wastedBytes`, and the sorted list of duplicate file paths, plus aggregate totals (`filesScanned`, `filesHashed`, `duplicateSetCount`, `totalDuplicateFiles`, `totalWastedBytes`). Optional `extensions` and `min_size` filters narrow the scan. Always available — does not require `MCP_ALLOW_EXEC`.
 - **`compare_directories`**: Recursively compare two directory trees (`left`/`right`) by content hash and classify every relative file path as `added` (only in `right`), `removed` (only in `left`), `modified` (present in both, content differs), or `unchanged` (present in both, identical content). Relative paths are computed against each compared directory itself, so two trees with different names/locations but the same internal layout compare correctly. Returns the four classified path arrays plus a `summary` object with counts. Useful for verifying build outputs, comparing deployment artifacts, or auditing a refactor without needing git. Always available — does not require `MCP_ALLOW_EXEC`.
+- **`count_lines`**: Count lines, words, and bytes in one or more files (like the Unix `wc` command). Returns per-file statistics and an aggregate `total`. Useful for quick code metrics, sanity-checking generated output, and reporting file statistics. Always available — does not require `MCP_ALLOW_EXEC`.
+- **`file_tree`**: Pretty-print an ASCII directory tree (like the Unix `tree` command) for a given path. MCP_IGNORE'd directories (e.g. `node_modules`, `.git`) are excluded automatically. Supports a `depth` limit (1–10, default 4) and an optional `sizes` flag to annotate each file with its byte count. Output is truncated at 500 nodes to keep responses readable. Always available — does not require `MCP_ALLOW_EXEC`.
+- **`hash_directory`**: Compute a single aggregate fingerprint of an entire directory tree by hashing all file contents together with their relative paths in sorted order. Any add, remove, rename, or content change in the tree produces a different hash. Useful for detecting whether a build output or deployment artifact has changed without comparing individual files. Supports MD5/SHA-1/SHA-256 (default)/SHA-512 and an optional `extensions` filter. Always available — does not require `MCP_ALLOW_EXEC`.
 
 ### 1c. Git Metadata Tools (Always Available, Read-Only)
 - **`git_status`**: Structured branch/tracking summary — current branch, upstream, ahead/behind counts, and staged/unstaged/untracked/conflicted file counts and entries.
@@ -191,12 +194,16 @@ The server logic is split into small, single-purpose modules under `lib/`:
 | `lib/utilOps.js` | Utility helpers: `file_checksum`, `zip_directory`, `query_json`, `query_data`, `diff_files` |
 | `lib/duplicateOps.js` | Duplicate-file detection helper: `find_duplicates` (size-prefilter + content-hash grouping) |
 | `lib/compareOps.js` | Two-directory-tree comparison helper: `compare_directories` (added/removed/modified/unchanged by content hash) |
+| `lib/wc.js` | Word/line/byte counter: `count_lines` (like Unix `wc`) |
+| `lib/treeOps.js` | ASCII directory-tree printer: `file_tree` (like Unix `tree`) |
+| `lib/hashDirOps.js` | Aggregate directory fingerprinting: `hash_directory` (single hash over sorted file contents + paths) |
 | `lib/yamlOps.js` | Minimal zero-dependency YAML parser used by `query_data` |
 | `lib/gitOps.js` | Read-only git metadata helpers: `git_status`, `git_log`, `git_blame`, `git_diff` |
 | `lib/gitOpsHelpers.js` | Shared git helpers (`gitExec`, `assertSafeArg`, `q`) used by `gitOps.js` and `gitStashOps.js` |
 | `lib/gitStashOps.js` | Read-only git stash helper: `git_stash_list` |
 | `lib/toolsSchema.js` | JSON-RPC tool schema declarations (`TOOLS_ALL`) |
 | `lib/errors.js` | Shared `ToolError` class + `getErrorCode` helper (no circular deps) |
+
 | `lib/executeTool.js` | Tool dispatch switch + `execute_pipeline` |
 | `lib/stdioProtocol.js` | Pure (no I/O) stdio message-framing/dispatch logic shared by `server-stdio.js` |
 
