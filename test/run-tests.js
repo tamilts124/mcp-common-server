@@ -64,9 +64,12 @@
  *   26-git-branch-list.js     [29] git_branch_list tool (list local/remote branches)
  *   27-move-copy-dir-ops.js   [30-ABC] move_directory/copy_directory: Normal/Medium/High
  *   27b-move-copy-dir-ops-de.js [30-DE] move_directory/copy_directory: Critical/Extreme
- *   28-unzip-archive.js         [31] unzip_archive tool (extract ZIP contents into jailed directory)
+ *   28-unzip-archive.js         [31-A/B/C] unzip_archive tool Normal+Medium+High
+ *   28b-unzip-archive-ce.js     [31-D/E] unzip_archive tool Critical+Extreme
  *   29-http-fetch.js            [32] http_fetch tool (outbound HTTP/HTTPS requests) — async section
  *   29b-http-fetch-pipeline.js  [32b] execute_pipeline + http_fetch async-tool integration — async section
+ *   30-yaml-patch.js            [33-A/B/C] yaml_patch tool Normal+Medium+High (set/delete/insert_at/append_to)
+ *   30b-yaml-patch-de.js        [33-D/E] yaml_patch tool Critical+Extreme
  *
  * Run with: node test/run-tests.js
  */
@@ -110,6 +113,7 @@ async function main() {
   require("./sections/27-move-copy-dir-ops");
   require("./sections/27b-move-copy-dir-ops-de");
   require("./sections/28-unzip-archive");
+  require("./sections/28b-unzip-archive-ce");
 
   // Sections 29/29b make real network round-trips (to a local loopback test
   // server) with a 15s timeout each. Awaiting them in place — instead of
@@ -120,6 +124,9 @@ async function main() {
   // noticing these are async).
   await require("./sections/29-http-fetch");
   await require("./sections/29b-http-fetch-pipeline");
+
+  require("./sections/30-yaml-patch");
+  require("./sections/30b-yaml-patch-de");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);
