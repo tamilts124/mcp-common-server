@@ -70,6 +70,7 @@
  *   29b-http-fetch-pipeline.js  [32b] execute_pipeline + http_fetch async-tool integration — async section
  *   30-yaml-patch.js            [33-A/B/C] yaml_patch tool Normal+Medium+High (set/delete/insert_at/append_to)
  *   30b-yaml-patch-de.js        [33-D/E] yaml_patch tool Critical+Extreme
+ *   31-yaml-merge.js            [34-A/B/C/D/E] yaml_merge tool, all 5 rigor levels (deep-merge YAML overlay)
  *
  * Run with: node test/run-tests.js
  */
@@ -127,6 +128,8 @@ async function main() {
 
   require("./sections/30-yaml-patch");
   require("./sections/30b-yaml-patch-de");
+
+  require("./sections/31-yaml-merge");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);
