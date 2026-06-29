@@ -32,6 +32,7 @@
  *   20-search-lines.js        [24] search_lines tool (grep-like line search with context)
  *   21-json-patch.js          [25-A/B] json_patch tool Normal+Medium (RFC 6902)
  *   22-json-patch-hce.js      [25-C/D/E] json_patch tool High+Critical+Extreme
+ *   23-read-line-range.js     [26] read_file/read_files structured line-range output
  *
  * Run with: node test/run-tests.js
  */
@@ -61,6 +62,7 @@ require("./sections/19-file-stats-csv");
 require("./sections/20-search-lines");
 require("./sections/21-json-patch");
 require("./sections/22-json-patch-hce");
+require("./sections/23-read-line-range");
 
 console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
 
