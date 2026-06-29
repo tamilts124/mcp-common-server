@@ -34,6 +34,8 @@
  *   22-json-patch-hce.js      [25-C/D/E] json_patch tool High+Critical+Extreme
  *   23-read-line-range.js     [26] read_file/read_files structured line-range output
  *   24-apply-patch.js         [27] apply_patch tool (unified diff applier)
+ *   25-move-copy-ops.js       [28-ABC] move_file/copy_file audit: Normal/Medium/High
+ *   25b-move-copy-ops-cde.js  [28-DE] move_file/copy_file audit: Critical/Extreme
  *
  * Run with: node test/run-tests.js
  */
@@ -65,6 +67,9 @@ require("./sections/21-json-patch");
 require("./sections/22-json-patch-hce");
 require("./sections/23-read-line-range");
 require("./sections/24-apply-patch");
+
+require("./sections/25-move-copy-ops");
+require("./sections/25b-move-copy-ops-cde");
 
 console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
 

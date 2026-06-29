@@ -167,7 +167,7 @@ These five never require `MCP_ALLOW_EXEC` (they only read repo metadata via `git
 - **`create_file`**: Create a new file (fails if the file already exists).
 - **`create_files`**: Batch-create multiple new files.
 - **`delete_file` / `delete_files`**: Delete files.
-- **`move_file` / `copy_file`**: Relocate or duplicate files inside the jail.
+- **`move_file` / `copy_file`**: Relocate or duplicate a file inside the jail, audited for cross-root/symlink/EXDEV safety. Works across directories and across configured roots — including across filesystems/drives, via an automatic copy+delete fallback when the OS rejects a direct cross-device rename (`EXDEV`). Rejects directory sources with a clear error (use `create_directory`/`delete_directory`/a recursive copy pipeline for directory trees instead). Fails if the destination already exists unless `overwrite: true` is passed. A symlink living inside a root that points outside it (on either the source or destination side) is detected via a realpath check and rejected, even though the lexical path itself looked jailed. Moving/copying a path to itself is a safe no-op (`{ noop: true }`) rather than relying on incidental OS rename/copy-to-self behavior.
 - **`create_directory` / `delete_directory`**: Create and remove folders recursively.
 - **`replace_in_file`**: Find-and-replace strings across files or folders.
 - **`truncate_file`**: Shrink a file to its first N lines (`lines` param) or first N bytes (`bytes` param). Exactly one must be supplied. If the file is already shorter than the limit it is left untouched (`truncated: false`).
@@ -204,6 +204,7 @@ The server logic is split into small, single-purpose modules under `lib/`:
 | `lib/executeTool.js` | Tool dispatch coordinator: validates args, enforces policy, delegates to dispatch modules |
 | `lib/dispatchRead.js` | Handler functions for all read/git/utility tools |
 | `lib/dispatchWrite.js` | Handler functions for all write/exec tools |
+| `lib/moveOps.js` | Audited `move_file`/`copy_file` helpers: symlink-escape detection (realpath check), EXDEV cross-device fallback, overwrite-safety, directory-source rejection, same-path no-op |
 | `lib/stdioProtocol.js` | Pure (no I/O) stdio message-framing/dispatch logic shared by `server-stdio.js` |
 | `lib/fileOps.js` | File/directory read, write, search, glob-find, replace, truncate, append helpers |
 | `lib/processOps.js` | `run_command` and background process management |
