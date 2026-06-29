@@ -28,10 +28,12 @@
  *   16-compare-directories.js [20] compare_directories tool (two-tree content-hash diff)
  *   17-new-tools.js           [21] count_lines, file_tree, hash_directory tools
  *   18-encoding-text-tools.js [22] base64_encode/decode, json_format, text_transform tools
+ *   19-file-stats-csv.js      [23] file_stats (directory analytics) and csv_query tools
  *
  * Run with: node test/run-tests.js
  */
 const { fs, counters, TMP, cleanupDir } = require("./test-harness");
+
 
 require("./sections/01-core-ops");
 require("./sections/02-jsonrpc-validation");
@@ -52,6 +54,7 @@ require("./sections/15-find-duplicates");
 require("./sections/16-compare-directories");
 require("./sections/17-new-tools");
 require("./sections/18-encoding-text-tools");
+require("./sections/19-file-stats-csv");
 
 console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
 
