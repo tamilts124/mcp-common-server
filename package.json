@@ -1,6 +1,6 @@
 {
   "name": "mcp-common-server",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "description": "Universal MCP server — multi-root, HTTP+SSE + stdio transport, exec/pipeline support, zero dependencies",
   "main": "server-http.js",
   "bin": {
