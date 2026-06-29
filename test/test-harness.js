@@ -27,13 +27,35 @@ const { executeTool, ToolError, validateArgs, getErrorCode } = require("../lib/e
 const counters = { pass: 0, fail: 0 };
 
 function test(name, fn) {
+  // Support both synchronous and async (Promise-returning) test functions.
+  // When fn() returns a Promise, callers should await test(...) so failures
+  // are captured before the next test begins. For synchronous fn(), the
+  // returned Promise still resolves immediately, so existing test sections
+  // that don't await work unchanged (they just fire-and-forget, which is
+  // fine because synchronous exceptions are caught here before any promise
+  // machinery is involved).
   try {
-    fn();
+    const result = fn();
+    if (result && typeof result.then === "function") {
+      // Async test — return the Promise so callers can await it.
+      return result
+        .then(() => {
+          counters.pass++;
+          console.log(`  ok - ${name}`);
+        })
+        .catch((e) => {
+          counters.fail++;
+          console.log(`  FAIL - ${name}\n      ${e.message}`);
+        });
+    }
+    // Synchronous test — passed.
     counters.pass++;
     console.log(`  ok - ${name}`);
+    return Promise.resolve();
   } catch (e) {
     counters.fail++;
     console.log(`  FAIL - ${name}\n      ${e.message}`);
+    return Promise.resolve();
   }
 }
 

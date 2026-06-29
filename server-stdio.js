@@ -92,24 +92,26 @@ process.stdin.on("data", (chunk) => {
       continue;
     }
 
-    try {
-      const response = handleMessage(parsed.msg);
-      if (parsed.msg?.method === "tools/call") {
-        const a = parsed.msg.params?.arguments;
-        console.error(`[TOOL] ${parsed.msg.params?.name}`, a?.path || a?.command || a?.id ||
-          (a?.files?.length ? `(${a.files.length} files)` : "") ||
-          (a?.steps?.length ? `(${a.steps.length} steps)` : "") || "");
-      }
-      if (response) send(response);
-    } catch (e) {
-      // Should be unreachable — handleMessage already wraps executeTool in
-      // its own try/catch — but this guarantees one malformed message can
-      // never take the whole process down.
-      console.error(`[FATAL DISPATCH ERROR] ${e.stack || e.message}`);
-      if (parsed.msg && parsed.msg.id !== undefined) {
-        send({ jsonrpc: "2.0", id: parsed.msg.id, error: { code: -32603, message: "Internal error" } });
-      }
-    }
+    // handleMessage is async (tools like http_fetch are asynchronous).
+    Promise.resolve(handleMessage(parsed.msg))
+      .then((response) => {
+        if (parsed.msg?.method === "tools/call") {
+          const a = parsed.msg.params?.arguments;
+          console.error(`[TOOL] ${parsed.msg.params?.name}`, a?.path || a?.command || a?.id ||
+            (a?.files?.length ? `(${a.files.length} files)` : "") ||
+            (a?.steps?.length ? `(${a.steps.length} steps)` : "") || "");
+        }
+        if (response) send(response);
+      })
+      .catch((e) => {
+        // Should be unreachable — handleMessage already wraps executeTool in
+        // its own try/catch — but this guarantees one malformed message can
+        // never take the whole process down.
+        console.error(`[FATAL DISPATCH ERROR] ${e.stack || e.message}`);
+        if (parsed.msg && parsed.msg.id !== undefined) {
+          send({ jsonrpc: "2.0", id: parsed.msg.id, error: { code: -32603, message: "Internal error" } });
+        }
+      });
   }
 });
 
