@@ -39,6 +39,7 @@
  *   26-git-branch-list.js     [29] git_branch_list tool (list local/remote branches)
  *   27-move-copy-dir-ops.js   [30-ABC] move_directory/copy_directory: Normal/Medium/High
  *   27b-move-copy-dir-ops-de.js [30-DE] move_directory/copy_directory: Critical/Extreme
+ *   28-unzip-archive.js         [31] unzip_archive tool (extract ZIP contents into jailed directory)
  *
  * Run with: node test/run-tests.js
  */
@@ -76,6 +77,7 @@ require("./sections/25b-move-copy-ops-cde");
 require("./sections/26-git-branch-list");
 require("./sections/27-move-copy-dir-ops");
 require("./sections/27b-move-copy-dir-ops-de");
+require("./sections/28-unzip-archive");
 
 console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
 

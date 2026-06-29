@@ -78,7 +78,7 @@ test("copy_file: blocks symlink that escapes root — source symlink check", () 
     if (fs.existsSync(symlinkPath)) fs.unlinkSync(symlinkPath);
     if (fs.existsSync(dst))         fs.unlinkSync(dst);
     if (fs.existsSync(outsideFile)) fs.unlinkSync(outsideFile);
-    if (fs.existsSync(outsideDir))  fs.rmdirSync(outsideDir, { recursive: true });
+    if (fs.existsSync(outsideDir))  fs.rmSync(outsideDir, { recursive: true, force: true });
   }
 });
 
