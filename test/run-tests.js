@@ -25,6 +25,7 @@
  *   13-read-archive.js        [17] read_archive tool (ZIP manifest inspection)
  *   14-git-stash-list.js     [18] git_stash_list tool (list git stash entries)
  *   15-find-duplicates.js     [19] find_duplicates tool (content-hash duplicate detection)
+ *   16-compare-directories.js [20] compare_directories tool (two-tree content-hash diff)
  *
  * Run with: node test/run-tests.js
  */
@@ -45,6 +46,7 @@ require("./sections/12-git-diff");
 require("./sections/13-read-archive");
 require("./sections/14-git-stash-list");
 require("./sections/15-find-duplicates");
+require("./sections/16-compare-directories");
 
 console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
 
