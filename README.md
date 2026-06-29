@@ -1,4 +1,4 @@
-# 🚀 MCP Common Server (HTTP + SSE) — v3.5.0
+# 🚀 MCP Common Server (HTTP + SSE) — v3.6.0
 
 [![Protocol](https://img.shields.io/badge/MCP-Protocol-orange.svg)](https://modelcontextprotocol.io/)
 [![Runtime](https://img.shields.io/badge/node-%3E%3D18.0.0-green.svg)](https://nodejs.org/)
@@ -158,8 +158,9 @@ Each folder mapped in `MCP_ROOTS` is assigned a lowercased **alias** (derived fr
 - **`git_blame`**: Per-line authorship for a file — line number, content, commit hash, author, date, and commit summary. Supports an optional `from_line`/`to_line` range.
 - **`git_diff`**: Unified diff between repository states. Four modes: working tree vs HEAD (default), staging index vs HEAD (`staged: true`), working tree vs a specific ref (`from_ref` only), or commit-to-commit (`from_ref` + `to_ref`). Optional `file` argument restricts the diff to a single file/directory. Returns the unified diff text plus structured statistics (`additions`, `deletions`, `hunks`, `changedFiles` with status codes A/D/M/R). Always available — does not require `MCP_ALLOW_EXEC`.
 - **`git_stash_list`**: Structured list of all `git stash` entries in the repository. Each entry includes `index`, `ref` (`stash@{N}`), `message`, `author`, `email`, and an ISO 8601 `date`. Returns `{ count: 0, stashes: [] }` when there are no stashes. Always available — does not require `MCP_ALLOW_EXEC`.
+- **`git_branch_list`**: List of branches in a repository with the current-branch marker and last-commit metadata for each (`lastCommitHash`, `lastCommitShortHash`, `lastCommitDate`, `lastCommitSubject`, `lastCommitAuthor`). By default lists only local branches (`refs/heads`); set `include_remote: true` to also include remote-tracking branches (`refs/remotes`), excluding the synthetic `origin/HEAD` pointer ref. Returns `{ currentBranch, count, branches }`. Always available — does not require `MCP_ALLOW_EXEC`.
 
-These five never require `MCP_ALLOW_EXEC` (they only read repo metadata via `git`, never modify the working tree) and are jailed through the same root/path safety as every other tool. Arguments passed through to `git` are validated against shell metacharacters before use.
+These six never require `MCP_ALLOW_EXEC` (they only read repo metadata via `git`, never modify the working tree) and are jailed through the same root/path safety as every other tool. Arguments passed through to `git` are validated against shell metacharacters before use.
 
 ### 2. Write Tools (Disabled when `MCP_READ_ONLY=true`)
 - **`write_file`**: Write/overwrite files (supports partial line range replacements).
@@ -220,8 +221,9 @@ The server logic is split into small, single-purpose modules under `lib/`:
 | `lib/hashDirOps.js` | Aggregate directory fingerprinting: `hash_directory` (single hash over sorted file contents + paths) |
 | `lib/yamlOps.js` | Minimal zero-dependency YAML parser used by `query_data` |
 | `lib/gitOps.js` | Read-only git metadata helpers: `git_status`, `git_log`, `git_blame`, `git_diff` |
-| `lib/gitOpsHelpers.js` | Shared git helpers (`gitExec`, `assertSafeArg`, `q`) used by `gitOps.js` and `gitStashOps.js` |
+| `lib/gitOpsHelpers.js` | Shared git helpers (`gitExec`, `assertSafeArg`, `q`) used by `gitOps.js`, `gitStashOps.js`, and `gitBranchOps.js` |
 | `lib/gitStashOps.js` | Read-only git stash helper: `git_stash_list` |
+| `lib/gitBranchOps.js` | Read-only git branch helper: `git_branch_list` (local + optional remote-tracking branches, current-branch marker, last-commit metadata) |
 | `lib/fileStatsOps.js` | Directory analytics: `file_stats` (per-extension breakdown, top-N largest files) |
 | `lib/csvOps.js` | CSV parser + query helper: `csv_query` (RFC 4180, projection, slicing, equality filter) |
 

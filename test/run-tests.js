@@ -36,6 +36,7 @@
  *   24-apply-patch.js         [27] apply_patch tool (unified diff applier)
  *   25-move-copy-ops.js       [28-ABC] move_file/copy_file audit: Normal/Medium/High
  *   25b-move-copy-ops-cde.js  [28-DE] move_file/copy_file audit: Critical/Extreme
+ *   26-git-branch-list.js     [29] git_branch_list tool (list local/remote branches)
  *
  * Run with: node test/run-tests.js
  */
@@ -70,6 +71,7 @@ require("./sections/24-apply-patch");
 
 require("./sections/25-move-copy-ops");
 require("./sections/25b-move-copy-ops-cde");
+require("./sections/26-git-branch-list");
 
 console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
 
