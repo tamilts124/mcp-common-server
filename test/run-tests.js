@@ -76,6 +76,7 @@
  *   33b-query-path-slice.js     [36b] query_path array slice syntax [start:end]
  *   34-find-replace-dir.js      [37] replace_in_file bulk directory mode + dry_run (find_replace_dir)
  *   35-json-diff.js             [38] json_diff tool (structural/semantic JSON+YAML document diff)
+ *   36-git-show.js               [39] git_show tool (read a file's content at a specific commit/ref)
  *
  * Run with: node test/run-tests.js
  */
@@ -145,6 +146,8 @@ async function main() {
   require("./sections/34-find-replace-dir");
 
   require("./sections/35-json-diff");
+
+  require("./sections/36-git-show");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);
