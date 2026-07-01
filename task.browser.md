@@ -207,10 +207,25 @@ All tools above implemented, wired, and tested (46/46 in test/browser-tests.js).
     across a fresh browser_launch, non-object/array storage_state rejected,
     malformed storage_state -> -32603 via the new try/catch). Full isolated
     suite: 196/196 passing. package.json v3.46.0.
-- [ ] browser_accessibility_snapshot / browser_find_by_role (a11y-tree
+- [x] browser_accessibility_snapshot / browser_find_by_role (a11y-tree
       snapshot of the page; locate elements by ARIA role+accessible name
-      instead of a CSS selector) — status: todo
-  - notes: page.accessibility.snapshot() gives agents a structure-aware view
-    of the page without parsing raw HTML; role+name lookup (via
-    page.getByRole under the hood) is often more robust than CSS selectors
-    for dynamically-classed SPA markup.
+      instead of a CSS selector) — status: tested
+  - notes: page.accessibility.snapshot() does NOT exist in installed
+    Playwright 1.61.1 (removed deprecated API) — discovered via a real
+    failing test run, not by reading changelogs. Rewrote to use the current
+    replacement, locator.ariaSnapshot() (YAML-style string), rooted at
+    'body' or an optional selector. browser_find_by_role wraps
+    page.getByRole(role, {name, exact}) returning per-match bounding
+    box/text/visibility (capped 50). Wired into browserActions/
+    dispatchBrowser/browserSchemas/toolsSchema EXEC_TOOLS (125 tools total,
+    require()-clean). 13 new tests across 5 rigor levels. Full isolated
+    suite: 209/209 passing. package.json v3.47.0.
+- [ ] Split lib/browserActions.js into modules (now 871 lines, approaching
+      the project's 1000-line-file threshold) — status: todo
+  - notes: split along the existing grouping used in this file's own
+    comments (nav/content/input, cookies/storage, network, a11y) into e.g.
+    browserActions/{core,storage,network,a11y}.js re-exported from a thin
+    browserActions.js barrel, mirroring the lib/schemas/ split already used
+    for tool schemas. Pure refactor — no behavior change — so it must be
+    verified against the full 209/209 test/browser-tests.js suite before
+    and after with zero diffs in pass count.

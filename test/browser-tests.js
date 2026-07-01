@@ -875,6 +875,48 @@ let sessionId;
   await test("browser_launch malformed storage_state object -> -32603 (critical)", () =>
     expectCode(() => executeTool("browser_launch", { headless: true, storage_state: { cookies: "not-an-array" } }), -32603));
 
+  await test("browser_accessibility_snapshot returns a tree (normal)", async () => {
+    await executeTool("browser_navigate", { session_id: sessionId, url: "https://example.com/" });
+    const r = await executeTool("browser_accessibility_snapshot", { session_id: sessionId });
+    assertOk(typeof r.snapshot === "string" && r.snapshot.length > 0);
+  });
+  await test("browser_accessibility_snapshot with selector root (normal)", async () => {
+    const r = await executeTool("browser_accessibility_snapshot", { session_id: sessionId, selector: "h1" });
+    assertOk(typeof r.snapshot === "string");
+  });
+  await test("browser_accessibility_snapshot missing session_id -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_accessibility_snapshot", {}), -32602));
+  await test("browser_accessibility_snapshot unknown selector -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_accessibility_snapshot", { session_id: sessionId, selector: "#does-not-exist-xyz" }), -32602));
+  await test("browser_accessibility_snapshot unknown session -> -32602 (high)", () =>
+    expectCode(() => executeTool("browser_accessibility_snapshot", { session_id: "does-not-exist" }), -32602));
+  await test("browser_accessibility_snapshot injection-style selector rejected cleanly (critical)", () =>
+    expectCode(() => executeTool("browser_accessibility_snapshot", { session_id: sessionId, selector: "<script>alert(1)</script>" }), -32603));
+
+  await test("browser_find_by_role finds link on example.com (normal)", async () => {
+    const r = await executeTool("browser_find_by_role", { session_id: sessionId, role: "link" });
+    assertOk(r.count >= 1);
+    assertOk(Array.isArray(r.matches));
+  });
+  await test("browser_find_by_role with name filter, no match (normal)", async () => {
+    const r = await executeTool("browser_find_by_role", { session_id: sessionId, role: "link", name: "definitely-not-a-real-link-name" });
+    assertEq(r.count, 0);
+  });
+  await test("browser_find_by_role missing role -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_find_by_role", { session_id: sessionId }), -32602));
+  await test("browser_find_by_role missing session_id -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_find_by_role", { role: "button" }), -32602));
+  await test("browser_find_by_role unknown session -> -32602 (high)", () =>
+    expectCode(() => executeTool("browser_find_by_role", { session_id: "does-not-exist", role: "button" }), -32602));
+  await test("browser_find_by_role invalid role string doesn't crash (critical)", async () => {
+    const r = await executeTool("browser_find_by_role", { session_id: sessionId, role: "not-a-real-aria-role" });
+    assertEq(r.count, 0);
+  });
+  await test("browser_find_by_role huge name fuzz doesn't crash (extreme)", async () => {
+    const r = await executeTool("browser_find_by_role", { session_id: sessionId, role: "link", name: "x".repeat(100000) });
+    assertEq(r.count, 0);
+  });
+
   await test("final browser_close of main session", () => executeTool("browser_close", { session_id: sessionId }));
 
   fs.rmSync(TMP, { recursive: true, force: true });

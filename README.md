@@ -235,8 +235,10 @@ Stealth Playwright (Chromium) sessions — `playwright-extra` + `puppeteer-extra
 - **`browser_expose_function`**/**`browser_get_exposed_calls`**: bind a Node-reachable callback on `window`, read recorded calls (no live channel back to the caller).
 - **`browser_wait_for_response`**: block until a matching network response (by URL substring, optional status) arrives or times out.
 - **`browser_get_storage_state`**: snapshot cookies + per-origin localStorage as a portable object; pass to `browser_launch`'s `storage_state` to resume a logged-in session in a fresh browser.
+- **`browser_accessibility_snapshot`**: YAML-style accessibility tree of the page or a selector subtree (via Playwright's `ariaSnapshot`; the older `page.accessibility` API is gone from this Playwright version).
+- **`browser_find_by_role`**: locate elements by ARIA role + optional accessible name (`page.getByRole`), returning bounding box/text/visibility per match.
 
-Tested via `npm run test:browser` (`test/browser-tests.js`, 196/196), independent of the frozen bulk suite below.
+Tested via `npm run test:browser` (`test/browser-tests.js`, 209/209), independent of the frozen bulk suite below.
 
 ---
 
