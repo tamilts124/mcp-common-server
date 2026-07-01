@@ -39,10 +39,14 @@ todo / in-progress / done / tested / blocked
     covering all 9 new tools across the 5 rigor levels (happy path, param
     validation, timeout failures, path-traversal, unknown session). Full suite
     re-run: 43/43 passed.
-- [ ] Proactive extension: git-metadata / archive utility tools — status: todo
-  - notes: candidate next task per session brief §4 once browser work is fully
-    closed out (checksum/zip/query tools already exist; consider concurrency
-    stress tests for write tools or a `browser_wait_for_navigation` tool).
+- [x] browser_wait_for_navigation tool — status: tested
+  - notes: page.waitForLoadState wrapper (load/domcontentloaded/networkidle).
+    Wired in browserActions/dispatchBrowser/browserSchemas/toolsSchema
+    EXEC_TOOLS (91 tools total, require()-clean). 3 new tests added
+    (happy path, missing session_id, unknown session_id). Full suite: 46/46.
+- [ ] Concurrency/stress hardening pass on write + browser tools — status: todo
+  - notes: next candidate per session brief §4 — parallel write_file races,
+    session-table cleanup under load, memory checks on repeated screenshots.
 
 ## Complete tool list (target)
 - browser_launch — launch a stealth Chromium context/page, returns session id
@@ -62,5 +66,6 @@ todo / in-progress / done / tested / blocked
 - browser_pdf — render page to a jailed PDF path (chromium only)
 - browser_select_option — select <select> option by value/label
 - browser_press_key — keyboard key press, global or scoped to a selector
+- browser_wait_for_navigation — wait for in-flight navigation to reach a load state
 
-All tools above implemented, wired, and tested (43/43 in test/browser-tests.js).
+All tools above implemented, wired, and tested (46/46 in test/browser-tests.js).

@@ -269,6 +269,18 @@ let sessionId;
   await test("follow-up tools: unknown session_id -> -32602", () =>
     expectCode(() => executeTool("browser_go_back", { session_id: "does-not-exist" }), -32602));
 
+  await test("browser_wait_for_navigation resolves after navigate", async () => {
+    await executeTool("browser_navigate", { session_id: sessionId, url: "data:text/html,<h1>nav</h1>" });
+    const r = await executeTool("browser_wait_for_navigation", { session_id: sessionId, timeout: 3000 });
+    assertEq(r.status, "settled");
+  });
+
+  await test("browser_wait_for_navigation missing session_id -> -32602", () =>
+    expectCode(() => executeTool("browser_wait_for_navigation", {}), -32602));
+
+  await test("browser_wait_for_navigation unknown session_id -> -32602", () =>
+    expectCode(() => executeTool("browser_wait_for_navigation", { session_id: "does-not-exist" }), -32602));
+
   // ── cleanup ─────────────────────────────────────────────────────────
   await test("final browser_close of main session", () => executeTool("browser_close", { session_id: sessionId }));
 
