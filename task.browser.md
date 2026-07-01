@@ -87,3 +87,9 @@ todo / in-progress / done / tested / blocked
 - browser_wait_for_navigation — wait for in-flight navigation to reach a load state
 
 All tools above implemented, wired, and tested (46/46 in test/browser-tests.js).
+
+- [x] browser_hover + browser_upload_file — status: tested (verified + committed this session; 55/55)
+- [x] browser_scroll / browser_double_click / browser_right_click / browser_drag_and_drop — status: tested
+  - notes: common interaction gaps (scroll-into-view/by-offset, dblclick, right-click context menus,
+    DnD via page.dragAndDrop). Wired into browserActions/dispatchBrowser/browserSchemas/toolsSchema
+    EXEC_TOOLS (97 tools total, require()-clean). 12 new tests added. Full suite: 67/67.

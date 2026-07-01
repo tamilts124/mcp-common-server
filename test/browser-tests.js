@@ -325,6 +325,67 @@ let sessionId;
     }
   });
 
+  await test("browser_scroll by offset (no selector)", async () => {
+    const r = await executeTool("browser_scroll", { session_id: sessionId, x: 0, y: 100 });
+    assertEq(r.status, "scrolled");
+  });
+
+  await test("browser_scroll selector into view", async () => {
+    await executeTool("browser_navigate", { session_id: sessionId, url: "data:text/html,<div id='s'>hi</div>" });
+    const r = await executeTool("browser_scroll", { session_id: sessionId, selector: "#s" });
+    assertEq(r.status, "scrolled");
+  });
+
+  await test("browser_scroll missing session_id -> -32602", () =>
+    expectCode(() => executeTool("browser_scroll", {}), -32602));
+
+  await test("browser_double_click updates DOM", async () => {
+    await executeTool("browser_navigate", { session_id: sessionId, url:
+      "data:text/html,<button id='d' ondblclick=\"this.textContent='dbl'\">x</button>" });
+    await executeTool("browser_double_click", { session_id: sessionId, selector: "#d" });
+    const c = await executeTool("browser_get_content", { session_id: sessionId, selector: "#d" });
+    assertEq(c.content, "dbl");
+  });
+
+  await test("browser_double_click missing selector -> -32602", () =>
+    expectCode(() => executeTool("browser_double_click", { session_id: sessionId }), -32602));
+
+  await test("browser_double_click missing element -> -32603", () =>
+    expectCode(() => executeTool("browser_double_click", { session_id: sessionId, selector: "#nope", timeout: 500 }), -32603));
+
+  await test("browser_right_click updates DOM", async () => {
+    await executeTool("browser_navigate", { session_id: sessionId, url:
+      "data:text/html,<div id='r' oncontextmenu=\"this.textContent='ctx';return false;\">x</div>" });
+    await executeTool("browser_right_click", { session_id: sessionId, selector: "#r" });
+    const c = await executeTool("browser_get_content", { session_id: sessionId, selector: "#r" });
+    assertEq(c.content, "ctx");
+  });
+
+  await test("browser_right_click missing selector -> -32602", () =>
+    expectCode(() => executeTool("browser_right_click", { session_id: sessionId }), -32602));
+
+  await test("browser_drag_and_drop moves element", async () => {
+    await executeTool("browser_navigate", { session_id: sessionId, url:
+      "data:text/html," +
+      "<div id='src' draggable='true'>drag</div><div id='tgt'>drop</div>" +
+      "<script>" +
+      "src.addEventListener('dragstart',e=>e.dataTransfer.setData('text','x'));" +
+      "tgt.addEventListener('dragover',e=>e.preventDefault());" +
+      "tgt.addEventListener('drop',e=>{e.preventDefault();tgt.textContent='dropped';});" +
+      "</script>" });
+    const r = await executeTool("browser_drag_and_drop", { session_id: sessionId, source: "#src", target: "#tgt" });
+    assertEq(r.status, "dropped");
+  });
+
+  await test("browser_drag_and_drop missing source -> -32602", () =>
+    expectCode(() => executeTool("browser_drag_and_drop", { session_id: sessionId, target: "#tgt" }), -32602));
+
+  await test("browser_drag_and_drop missing target -> -32602", () =>
+    expectCode(() => executeTool("browser_drag_and_drop", { session_id: sessionId, source: "#src" }), -32602));
+
+  await test("browser_drag_and_drop unknown session_id -> -32602", () =>
+    expectCode(() => executeTool("browser_drag_and_drop", { session_id: "does-not-exist", source: "#a", target: "#b" }), -32602));
+
   // ── cleanup ─────────────────────────────────────────────────────────
   await test("final browser_close of main session", () => executeTool("browser_close", { session_id: sessionId }));
 
