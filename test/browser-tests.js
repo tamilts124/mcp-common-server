@@ -555,6 +555,63 @@ let sessionId;
   await test("browser_new_page huge url fuzz doesn't crash (extreme)", () =>
     expectCode(() => executeTool("browser_new_page", { session_id: sessionId, url: "http://" + "x".repeat(50000), timeout: 500 }), -32603));
 
+  // ── Network interception ────────────────────────────────────────────────
+  await test("browser_network_start begins capture (normal)", async () => {
+    const r = await executeTool("browser_network_start", { session_id: sessionId });
+    assertEq(r.status, "capturing");
+  });
+  await test("browser_network_start idempotent when already capturing (normal)", async () => {
+    const r = await executeTool("browser_network_start", { session_id: sessionId });
+    assertEq(r.status, "already_capturing");
+  });
+  const netFile = path.join(TMP, "net-test.html");
+  fs.writeFileSync(netFile, "<h1>net</h1>");
+  const netUrl = "file://" + netFile.replace(/\\/g, "/");
+  await test("browser_get_network_requests captures a navigation (normal)", async () => {
+    await executeTool("browser_navigate", { session_id: sessionId, url: netUrl });
+    const r = await executeTool("browser_get_network_requests", { session_id: sessionId });
+    assertOk(r.count > 0);
+    assertOk(r.capturing === true);
+  });
+  await test("browser_get_network_requests url_contains filter (normal)", async () => {
+    const r = await executeTool("browser_get_network_requests", { session_id: sessionId, url_contains: "net-test.html" });
+    assertOk(r.requests.length > 0 && r.requests.every((e) => e.url.includes("net-test.html")));
+  });
+  await test("browser_get_network_requests limit is respected (normal)", async () => {
+    const r = await executeTool("browser_get_network_requests", { session_id: sessionId, limit: 1 });
+    assertOk(r.requests.length <= 1);
+  });
+  await test("browser_network_stop stops capture (normal)", async () => {
+    const r = await executeTool("browser_network_stop", { session_id: sessionId });
+    assertEq(r.status, "stopped");
+    const after = await executeTool("browser_get_network_requests", { session_id: sessionId });
+    assertEq(after.capturing, false);
+  });
+  await test("browser_network_start missing session_id -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_network_start", {}), -32602));
+  await test("browser_network_stop missing session_id -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_network_stop", {}), -32602));
+  await test("browser_get_network_requests missing session_id -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_get_network_requests", {}), -32602));
+  await test("browser_network_start unknown session -> -32602 (high)", () =>
+    expectCode(() => executeTool("browser_network_start", { session_id: "does-not-exist" }), -32602));
+  await test("browser_get_network_requests clear empties the log (high)", async () => {
+    await executeTool("browser_network_start", { session_id: sessionId });
+    await executeTool("browser_navigate", { session_id: sessionId, url: netUrl });
+    const r = await executeTool("browser_get_network_requests", { session_id: sessionId, clear: true });
+    assertOk(r.count > 0);
+    const after = await executeTool("browser_get_network_requests", { session_id: sessionId });
+    assertEq(after.count, 0);
+  });
+  await test("browser_get_network_requests injection-style filter inert (critical)", async () => {
+    const r = await executeTool("browser_get_network_requests", { session_id: sessionId, url_contains: "'; DROP TABLE--" });
+    assertEq(r.requests.length, 0);
+  });
+  await test("browser_get_network_requests huge url_contains fuzz doesn't crash (extreme)", async () => {
+    const r = await executeTool("browser_get_network_requests", { session_id: sessionId, url_contains: "x".repeat(50000) });
+    assertEq(r.requests.length, 0);
+  });
+
   await test("final browser_close of main session", () => executeTool("browser_close", { session_id: sessionId }));
 
   fs.rmSync(TMP, { recursive: true, force: true });

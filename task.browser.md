@@ -122,5 +122,16 @@ All tools above implemented, wired, and tested (46/46 in test/browser-tests.js).
   - notes: verified prior session's uncommitted work (require()-clean, 107
     tools total). Ran full suite for real: 111/111 passing (12 new multi-tab
     cases across normal/medium/high/critical/extreme). package.json v3.40.0.
-- [ ] Network interception / request-response inspection — status: todo
-  - notes: candidate next task (page.route/page.on('request'/'response')).
+- [x] Network interception / request-response inspection — status: tested
+  - notes: browser_network_start/stop/get_network_requests capture request/
+    response/requestfailed events into a capped (500) in-memory ring buffer
+    per session, filterable by url_contains/resource_type/type, with limit
+    and clear. Wired into browserActions/dispatchBrowser/browserSchemas/
+    toolsSchema EXEC_TOOLS (110 tools total, require()-clean). 15 new tests
+    added across 5 rigor levels (idempotent start, filters, clear, missing
+    session_id, unknown session, injection-style filter, huge fuzz filter).
+    Full isolated suite: 124/124 passing.
+- [ ] browser_route (request mocking/interception — abort, fulfill with
+      custom body/status, or continue) — status: todo
+  - notes: natural follow-up to network inspection; needed for testing
+    error states and mocking APIs without a live backend.
