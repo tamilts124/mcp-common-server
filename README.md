@@ -228,6 +228,7 @@ Stealth Playwright (Chromium) sessions — `playwright-extra` + `puppeteer-extra
 - **`browser_network_start`/`browser_network_stop`/`browser_get_network_requests`**: capture and inspect request/response/failure events.
 - **`browser_route`/`browser_unroute`**: intercept requests — abort, fulfill with a custom response, or continue.
 - **`browser_emulate`**: runtime-change viewport, geolocation, color-scheme, or offline state (`browser_launch` also takes `device_scale_factor`/`timezone_id`/`locale` for values Playwright can only set at launch).
+- **`browser_set_viewport`**: thin dedicated wrapper for just the viewport-resize slice of `browser_emulate`, for callers who want a narrower schema.
 - **`browser_set_extra_headers`**: set custom per-request HTTP headers for a session's context.
 - **`browser_get_local_storage`**/**`browser_set_local_storage`**: read/write `window.localStorage` (requires a real http/https page origin).
 - **`browser_add_init_script`**: register JS source to run before page scripts on every navigation in the session (context.addInitScript).

@@ -333,8 +333,24 @@ All tools above implemented, wired, and tested (46/46 in test/browser-tests.js).
     test/browser-edge-tests.js for regression check: 9/9 still passing.
     README + package.json (v3.51.0, new test:browser-dialog-queue script)
     updated.
-- [ ] browser_set_viewport dedicated tool (viewport resize is currently only
-      reachable via browser_emulate) — status: todo
-  - notes: proactive extension — low priority, browser_emulate already
-    covers this; would just be a thinner dedicated wrapper for callers who
-    only need viewport and find emulate's broader schema noisy.
+- [x] browser_set_viewport dedicated tool (viewport resize is currently only
+      reachable via browser_emulate) — status: tested
+  - notes: thin wrapper around page.setViewportSize (same validation as
+    browser_emulate's viewport branch: positive numeric width/height,
+    -32602 otherwise). Added to storage.js alongside emulate(), wired into
+    dispatchBrowser.js/browserSchemas.js/toolsSchema.js EXEC_TOOLS/
+    execSchemas.js execute_pipeline op enum (133 tools total,
+    require()-clean). New standalone test/browser-set-viewport-tests.js
+    (9 cases, 5 rigor levels: resize verified via window.innerWidth,
+    missing session_id/width, string-typed width, zero/negative rejected,
+    unknown session, 8000x8000 safe-bound fuzz). Re-ran browser-edge-tests.js
+    (9/9) and browser-dialog-queue-tests.js (11/11) for regression check —
+    no regressions. README + package.json (v3.52.0, new
+    test:browser-viewport script) updated.
+- [ ] browser_frame_evaluate (run arbitrary JS scoped to an <iframe>, mirroring
+      browser_evaluate but via frameLocator — currently only frame_click/
+      frame_type/frame_get_content exist, no general JS escape hatch inside
+      a frame) — status: todo
+  - notes: proactive extension — browser_evaluate runs in the main frame's
+    context only; a frame-scoped variant would close the same gap
+    frame_click/frame_type closed for click/type.
