@@ -1,6 +1,5 @@
 {
   "name": "mcp-common-server",
-  "version": "3.39.0",
   "description": "Universal MCP server — multi-root, HTTP+SSE + stdio transport, exec/pipeline support, zero deps for core tools, Playwright for browser automation",
   "main": "server-http.js",
   "bin": {
@@ -21,5 +20,6 @@
     "playwright": "^1.61.1",
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
-  }
+  },
+  "version": "3.40.0"
 }

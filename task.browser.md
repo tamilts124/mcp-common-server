@@ -117,6 +117,10 @@ All tools above implemented, wired, and tested (46/46 in test/browser-tests.js).
     added (normal, missing selector, unknown selector, unknown session,
     invalid-CSS injection selector -> -32603 matching existing convention,
     huge selector fuzz). Full suite: 99/99 passing.
-- [ ] Further browser tools (e.g. multi-tab/frame support, network
-      interception, request/response inspection) — status: todo
-  - notes: candidate next step if more browser coverage is requested.
+- [x] Multi-tab support (browser_new_page, browser_switch_page,
+      browser_list_pages, browser_close_page) — status: tested
+  - notes: verified prior session's uncommitted work (require()-clean, 107
+    tools total). Ran full suite for real: 111/111 passing (12 new multi-tab
+    cases across normal/medium/high/critical/extreme). package.json v3.40.0.
+- [ ] Network interception / request-response inspection — status: todo
+  - notes: candidate next task (page.route/page.on('request'/'response')).

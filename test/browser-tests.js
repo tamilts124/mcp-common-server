@@ -508,6 +508,53 @@ let sessionId;
       session_id: sessionId, selector: "#" + "z".repeat(50000),
     }), -32602));
 
+  // ── Multi-tab support ──────────────────────────────────────────────────
+  let pageId2;
+  await test("browser_new_page opens and navigates a second tab (normal)", async () => {
+    const r = await executeTool("browser_new_page", { session_id: sessionId, url: "data:text/html,<h1 id='p2'>tab2</h1>" });
+    assertOk(r.page_id);
+    pageId2 = r.page_id;
+    const c = await executeTool("browser_get_content", { session_id: sessionId, selector: "#p2" });
+    assertEq(c.content, "tab2");
+  });
+  await test("browser_list_pages shows both tabs, new one active (normal)", async () => {
+    const r = await executeTool("browser_list_pages", { session_id: sessionId });
+    assertEq(r.count, 2);
+    assertOk(r.pages.some((p) => p.page_id === pageId2 && p.active === true));
+  });
+  await test("browser_switch_page moves focus back to first tab (normal)", async () => {
+    const list = await executeTool("browser_list_pages", { session_id: sessionId });
+    const firstId = list.pages.find((p) => p.page_id !== pageId2).page_id;
+    const r = await executeTool("browser_switch_page", { session_id: sessionId, page_id: firstId });
+    assertEq(r.status, "switched");
+    const active = await executeTool("browser_list_pages", { session_id: sessionId });
+    assertOk(active.pages.find((p) => p.page_id === firstId).active === true);
+  });
+  await test("browser_new_page missing session_id -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_new_page", {}), -32602));
+  await test("browser_switch_page missing page_id -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_switch_page", { session_id: sessionId }), -32602));
+  await test("browser_switch_page unknown page_id -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_switch_page", { session_id: sessionId, page_id: "no-such-page" }), -32602));
+  await test("browser_list_pages unknown session -> -32602 (high)", () =>
+    expectCode(() => executeTool("browser_list_pages", { session_id: "does-not-exist" }), -32602));
+  await test("browser_new_page bad url -> -32603, session still usable (high)", () =>
+    expectCode(() => executeTool("browser_new_page", { session_id: sessionId, url: "http://127.0.0.1:1/", timeout: 1000 }), -32603));
+  await test("browser_close_page closes the second tab (normal)", async () => {
+    const r = await executeTool("browser_close_page", { session_id: sessionId, page_id: pageId2 });
+    assertEq(r.status, "closed");
+    const after = await executeTool("browser_list_pages", { session_id: sessionId });
+    assertEq(after.count, 1);
+  });
+  await test("browser_close_page cannot close last remaining page (critical)", async () => {
+    const r = await executeTool("browser_list_pages", { session_id: sessionId });
+    await expectCode(() => executeTool("browser_close_page", { session_id: sessionId, page_id: r.pages[0].page_id }), -32602);
+  });
+  await test("browser_close_page unknown page_id -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_close_page", { session_id: sessionId, page_id: "no-such-page" }), -32602));
+  await test("browser_new_page huge url fuzz doesn't crash (extreme)", () =>
+    expectCode(() => executeTool("browser_new_page", { session_id: sessionId, url: "http://" + "x".repeat(50000), timeout: 500 }), -32603));
+
   await test("final browser_close of main session", () => executeTool("browser_close", { session_id: sessionId }));
 
   fs.rmSync(TMP, { recursive: true, force: true });

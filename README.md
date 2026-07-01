@@ -1,4 +1,4 @@
-# 🚀 MCP Common Server (HTTP + SSE) — v3.39.0
+# 🚀 MCP Common Server (HTTP + SSE) — v3.40.0
 
 [![Protocol](https://img.shields.io/badge/MCP-Protocol-orange.svg)](https://modelcontextprotocol.io/)
 [![Runtime](https://img.shields.io/badge/node-%3E%3D18.0.0-green.svg)](https://nodejs.org/)
@@ -224,8 +224,9 @@ Stealth Playwright (Chromium) sessions — `playwright-extra` + `puppeteer-extra
 - **`browser_is_visible`**, **`browser_is_checked`**: query element visibility/checkbox state.
 - **`browser_check`**, **`browser_uncheck`**: set checkbox/radio state.
 - **`browser_get_element_info`**: bounding box, tag, text, and attributes of an element in one call.
+- **`browser_new_page`**, **`browser_switch_page`**, **`browser_list_pages`**, **`browser_close_page`**: multi-tab support within a session.
 
-Tested via `npm run test:browser` (`test/browser-tests.js`, 99/99), independent of the frozen bulk suite below.
+Tested via `npm run test:browser` (`test/browser-tests.js`, 111/111), independent of the frozen bulk suite below.
 
 ---
 
