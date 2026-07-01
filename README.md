@@ -1,4 +1,4 @@
-# 🚀 MCP Common Server (HTTP + SSE) — v3.31.0
+# 🚀 MCP Common Server (HTTP + SSE) — v3.32.0
 
 [![Protocol](https://img.shields.io/badge/MCP-Protocol-orange.svg)](https://modelcontextprotocol.io/)
 [![Runtime](https://img.shields.io/badge/node-%3E%3D18.0.0-green.svg)](https://nodejs.org/)
@@ -231,7 +231,11 @@ The server logic is split into small, single-purpose modules under `lib/`:
 | `lib/stdioProtocol.js` | Pure (no I/O) stdio message-framing/dispatch logic shared by `server-stdio.js` |
 | `lib/fileOps.js` | File/directory read, write, search, glob-find, replace, truncate, append helpers |
 | `lib/processOps.js` | `run_command` and background process management |
-| `lib/utilOps.js` | Utility helpers: `file_checksum`, `zip_directory`, `query_json`, `query_data`, `diff_files`, `env_info` |
+| `lib/checksumOps.js` | `file_checksum` — MD5/SHA-1/SHA-256/SHA-512 digest of a file |
+| `lib/zipDirOps.js` | `zip_directory` — pure-Node ZIP writer (LFH + Central Directory + EOCD, DEFLATE via zlib), MCP_IGNORE-aware, companion to `lib/unzipOps.js` |
+| `lib/queryOps.js` | `query_json`/`query_data` — dot-path extraction from JSON/YAML files, plus the shared `traverseByPath` helper |
+| `lib/diffFileOps.js` | `diff_files` — pure-JS LCS-based unified diff between two files (`diffFiles`/`computeEdits`) |
+| `lib/envInfoOps.js` | `env_info` — read-only, secret-free snapshot of the server's runtime environment |
 | `lib/hashStringOps.js` | `hash_string` — cryptographic digest of an arbitrary string payload, no file I/O |
 | `lib/encodingOps.js` | Base64 encode/decode helpers: `base64Encode`, `base64Decode` |
 | `lib/textOps.js` | JSON formatting and text-transform helpers: `jsonFormat`, `textTransform` |
@@ -240,7 +244,7 @@ The server logic is split into small, single-purpose modules under `lib/`:
 | `lib/duplicateOps.js` | Duplicate-file detection: `find_duplicates` (size-prefilter + content-hash grouping) |
 | `lib/compareOps.js` | Two-directory-tree comparison: `compare_directories` (added/removed/modified/unchanged by content hash) |
 | `lib/jsonPathOps.js` | JSONPath-style query engine: `query_path` — `$`, `.key`, `['key']`, `[N]`, `[start:end]` slice, `[*]` wildcard, `..` recursive descent, on JSON/YAML files |
-| `lib/dirDiffOps.js` | Combined directory diff: `file_diff_dir` — wraps compareOps + utilOps diffFiles to produce file-level classification + per-modified-file unified diff with a `max_diff_lines` budget |
+| `lib/dirDiffOps.js` | Combined directory diff: `file_diff_dir` — wraps compareOps + diffFileOps diffFiles to produce file-level classification + per-modified-file unified diff with a `max_diff_lines` budget |
 | `lib/jsonDiffOps.js` | Structural (semantic) document diff: `json_diff` — recursively compares two parsed JSON/YAML documents by JSON-Pointer-style path (added/removed/changed), array comparison by index, `max_changes` budget |
 | `lib/wc.js` | Word/line/byte counter: `count_lines` (like Unix `wc`) |
 | `lib/treeOps.js` | ASCII directory-tree printer: `file_tree` (like Unix `tree`) |
