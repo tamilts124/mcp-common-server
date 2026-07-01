@@ -116,3 +116,6 @@ public
 
 # Stray test-run output logs (redirected stdout from ad-hoc test/run-tests.js runs)
 test_output*.txt
+
+# Scratch syntax-check script (reused across sessions for isolated verification, not a project deliverable)
+_syntax_check.js

@@ -1,4 +1,4 @@
-# 🚀 MCP Common Server (HTTP + SSE) — v3.32.0
+# 🚀 MCP Common Server (HTTP + SSE) — v3.33.0
 
 [![Protocol](https://img.shields.io/badge/MCP-Protocol-orange.svg)](https://modelcontextprotocol.io/)
 [![Runtime](https://img.shields.io/badge/node-%3E%3D18.0.0-green.svg)](https://nodejs.org/)
@@ -203,6 +203,21 @@ All eleven tools resolve the true repository root via a jail-bounded upward `.gi
 - **`list_processes`**: Track, monitor, and list all active background processes.
 - **`execute_pipeline`**: Chained execution of sequential operations (e.g. write file, run build command, clean up temp files) in a single request.
 
+### 4. Browser Automation Tools (Enabled when `MCP_ALLOW_EXEC=true`)
+Stealth Playwright (Chromium) sessions — `playwright-extra` + `puppeteer-extra-plugin-stealth`.
+- **`browser_launch`**: Launch a stealth Chromium context/page. Returns `session_id`.
+- **`browser_navigate`**: Navigate a session's page to a URL, waits for load.
+- **`browser_get_content`**: Return page/element `outerHTML` or `innerText` (`mode`), optional CSS `selector` scope.
+- **`browser_evaluate`**: Run JS in the page context via `page.evaluate`, returns the JSON-safe result.
+- **`browser_click`**: Click an element by CSS selector.
+- **`browser_type`**: Fill/type text into an element by CSS selector.
+- **`browser_screenshot`**: Capture a PNG screenshot to a jailed path.
+- **`browser_get_console_logs`**: Return a session's buffered browser console messages.
+- **`browser_list_sessions`**: List active browser sessions.
+- **`browser_close`**: Close a session's page/context/browser and free it.
+
+Tested via `npm run test:browser` (`test/browser-tests.js`), independent of the frozen bulk suite below.
+
 ---
 
 ## 🧩 Code Layout
@@ -255,6 +270,10 @@ The server logic is split into small, single-purpose modules under `lib/`:
 | `lib/yamlMergeOps.js` | Deep-merge tool: `yaml_merge` (recursive mapping merge, array/scalar replace, dry-run) |
 | `lib/convertOps.js` | Format conversion tool: `convert_data` (JSON ↔ YAML, auto-detect by extension, optional destination write) |
 | `lib/csvConvertOps.js` | Format conversion tool: `csv_convert` (CSV ↔ JSON, auto-detect by extension, optional destination write) |
+| `lib/browserLaunch.js` | Stealth Playwright/Chromium session table: launch, session lookup, close |
+| `lib/browserActions.js` | Browser tool logic: navigate/get_content/evaluate/click/type/screenshot/console logs |
+| `lib/dispatchBrowser.js` | `browser_*` tool name → handler map |
+| `lib/schemas/browserSchemas.js` | JSON schemas for all `browser_*` tools |
 | `lib/gitOps.js` | Read-only git metadata helpers: `git_status`, `git_blame`, `git_diff`, `git_show` (`git_log` moved to `lib/gitLogOps.js`) |
 | `lib/gitLogOps.js` | `git_log`: commit history, with an optional `include_files` extension attaching a `filesChanged: [{path, additions, deletions}]` array per commit via a second numstat-based `git log` call matched back to each commit by hash |
 | `lib/gitDiffStatOps.js` | `git_diff`'s `stat_only` mode — per-file added/deleted line counts via `git diff --numstat`, no unified diff text generated |

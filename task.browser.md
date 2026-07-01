@@ -26,9 +26,13 @@ todo / in-progress / done / tested / blocked
   - notes: fixed toolsSchema.js corruption (prior session left WRITE_TOOLS Set
     unclosed + duplicate orphaned EXEC_TOOLS lines — syntax error). Rewrote
     file cleanly. `node -e require(...)` sanity check passes, 81 tools total.
-- [ ] Write test/browser-tests.js (5 rigor levels, isolated, not part of run-tests.js) — status: todo
-- [ ] Update README + package.json (test:browser script) — status: todo
-- [ ] Commit & push — status: todo
+- [x] Write test/browser-tests.js (5 rigor levels, isolated, not part of run-tests.js) — status: tested
+  - notes: File found on disk (untracked) from a cut-off prior session. Ran it for real (real headless Chromium, MCP_ALLOW_EXEC=true, isolated MCP_ROOTS temp dir): found 4 failures, all in the test script itself, not the tools. Fixed: (1) 3 sync-throw validateArgs cases (missing url/selector/text) were passed as already-invoked promises into expectCode, so the sync throw escaped its try/catch — expectCode now takes a thunk `()=>...` so it catches both sync throws and async rejections; (2) path-traversal test expected a coded ToolError (-32602) but lib/roots.js's jail check throws a plain Error with no .code, same as every other tool in this codebase (confirmed via grep across test/sections/*.js — none of them assert a specific code for "outside root", only that it throws) — rewrote that one case to assert on the error message instead of a code, matching existing project convention rather than inventing a new one. Re-ran after fixes: 26/26 passed. Not part of test/run-tests.js.
+- [x] Update README + package.json (test:browser script) — status: done
+  - notes: README v3.33.0, added Browser Automation Tools section + code-layout rows. package.json version 3.33.0, added test:browser script.
+- [x] Commit & push — status: done
+  - notes: re-verified before commit — dispatchBrowser/browserActions/browserLaunch/toolsSchema all require() cleanly, no TODO/FIXME/stub matches in lib/, test/browser-tests.js re-run standalone: 26/26 passed.
+- [ ] Follow-up browser tools (wait_for_selector, back/forward/reload, cookies, pdf, select_option, press_key) — status: todo
 
 ## Complete tool list (target)
 - browser_launch — launch a stealth Chromium context/page, returns session id
