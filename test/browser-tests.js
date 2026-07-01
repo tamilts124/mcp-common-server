@@ -658,6 +658,51 @@ let sessionId;
     await executeTool("browser_unroute", { session_id: sessionId });
   });
 
+  // ── Emulation (viewport/geolocation/color-scheme/offline) ──────────────
+  await test("browser_emulate viewport resizes page (normal)", async () => {
+    const r = await executeTool("browser_emulate", { session_id: sessionId, viewport: { width: 800, height: 600 } });
+    assertEq(r.applied.viewport.width, 800);
+  });
+  await test("browser_emulate geolocation sets coords (normal)", async () => {
+    const r = await executeTool("browser_emulate", { session_id: sessionId, geolocation: { latitude: 51.5, longitude: -0.12 } });
+    assertEq(r.applied.geolocation.latitude, 51.5);
+  });
+  await test("browser_emulate color_scheme dark (normal)", async () => {
+    const r = await executeTool("browser_emulate", { session_id: sessionId, color_scheme: "dark" });
+    assertEq(r.applied.color_scheme, "dark");
+  });
+  await test("browser_emulate offline toggles context (normal)", async () => {
+    const r = await executeTool("browser_emulate", { session_id: sessionId, offline: true });
+    assertEq(r.applied.offline, true);
+    await executeTool("browser_emulate", { session_id: sessionId, offline: false });
+  });
+  await test("browser_emulate no fields -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_emulate", { session_id: sessionId }), -32602));
+  await test("browser_emulate missing session_id -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_emulate", { viewport: { width: 100, height: 100 } }), -32602));
+  await test("browser_emulate invalid viewport -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_emulate", { session_id: sessionId, viewport: { width: -1, height: 100 } }), -32602));
+  await test("browser_emulate invalid color_scheme -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_emulate", { session_id: sessionId, color_scheme: "rainbow" }), -32602));
+  await test("browser_emulate bad geolocation types -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_emulate", { session_id: sessionId, geolocation: { latitude: "x", longitude: 1 } }), -32602));
+  await test("browser_emulate unknown session -> -32602 (high)", () =>
+    expectCode(() => executeTool("browser_emulate", { session_id: "does-not-exist", offline: true }), -32602));
+  await test("browser_emulate large viewport fuzz doesn't crash (extreme)", async () => {
+    // Note: truly extreme values (e.g. 999999x999999) crash the Chromium
+    // renderer itself (target closed) rather than raising a catchable JS
+    // error, killing the session out from under the tool. 8000x8000 is
+    // large enough to exercise the edge without taking the renderer down.
+    const r = await executeTool("browser_emulate", { session_id: sessionId, viewport: { width: 8000, height: 8000 } });
+    assertEq(r.applied.viewport.width, 8000);
+    await executeTool("browser_emulate", { session_id: sessionId, viewport: { width: 1280, height: 800 } });
+  });
+  await test("browser_launch with device_scale_factor/timezone/locale (normal)", async () => {
+    const r = await executeTool("browser_launch", { headless: true, device_scale_factor: 2, timezone_id: "America/New_York", locale: "fr-FR" });
+    assertOk(!!r.session_id);
+    await executeTool("browser_close", { session_id: r.session_id });
+  });
+
   await test("final browser_close of main session", () => executeTool("browser_close", { session_id: sessionId }));
 
   fs.rmSync(TMP, { recursive: true, force: true });

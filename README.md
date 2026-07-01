@@ -225,8 +225,11 @@ Stealth Playwright (Chromium) sessions — `playwright-extra` + `puppeteer-extra
 - **`browser_check`**, **`browser_uncheck`**: set checkbox/radio state.
 - **`browser_get_element_info`**: bounding box, tag, text, and attributes of an element in one call.
 - **`browser_new_page`**, **`browser_switch_page`**, **`browser_list_pages`**, **`browser_close_page`**: multi-tab support within a session.
+- **`browser_network_start`/`browser_network_stop`/`browser_get_network_requests`**: capture and inspect request/response/failure events.
+- **`browser_route`/`browser_unroute`**: intercept requests — abort, fulfill with a custom response, or continue.
+- **`browser_emulate`**: runtime-change viewport, geolocation, color-scheme, or offline state (`browser_launch` also takes `device_scale_factor`/`timezone_id`/`locale` for values Playwright can only set at launch).
 
-Tested via `npm run test:browser` (`test/browser-tests.js`, 111/111), independent of the frozen bulk suite below.
+Tested via `npm run test:browser` (`test/browser-tests.js`, 148/148), independent of the frozen bulk suite below.
 
 ---
 

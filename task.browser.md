@@ -141,7 +141,24 @@ All tools above implemented, wired, and tested (46/46 in test/browser-tests.js).
     invalid action, unknown session, unknown unroute pattern, no-op
     unroute-all, huge url_pattern fuzz). Full isolated suite: 136/136
     passing. package.json v3.41.0.
-- [ ] browser_emulate (viewport size, device scale factor, geolocation,
-      timezone, locale, color-scheme presets) — status: todo
-  - notes: natural next gap; useful for responsive/mobile testing and
-    geo-gated content.
+- [x] browser_emulate (viewport, geolocation, color-scheme, offline —
+      runtime-settable subset; device_scale_factor/timezone/locale added
+      to browser_launch instead since Playwright can't change them after
+      context creation) — status: tested
+  - notes: page.setViewportSize/context.setGeolocation(+grantPermissions)/
+    page.emulateMedia/context.setOffline wrapped in one tool; browser_launch
+    schema extended with device_scale_factor/timezone_id/locale. Wired into
+    browserActions/dispatchBrowser/browserSchemas/toolsSchema EXEC_TOOLS
+    (115 tools total, require()-clean). 12 new tests added across 5 rigor
+    levels. Found+fixed a real bug during testing: the initial extreme-fuzz
+    case used a 999999x999999 viewport, which crashes the Chromium renderer
+    itself (target closed) instead of raising a catchable error, killing the
+    session under the tool — not a bug in browser_emulate, but an unsafe
+    test. Lowered to 8000x8000 (still exercises the edge, doesn't crash the
+    renderer). Full isolated suite re-run twice clean: 148/148 passing both
+    times. package.json v3.42.0.
+- [ ] browser_set_extra_headers / browser_get_local_storage /
+      browser_set_local_storage (custom per-request headers; localStorage
+      inspection for SPA testing) — status: todo
+  - notes: natural next gap; context.setExtraHTTPHeaders + page.evaluate-based
+    localStorage read/write helpers.
