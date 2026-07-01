@@ -44,9 +44,28 @@ todo / in-progress / done / tested / blocked
     Wired in browserActions/dispatchBrowser/browserSchemas/toolsSchema
     EXEC_TOOLS (91 tools total, require()-clean). 3 new tests added
     (happy path, missing session_id, unknown session_id). Full suite: 46/46.
-- [ ] Concurrency/stress hardening pass on write + browser tools — status: todo
-  - notes: next candidate per session brief §4 — parallel write_file races,
-    session-table cleanup under load, memory checks on repeated screenshots.
+- [x] Concurrency/stress hardening pass on write + browser tools — status: tested
+  - notes: verified prior work first (46/46 real browser-tests.js run, no
+    stubs, require()-clean); cleaned stray .bak cruft (already .gitignore'd,
+    from replace_in_file's auto-backup behavior — not a bug).
+    Found and fixed a real race in browserLaunch.js: MAX_SESSIONS cap check
+    read SESSIONS.size, but SESSIONS.set() only happens after the awaited
+    chromium.launch() resolves, so N concurrent browser_launch calls all
+    passed the check before any registered — cap was unenforceable under
+    load. Fixed with a synchronous pendingLaunches reservation counter
+    incremented/decremented around the await. Also added process exit/SIGINT/
+    SIGTERM cleanup hooks to close orphaned Chromium processes. New
+    MCP_MAX_BROWSER_SESSIONS env var (default 8).
+    New test/stress-tests.js (not part of run-tests.js or browser-tests.js):
+    parallel write_file/write_files races (no interleave/corruption), session
+    cap enforcement under concurrent launches, rapid launch/close leak check,
+    repeated-screenshot RSS growth check, mixed-race cap safety, 5MB fuzz
+    write. 7/7 passing (caught the race above pre-fix, 4/7 failed; confirmed
+    fix, now 7/7). package.json test:stress script added, v3.34.0.
+- [ ] Additional utility tools (archive checksum diff, git branch metadata
+  helpers, JSON/YAML schema validators) — status: todo
+  - notes: next candidate per session brief §4 if browser/concurrency work
+    is exhausted — server already has most of these; audit for gaps first.
 
 ## Complete tool list (target)
 - browser_launch — launch a stealth Chromium context/page, returns session id
