@@ -191,11 +191,26 @@ All tools above implemented, wired, and tested (46/46 in test/browser-tests.js).
     19 new tests across 5 rigor levels (duplicate-name rejection, XSS-style
     payload stored inert, no-match timeout, status-mismatch timeout). Full
     isolated suite: 190/190 passing. package.json v3.45.0.
-- [ ] browser_get_storage_state / browser_launch persisted-context reuse
+- [x] browser_get_storage_state / browser_launch persisted-context reuse
       (export/import cookies+localStorage as one portable blob for session
-      resumption across browser_launch calls) — status: todo
-  - notes: context.storageState() already covers cookies; the local_storage
-    tools added this session cover single-origin localStorage only —
-    storage_state gives one call that captures/restores both, matching
-    Playwright's own auth-reuse pattern for agents that need to resume a
-    logged-in session across a fresh browser_launch.
+      resumption across browser_launch calls) — status: tested
+  - notes: context.storageState() reader + browser_launch storage_state
+    param passed through to newContext(). Found+fixed a real bug while
+    testing: browser.newContext()/newPage() in launchSession weren't
+    wrapped in try/catch — a bad storage_state (or any other newContext
+    failure) threw an unwrapped Error past the ToolError boundary AND
+    leaked the already-launched Chromium process (never closed). Wrapped
+    both calls, close the orphaned browser on failure, rethrow as
+    ToolError(-32603). Wired into browserActions/browserLaunch/
+    dispatchBrowser/browserSchemas/toolsSchema EXEC_TOOLS (123 tools total,
+    require()-clean). 8 new tests across 5 rigor levels (round-trip resume
+    across a fresh browser_launch, non-object/array storage_state rejected,
+    malformed storage_state -> -32603 via the new try/catch). Full isolated
+    suite: 196/196 passing. package.json v3.46.0.
+- [ ] browser_accessibility_snapshot / browser_find_by_role (a11y-tree
+      snapshot of the page; locate elements by ARIA role+accessible name
+      instead of a CSS selector) — status: todo
+  - notes: page.accessibility.snapshot() gives agents a structure-aware view
+    of the page without parsing raw HTML; role+name lookup (via
+    page.getByRole under the hood) is often more robust than CSS selectors
+    for dynamically-classed SPA markup.

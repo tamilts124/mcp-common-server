@@ -234,8 +234,9 @@ Stealth Playwright (Chromium) sessions — `playwright-extra` + `puppeteer-extra
 - **`browser_get_page_metrics`**: navigation timing (DOMContentLoaded/load/TTFB), transfer size, resource count, JS heap usage.
 - **`browser_expose_function`**/**`browser_get_exposed_calls`**: bind a Node-reachable callback on `window`, read recorded calls (no live channel back to the caller).
 - **`browser_wait_for_response`**: block until a matching network response (by URL substring, optional status) arrives or times out.
+- **`browser_get_storage_state`**: snapshot cookies + per-origin localStorage as a portable object; pass to `browser_launch`'s `storage_state` to resume a logged-in session in a fresh browser.
 
-Tested via `npm run test:browser` (`test/browser-tests.js`, 190/190), independent of the frozen bulk suite below.
+Tested via `npm run test:browser` (`test/browser-tests.js`, 196/196), independent of the frozen bulk suite below.
 
 ---
 

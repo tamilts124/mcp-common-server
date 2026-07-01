@@ -853,6 +853,28 @@ let sessionId;
   await test("browser_wait_for_response status filter mismatch times out -> -32603 (critical)", () =>
     expectCode(() => executeTool("browser_wait_for_response", { session_id: sessionId, url_pattern: "example.com", status: 599, timeout: 1000 }), -32603));
 
+  await test("browser_get_storage_state captures cookies+localStorage; browser_launch resumes it (normal)", async () => {
+    await executeTool("browser_navigate", { session_id: sessionId, url: "https://example.com/" });
+    await executeTool("browser_set_local_storage", { session_id: sessionId, items: { resumed: "yes" } });
+    const snap = await executeTool("browser_get_storage_state", { session_id: sessionId });
+    assertOk(snap.storage_state && Array.isArray(snap.storage_state.cookies));
+    const launched = await executeTool("browser_launch", { headless: true, storage_state: snap.storage_state });
+    await executeTool("browser_navigate", { session_id: launched.session_id, url: "https://example.com/" });
+    const ls = await executeTool("browser_get_local_storage", { session_id: launched.session_id });
+    assertEq(ls.items.resumed, "yes");
+    await executeTool("browser_close", { session_id: launched.session_id });
+  });
+  await test("browser_get_storage_state missing session_id -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_get_storage_state", {}), -32602));
+  await test("browser_get_storage_state unknown session -> -32602 (high)", () =>
+    expectCode(() => executeTool("browser_get_storage_state", { session_id: "does-not-exist" }), -32602));
+  await test("browser_launch invalid storage_state type -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_launch", { headless: true, storage_state: "not-an-object" }), -32602));
+  await test("browser_launch storage_state array rejected -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_launch", { headless: true, storage_state: [] }), -32602));
+  await test("browser_launch malformed storage_state object -> -32603 (critical)", () =>
+    expectCode(() => executeTool("browser_launch", { headless: true, storage_state: { cookies: "not-an-array" } }), -32603));
+
   await test("final browser_close of main session", () => executeTool("browser_close", { session_id: sessionId }));
 
   fs.rmSync(TMP, { recursive: true, force: true });
