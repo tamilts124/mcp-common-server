@@ -230,8 +230,10 @@ Stealth Playwright (Chromium) sessions — `playwright-extra` + `puppeteer-extra
 - **`browser_emulate`**: runtime-change viewport, geolocation, color-scheme, or offline state (`browser_launch` also takes `device_scale_factor`/`timezone_id`/`locale` for values Playwright can only set at launch).
 - **`browser_set_extra_headers`**: set custom per-request HTTP headers for a session's context.
 - **`browser_get_local_storage`**/**`browser_set_local_storage`**: read/write `window.localStorage` (requires a real http/https page origin).
+- **`browser_add_init_script`**: register JS source to run before page scripts on every navigation in the session (context.addInitScript).
+- **`browser_get_page_metrics`**: navigation timing (DOMContentLoaded/load/TTFB), transfer size, resource count, JS heap usage.
 
-Tested via `npm run test:browser` (`test/browser-tests.js`, 165/165), independent of the frozen bulk suite below.
+Tested via `npm run test:browser` (`test/browser-tests.js`, 176/176), independent of the frozen bulk suite below.
 
 ---
 

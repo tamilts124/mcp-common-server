@@ -761,6 +761,48 @@ let sessionId;
     assertEq(r.items.big.length, 200000);
   });
 
+  await test("browser_add_init_script runs before page scripts on navigate (normal)", async () => {
+    await executeTool("browser_add_init_script", { session_id: sessionId, script: "window.__injected = 'hello';" });
+    await executeTool("browser_navigate", { session_id: sessionId, url: "https://example.com/" });
+    const r = await executeTool("browser_evaluate", { session_id: sessionId, script: "window.__injected" });
+    assertEq(r.result, "hello");
+  });
+  await test("browser_add_init_script missing script -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_add_init_script", { session_id: sessionId }), -32602));
+  await test("browser_add_init_script empty string -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_add_init_script", { session_id: sessionId, script: "" }), -32602));
+  await test("browser_add_init_script missing session_id -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_add_init_script", { script: "1" }), -32602));
+  await test("browser_add_init_script unknown session -> -32602 (high)", () =>
+    expectCode(() => executeTool("browser_add_init_script", { session_id: "does-not-exist", script: "1" }), -32602));
+  await test("browser_add_init_script syntactically invalid JS registers but errors lazily on next nav (critical)", async () => {
+    // Playwright's addInitScript doesn't parse eagerly; a broken script just
+    // throws inside the page context on the next navigation, not here.
+    const r = await executeTool("browser_add_init_script", { session_id: sessionId, script: "this is not valid js (((" });
+    assertEq(r.applied, true);
+  });
+  await test("browser_add_init_script huge script fuzz doesn't crash (extreme)", async () => {
+    const big = "// " + "x".repeat(300000) + "\nwindow.__big = 1;";
+    const r = await executeTool("browser_add_init_script", { session_id: sessionId, script: big });
+    assertEq(r.applied, true);
+  });
+
+  await test("browser_get_page_metrics returns navigation timing (normal)", async () => {
+    await executeTool("browser_navigate", { session_id: sessionId, url: "https://example.com/" });
+    const r = await executeTool("browser_get_page_metrics", { session_id: sessionId });
+    assertOk(typeof r.metrics.resource_count === "number");
+    assertOk("load_event_ms" in r.metrics);
+  });
+  await test("browser_get_page_metrics missing session_id -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_get_page_metrics", {}), -32602));
+  await test("browser_get_page_metrics unknown session -> -32602 (high)", () =>
+    expectCode(() => executeTool("browser_get_page_metrics", { session_id: "does-not-exist" }), -32602));
+  await test("browser_get_page_metrics works on about:blank (extreme, near-empty doc)", async () => {
+    await executeTool("browser_navigate", { session_id: sessionId, url: "about:blank" });
+    const r = await executeTool("browser_get_page_metrics", { session_id: sessionId });
+    assertOk(r.metrics !== null);
+  });
+
   await test("final browser_close of main session", () => executeTool("browser_close", { session_id: sessionId }));
 
   fs.rmSync(TMP, { recursive: true, force: true });

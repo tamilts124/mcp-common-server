@@ -167,9 +167,24 @@ All tools above implemented, wired, and tested (46/46 in test/browser-tests.js).
     http(s) origin (data:/about:blank throw SecurityError, opaque origin) —
     used https://example.com. Full isolated suite: 165/165 passing.
     package.json v3.43.0.
-- [ ] browser_add_init_script / browser_get_page_metrics (inject a script
+- [x] browser_add_init_script / browser_get_page_metrics (inject a script
       that runs on every navigation in the session; basic perf timing —
-      DOMContentLoaded/load/resource counts) — status: todo
+      DOMContentLoaded/load/resource counts) — status: tested
+  - notes: context.addInitScript({content}) wrapper + page.evaluate-based
+    Navigation Timing/resource/JS-heap reader. Wired into browserActions/
+    dispatchBrowser/browserSchemas/toolsSchema EXEC_TOOLS (119 tools total,
+    require()-clean). 11 new tests across 5 rigor levels (init script
+    persists across navigate, huge-script fuzz, syntactically-broken script
+    registers without throwing since Playwright doesn't parse eagerly,
+    metrics on about:blank). Full isolated suite: 176/176 passing.
+    package.json v3.44.0.
+- [ ] browser_expose_function / browser_wait_for_response (register a Node
+      callback reachable from page JS via window binding; wait for a
+      specific network response matching url/status before continuing) —
+      status: todo
+  - notes: expose_function covers agent-driven page->host callbacks;
+    wait_for_response complements existing network capture with a blocking
+    wait for one matching response, useful for SPA action confirmation.
   - notes: init script covers auth-token injection / test shims some SPAs
     need before app code runs; metrics tool surfaces navigation timing
     without a manual evaluate() call.
