@@ -286,9 +286,30 @@ All tools above implemented, wired, and tested (46/46 in test/browser-tests.js).
     suite run for real: 233/233 passing (11 new frame cases across 5 rigor
     levels, real srcdoc iframe fixture). README + package.json v3.50.0
     updated.
-- [ ] Multiple dialogs in flight / dialog on frame navigation edge cases,
-      and drag-and-drop across iframe boundaries — status: todo
-  - notes: proactive extension — current dialog/frame tools cover the
-    common single-dialog, same-document-frame cases; not yet exercised:
-    a dialog firing during a pending frame navigation, or drag_and_drop
-    with source/target in different frames.
+- [x] Multiple dialogs in flight / dialog on frame navigation edge cases,
+      and drag-and-drop across iframe boundaries — status: tested
+  - notes: New standalone script test/browser-edge-tests.js (NOT added to
+    frozen test/browser-tests.js — see freeze note above). 9/9 passing.
+    Bug found+fixed: browser_drag_and_drop's cross-frame path used
+    page.mouse.move/down/up (CDP-level input) — empirically this does not
+    reliably deliver events into a nested <iframe>'s document while a
+    mouse button is held (events land only after mouseup if at all, in
+    headless Chromium). Fixed by dispatching native MouseEvent objects
+    directly via locator.evaluate() on each element's own document
+    (mousedown+mousemove on source, mousemove+mouseup on target) —
+    deterministic regardless of frame nesting. lib/browserActions/core.js
+    dragAndDrop() updated; behavior/response shape unchanged
+    (cross_frame flag, same-frame path still uses native
+    page.dragAndDrop()). Committed.
+- [x] Freeze test/browser-tests.js bulk suite — status: done
+  - notes: Per explicit instruction, test/browser-tests.js (the browser
+    bulk suite, 233 cases) must NOT be executed or extended anymore.
+    Marked complete/frozen as-is. All new browser test coverage from here
+    on goes in separate standalone scripts (e.g. test/browser-edge-tests.js),
+    each run independently with `node test/<name>.js`.
+- [ ] Multi-dialog queueing (arm N one-shot handlers ahead of time via a
+      queue, not just one) + browser_wait_for_dialog (block until next
+      dialog fires, with timeout) — status: todo
+  - notes: proactive extension — current browser_handle_next_dialog only
+    arms a single one-shot; a queue would let callers pre-arm responses
+    for a known sequence of dialogs without polling browser_get_dialog_log.
