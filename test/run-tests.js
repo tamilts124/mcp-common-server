@@ -88,6 +88,7 @@
  *   47-convert-data.js            [47] convert_data tool (JSON <-> YAML document conversion)
  *   48-git-reflog.js              [48] git_reflog tool (reflog entries for HEAD/a ref, incl. unreachable commits)
  *   49-git-cherry.js              [49] git_cherry tool (commits on head not yet in upstream, patch-equivalence aware)
+ *   50-csv-convert.js              [50] csv_convert tool (CSV <-> JSON document conversion)
  *
  * Run with: node test/run-tests.js
  */
@@ -177,6 +178,7 @@ async function main() {
   require("./sections/47-convert-data");
   require("./sections/48-git-reflog");
   require("./sections/49-git-cherry");
+  require("./sections/50-csv-convert");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);
