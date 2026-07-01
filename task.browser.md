@@ -109,7 +109,14 @@ All tools above implemented, wired, and tested (46/46 in test/browser-tests.js).
     (103 tools total, require()-clean). 23 new tests added across 5 rigor
     levels (normal/medium/high/critical/extreme: injection selectors, huge
     fuzz selector, non-checkbox check rejection). Full suite: 93/93 passing.
-- [ ] Element info batch tool (browser_get_element_info: bounding box, tag,
-      text, attributes in one call) — status: todo
+- [x] Element info batch tool (browser_get_element_info: bounding box, tag,
+      text, attributes in one call) — status: tested
   - notes: reduces round-trips for agents inspecting multiple properties of
-    the same element.
+    the same element. Wired into browserActions/dispatchBrowser/browserSchemas/
+    toolsSchema EXEC_TOOLS (104 tools total, require()-clean). 6 new tests
+    added (normal, missing selector, unknown selector, unknown session,
+    invalid-CSS injection selector -> -32603 matching existing convention,
+    huge selector fuzz). Full suite: 99/99 passing.
+- [ ] Further browser tools (e.g. multi-tab/frame support, network
+      interception, request/response inspection) — status: todo
+  - notes: candidate next step if more browser coverage is requested.

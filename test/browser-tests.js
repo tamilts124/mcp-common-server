@@ -484,6 +484,30 @@ let sessionId;
     await expectCode(() => executeTool("browser_check", { session_id: sessionId, selector: "#d", timeout: 500 }), -32603);
   });
 
+  await test("browser_get_element_info returns tag/text/attrs/box (normal)", async () => {
+    await executeTool("browser_navigate", { session_id: sessionId, url:
+      "data:text/html,<a id='lnk' href='/x' class='c'>Hello</a>" });
+    const r = await executeTool("browser_get_element_info", { session_id: sessionId, selector: "#lnk" });
+    assertEq(r.tag, "a");
+    assertEq(r.text, "Hello");
+    assertEq(r.attributes.href, "/x");
+    assertOk(r.bounding_box && typeof r.bounding_box.width === "number");
+  });
+  await test("browser_get_element_info missing selector -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_get_element_info", { session_id: sessionId }), -32602));
+  await test("browser_get_element_info unknown selector -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_get_element_info", { session_id: sessionId, selector: "#nope-xyz" }), -32602));
+  await test("browser_get_element_info unknown session -> -32602 (high)", () =>
+    expectCode(() => executeTool("browser_get_element_info", { session_id: "does-not-exist", selector: "#lnk" }), -32602));
+  await test("browser_get_element_info script-injection selector inert (critical)", () =>
+    expectCode(() => executeTool("browser_get_element_info", {
+      session_id: sessionId, selector: "<img src=x onerror=alert(1)>",
+    }), -32603));
+  await test("browser_get_element_info huge selector fuzz doesn't crash (extreme)", () =>
+    expectCode(() => executeTool("browser_get_element_info", {
+      session_id: sessionId, selector: "#" + "z".repeat(50000),
+    }), -32602));
+
   await test("final browser_close of main session", () => executeTool("browser_close", { session_id: sessionId }));
 
   fs.rmSync(TMP, { recursive: true, force: true });
