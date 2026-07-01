@@ -803,6 +803,56 @@ let sessionId;
     assertOk(r.metrics !== null);
   });
 
+  await test("browser_expose_function then page calls it, recorded via browser_get_exposed_calls (normal)", async () => {
+    await executeTool("browser_expose_function", { session_id: sessionId, name: "onTestEvent" });
+    await executeTool("browser_navigate", { session_id: sessionId, url: "https://example.com/" });
+    await executeTool("browser_evaluate", { session_id: sessionId, script: "window.onTestEvent('hi', 42)" });
+    const r = await executeTool("browser_get_exposed_calls", { session_id: sessionId, name: "onTestEvent" });
+    assertEq(r.count, 1);
+    assertEq(r.calls[0].args[0], "hi");
+    assertEq(r.calls[0].args[1], 42);
+  });
+  await test("browser_expose_function missing name -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_expose_function", { session_id: sessionId }), -32602));
+  await test("browser_expose_function invalid identifier -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_expose_function", { session_id: sessionId, name: "not-valid!" }), -32602));
+  await test("browser_expose_function duplicate name -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_expose_function", { session_id: sessionId, name: "onTestEvent" }), -32602));
+  await test("browser_expose_function unknown session -> -32602 (high)", () =>
+    expectCode(() => executeTool("browser_expose_function", { session_id: "does-not-exist", name: "x" }), -32602));
+  await test("browser_get_exposed_calls unknown session -> -32602 (high)", () =>
+    expectCode(() => executeTool("browser_get_exposed_calls", { session_id: "does-not-exist" }), -32602));
+  await test("browser_get_exposed_calls clear empties log (critical)", async () => {
+    const r = await executeTool("browser_get_exposed_calls", { session_id: sessionId, clear: true });
+    assertOk(r.count >= 1);
+    const r2 = await executeTool("browser_get_exposed_calls", { session_id: sessionId });
+    assertEq(r2.count, 0);
+  });
+  await test("browser_expose_function injection-style payload stored as inert data (extreme)", async () => {
+    await executeTool("browser_evaluate", { session_id: sessionId, script: "window.onTestEvent('<script>alert(1)</script>', \"'; DROP TABLE x; --\")" });
+    const r = await executeTool("browser_get_exposed_calls", { session_id: sessionId });
+    assertEq(r.count, 1);
+    assertOk(r.calls[0].args[0].includes("<script>"));
+  });
+
+  await test("browser_wait_for_response resolves on matching url (normal)", async () => {
+    const p = executeTool("browser_wait_for_response", { session_id: sessionId, url_pattern: "example.com", timeout: 10000 });
+    await executeTool("browser_navigate", { session_id: sessionId, url: "https://example.com/" });
+    const r = await p;
+    assertOk(r.url.includes("example.com"));
+    assertEq(typeof r.status, "number");
+  });
+  await test("browser_wait_for_response missing url_pattern -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_wait_for_response", { session_id: sessionId }), -32602));
+  await test("browser_wait_for_response missing session_id -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_wait_for_response", { url_pattern: "x" }), -32602));
+  await test("browser_wait_for_response unknown session -> -32602 (high)", () =>
+    expectCode(() => executeTool("browser_wait_for_response", { session_id: "does-not-exist", url_pattern: "x" }), -32602));
+  await test("browser_wait_for_response no match times out -> -32603 (high)", () =>
+    expectCode(() => executeTool("browser_wait_for_response", { session_id: sessionId, url_pattern: "no-such-endpoint-xyz", timeout: 1000 }), -32603));
+  await test("browser_wait_for_response status filter mismatch times out -> -32603 (critical)", () =>
+    expectCode(() => executeTool("browser_wait_for_response", { session_id: sessionId, url_pattern: "example.com", status: 599, timeout: 1000 }), -32603));
+
   await test("final browser_close of main session", () => executeTool("browser_close", { session_id: sessionId }));
 
   fs.rmSync(TMP, { recursive: true, force: true });

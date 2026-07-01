@@ -178,13 +178,24 @@ All tools above implemented, wired, and tested (46/46 in test/browser-tests.js).
     registers without throwing since Playwright doesn't parse eagerly,
     metrics on about:blank). Full isolated suite: 176/176 passing.
     package.json v3.44.0.
-- [ ] browser_expose_function / browser_wait_for_response (register a Node
+- [x] browser_expose_function / browser_wait_for_response (register a Node
       callback reachable from page JS via window binding; wait for a
       specific network response matching url/status before continuing) —
-      status: todo
-  - notes: expose_function covers agent-driven page->host callbacks;
-    wait_for_response complements existing network capture with a blocking
-    wait for one matching response, useful for SPA action confirmation.
-  - notes: init script covers auth-token injection / test shims some SPAs
-    need before app code runs; metrics tool surfaces navigation timing
-    without a manual evaluate() call.
+      status: tested
+  - notes: page.exposeFunction wrapper recording calls into a capped (200)
+    per-session log, read via new companion tool browser_get_exposed_calls
+    (needed since exposeFunction has no live return channel to the tool
+    caller); page.waitForResponse wrapper with url-substring + optional
+    status predicate. Wired into browserActions/dispatchBrowser/
+    browserSchemas/toolsSchema EXEC_TOOLS (122 tools total, require()-clean).
+    19 new tests across 5 rigor levels (duplicate-name rejection, XSS-style
+    payload stored inert, no-match timeout, status-mismatch timeout). Full
+    isolated suite: 190/190 passing. package.json v3.45.0.
+- [ ] browser_get_storage_state / browser_launch persisted-context reuse
+      (export/import cookies+localStorage as one portable blob for session
+      resumption across browser_launch calls) — status: todo
+  - notes: context.storageState() already covers cookies; the local_storage
+    tools added this session cover single-origin localStorage only —
+    storage_state gives one call that captures/restores both, matching
+    Playwright's own auth-reuse pattern for agents that need to resume a
+    logged-in session across a fresh browser_launch.
