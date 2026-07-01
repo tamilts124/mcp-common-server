@@ -202,6 +202,39 @@ test("git_log: succeeds when path is 5 levels deep inside the repo", () => {
   assert.strictEqual(r.count, 2);
 });
 
+test("git_blame: succeeds when the target file is 5 levels deep", () => {
+  // git_blame is file-scoped: its repo-root search starts from
+  // path.dirname(resolved) rather than a directory arg directly, so this
+  // exercises a different code path than the directory-scoped tools above
+  // (and than git_log's 5-level test) at the same nesting depth.
+  const { deepFileRel, repoDir } = makeNestedRepo("nest-blame5", 5);
+  const r = executeTool("git_blame", { path: path.join(relTo(repoDir), deepFileRel) });
+  assert.strictEqual(r.lineCount, 4); // alpha, beta, gamma, delta
+  assert.ok(r.lines[0].hash.match(/^[0-9a-f]{40}$/));
+  assert.ok(r.lines.every(l => l.hash.match(/^[0-9a-f]{40}$/)));
+});
+
+test("git_show: succeeds when path is 5 levels deep, reads file at HEAD", () => {
+  // Same repo-root-discovery code path as the 2-level git_show test above
+  // (resolveRepoDir off a directory arg), verified at greater depth. `file`
+  // remains repo-root-relative regardless of nesting depth.
+  const { repoDir, deepDir, deepFileRel } = makeNestedRepo("nest-show5", 5);
+  const r = executeTool("git_show", { path: relTo(deepDir), file: deepFileRel });
+  assert.strictEqual(r.content, "alpha\nbeta\ngamma\ndelta\n");
+});
+
+test("git_blame: non-git file path nested 5 levels deep still throws (jail boundary respected)", () => {
+  const notGitDeep = path.join(TMP, "nest-blame5-notgit", "a", "b", "c", "d");
+  fs.mkdirSync(notGitDeep, { recursive: true });
+  const filePath = path.join(notGitDeep, "orphan.txt");
+  fs.writeFileSync(filePath, "hello\n", "utf8");
+  assert.throws(
+    () => executeTool("git_blame", { path: relTo(filePath) }),
+    /not a git repository|git blame failed/i,
+    "must not silently adopt a repo found above the jail boundary"
+  );
+});
+
 // ── CRITICAL — jail-boundary regression ───────────────────────────────────────
 
 test("git_status: non-git directory inside the sandbox still throws (never escapes the jail)", () => {
@@ -253,6 +286,7 @@ test("cleanup: remove nested-repo-root fixture repos", () => {
     "nest-status", "nest-log", "nest-blame", "nest-diff", "nest-stash",
     "nest-branch", "nest-show", "nest-tag", "nest-shallow", "nest-deep5",
     "nest-not-git", "nest-not-git-log", "nest-not-git-branch", "nest-concurrent",
+    "nest-blame5", "nest-show5", "nest-blame5-notgit",
   ];
   for (const d of dirs) {
     try { fs.rmSync(path.join(TMP, d), { recursive: true, force: true }); } catch (_) {}
