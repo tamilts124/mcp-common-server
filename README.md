@@ -293,7 +293,11 @@ The server logic is split into small, single-purpose modules under `lib/`:
 | `lib/convertOps.js` | Format conversion tool: `convert_data` (JSON ↔ YAML, auto-detect by extension, optional destination write) |
 | `lib/csvConvertOps.js` | Format conversion tool: `csv_convert` (CSV ↔ JSON, auto-detect by extension, optional destination write) |
 | `lib/browserLaunch.js` | Stealth Playwright/Chromium session table: launch, session lookup, close |
-| `lib/browserActions.js` | Browser tool logic: navigate/get_content/evaluate/click/type/screenshot/console logs |
+| `lib/browserActions.js` | Thin barrel re-exporting `lib/browserActions/{core,storage,network,a11y}.js` |
+| `lib/browserActions/core.js` | navigate/content/evaluate/click/type/interaction/element-state/scripting tools |
+| `lib/browserActions/storage.js` | cookies/localStorage/storageState/headers/emulate tools |
+| `lib/browserActions/network.js` | request/response capture + route/unroute interception tools |
+| `lib/browserActions/a11y.js` | accessibility snapshot + find-by-role tools |
 | `lib/dispatchBrowser.js` | `browser_*` tool name → handler map |
 | `lib/schemas/browserSchemas.js` | JSON schemas for all `browser_*` tools |
 | `lib/gitOps.js` | Read-only git metadata helpers: `git_status`, `git_blame`, `git_diff`, `git_show` (`git_log` moved to `lib/gitLogOps.js`) |

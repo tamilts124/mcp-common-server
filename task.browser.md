@@ -220,12 +220,21 @@ All tools above implemented, wired, and tested (46/46 in test/browser-tests.js).
     dispatchBrowser/browserSchemas/toolsSchema EXEC_TOOLS (125 tools total,
     require()-clean). 13 new tests across 5 rigor levels. Full isolated
     suite: 209/209 passing. package.json v3.47.0.
-- [ ] Split lib/browserActions.js into modules (now 871 lines, approaching
-      the project's 1000-line-file threshold) — status: todo
-  - notes: split along the existing grouping used in this file's own
-    comments (nav/content/input, cookies/storage, network, a11y) into e.g.
-    browserActions/{core,storage,network,a11y}.js re-exported from a thin
-    browserActions.js barrel, mirroring the lib/schemas/ split already used
-    for tool schemas. Pure refactor — no behavior change — so it must be
-    verified against the full 209/209 test/browser-tests.js suite before
-    and after with zero diffs in pass count.
+- [x] Split lib/browserActions.js into modules (was 871 lines, approaching
+      the project's 1000-line-file threshold) — status: tested
+  - notes: split into lib/browserActions/{shared,core,storage,network,a11y}.js
+    (shared.js = ToolError/getSession/requireSessionId/path helpers; core.js =
+    nav/content/input/interaction/element-state/scripting, 33 fns; storage.js =
+    cookies/localStorage/storageState/headers/emulate, 7 fns; network.js =
+    capture+route/unroute, 5 fns; a11y.js = snapshot/find_by_role, 2 fns).
+    lib/browserActions.js is now a 9-line barrel re-exporting all four via
+    spread. Verified export-key set matches the original file's 47 keys
+    exactly (no missing/extra), all modules require()-clean, dispatchBrowser/
+    executeTool/toolsSchema require()-clean. Pure refactor, zero behavior
+    change — full isolated test/browser-tests.js re-run: 209/209 passing
+    (same count as before the split). package.json v3.48.0.
+- [ ] Extend test/stress-tests.js with browser-specific concurrency cases
+      (parallel navigate/evaluate on the same session, rapid route/unroute
+      churn) — status: todo
+  - notes: current stress-tests.js covers write_file races + browser_launch
+    session-cap/leak checks but not same-session concurrent tool calls.
