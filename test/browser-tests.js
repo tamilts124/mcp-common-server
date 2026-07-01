@@ -281,6 +281,50 @@ let sessionId;
   await test("browser_wait_for_navigation unknown session_id -> -32602", () =>
     expectCode(() => executeTool("browser_wait_for_navigation", { session_id: "does-not-exist" }), -32602));
 
+  await test("browser_hover moves over element", async () => {
+    await executeTool("browser_navigate", { session_id: sessionId, url: "data:text/html,<button id='b'>hi</button>" });
+    const r = await executeTool("browser_hover", { session_id: sessionId, selector: "#b" });
+    assertEq(r.status, "hovered");
+  });
+
+  await test("browser_hover missing selector -> -32602", () =>
+    expectCode(() => executeTool("browser_hover", { session_id: sessionId }), -32602));
+
+  await test("browser_hover unknown session_id -> -32602", () =>
+    expectCode(() => executeTool("browser_hover", { session_id: "does-not-exist", selector: "#b" }), -32602));
+
+  await test("browser_hover missing element -> -32603", () =>
+    expectCode(() => executeTool("browser_hover", { session_id: sessionId, selector: "#nope", timeout: 500 }), -32603));
+
+  await test("browser_upload_file sets file on input", async () => {
+    const filePath = path.join(TMP, "upload.txt");
+    fs.writeFileSync(filePath, "hello");
+    await executeTool("browser_navigate", { session_id: sessionId, url: "data:text/html,<input type='file' id='f'>" });
+    const r = await executeTool("browser_upload_file", { session_id: sessionId, selector: "#f", path: "upload.txt" });
+    assertEq(r.status, "uploaded");
+    assertEq(r.files.length, 1);
+  });
+
+  await test("browser_upload_file accepts files array", async () => {
+    const r = await executeTool("browser_upload_file", { session_id: sessionId, selector: "#f", files: ["upload.txt"] });
+    assertEq(r.status, "uploaded");
+  });
+
+  await test("browser_upload_file missing selector -> -32602", () =>
+    expectCode(() => executeTool("browser_upload_file", { session_id: sessionId, path: "upload.txt" }), -32602));
+
+  await test("browser_upload_file missing files/path -> -32602", () =>
+    expectCode(() => executeTool("browser_upload_file", { session_id: sessionId, selector: "#f" }), -32602));
+
+  await test("browser_upload_file path traversal rejected", async () => {
+    try {
+      await executeTool("browser_upload_file", { session_id: sessionId, selector: "#f", path: "../../../etc/passwd" });
+      throw new Error("expected throw, none occurred");
+    } catch (e) {
+      assertOk(/access denied|outside root/i.test(e.message), `unexpected error: ${e.message}`);
+    }
+  });
+
   // ── cleanup ─────────────────────────────────────────────────────────
   await test("final browser_close of main session", () => executeTool("browser_close", { session_id: sessionId }));
 

@@ -62,21 +62,20 @@ todo / in-progress / done / tested / blocked
     repeated-screenshot RSS growth check, mixed-race cap safety, 5MB fuzz
     write. 7/7 passing (caught the race above pre-fix, 4/7 failed; confirmed
     fix, now 7/7). package.json test:stress script added, v3.34.0.
-- [ ] Additional utility tools (archive checksum diff, git branch metadata
-  helpers, JSON/YAML schema validators) — status: todo
-  - notes: next candidate per session brief §4 if browser/concurrency work
-    is exhausted — server already has most of these; audit for gaps first.
+- [x] Additional utility tools (archive checksum diff, git branch metadata
+  helpers, JSON/YAML schema validators) — status: blocked
+  - notes: OUT OF SCOPE for this session — explicit instruction restricts
+    work to browser automation tools only, no general/non-browser tools.
+    Not implementing. Left for a future non-browser-focused session.
+- [x] browser_hover + browser_upload_file tools — status: tested
+  - notes: hover (page.hover) + upload_file (page.setInputFiles, accepts
+    'files' array or single 'path', jailed via resolveClientPath). Wired
+    into browserActions/dispatchBrowser/browserSchemas/toolsSchema
+    EXEC_TOOLS (93 tools total, require()-clean). 9 new tests added
+    (happy path x2, missing selector, unknown session, timeout/missing
+    element, missing files/path, path traversal). Full suite: 55/55.
+    README + package.json v3.35.0 updated.
 
-## Complete tool list (target)
-- browser_launch — launch a stealth Chromium context/page, returns session id
-- browser_navigate — goto(url), waits for load
-- browser_get_content — outerHTML / innerText, optional selector scope
-- browser_evaluate — page.evaluate(js)
-- browser_click — click(selector)
-- browser_type — fill/type(selector, text)
-- browser_screenshot — page.screenshot() to a jailed path
-- browser_get_console_logs — buffered console messages for a session
-- browser_list_sessions — list active sessions
 - browser_close — close page/context/browser, drop session
 
 - browser_wait_for_selector — wait for element state (visible/hidden/attached/detached)

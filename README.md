@@ -215,8 +215,11 @@ Stealth Playwright (Chromium) sessions — `playwright-extra` + `puppeteer-extra
 - **`browser_get_console_logs`**: Return a session's buffered browser console messages.
 - **`browser_list_sessions`**: List active browser sessions.
 - **`browser_close`**: Close a session's page/context/browser and free it.
+- **`browser_wait_for_selector`**, **`browser_go_back`/`browser_go_forward`/`browser_reload`**, **`browser_get_cookies`/`browser_set_cookies`**, **`browser_pdf`**, **`browser_select_option`**, **`browser_press_key`**, **`browser_wait_for_navigation`**: follow-up navigation/interaction tools.
+- **`browser_hover`**: Move the mouse over an element without clicking.
+- **`browser_upload_file`**: Set file(s) on a `<input type=file>` element via `files`/`path`.
 
-Tested via `npm run test:browser` (`test/browser-tests.js`), independent of the frozen bulk suite below.
+Tested via `npm run test:browser` (`test/browser-tests.js`, 55/55), independent of the frozen bulk suite below.
 
 ---
 
