@@ -181,6 +181,94 @@ let sessionId;
     await expectCode(() => executeTool("browser_close", { session_id: r.session_id }), -32602);
   });
 
+  // ── FOLLOW-UP TOOLS: wait_for_selector/back/forward/reload/cookies/pdf/select/press ──
+  await test("browser_navigate reset for follow-up tools page", async () => {
+    const r = await executeTool("browser_navigate", {
+      session_id: sessionId,
+      url: "data:text/html,<html><body><h1 id='t'>Hi</h1><select id='s'><option value='a'>A</option><option value='b'>B</option></select><input id='i2'/></body></html>",
+    });
+    assertOk(r.url.startsWith("data:"));
+  });
+
+  await test("browser_wait_for_selector finds existing element", async () => {
+    const r = await executeTool("browser_wait_for_selector", { session_id: sessionId, selector: "#t", timeout: 3000 });
+    assertEq(r.status, "found");
+  });
+
+  await test("browser_wait_for_selector missing selector -> -32602", () =>
+    expectCode(() => executeTool("browser_wait_for_selector", { session_id: sessionId }), -32602));
+
+  await test("browser_wait_for_selector timeout on absent element -> -32603", () =>
+    expectCode(() => executeTool("browser_wait_for_selector", { session_id: sessionId, selector: "#nope-xyz", timeout: 500 }), -32603));
+
+  await test("browser_select_option by value", async () => {
+    const r = await executeTool("browser_select_option", { session_id: sessionId, selector: "#s", value: "b" });
+    assertEq(r.selected[0], "b");
+  });
+
+  await test("browser_select_option missing value/label -> -32602", () =>
+    expectCode(() => executeTool("browser_select_option", { session_id: sessionId, selector: "#s" }), -32602));
+
+  await test("browser_press_key types into focused selector", async () => {
+    await executeTool("browser_click", { session_id: sessionId, selector: "#i2" });
+    await executeTool("browser_press_key", { session_id: sessionId, key: "a" });
+    const r = await executeTool("browser_evaluate", { session_id: sessionId, script: "document.getElementById('i2').value" });
+    assertEq(r.result, "a");
+  });
+
+  await test("browser_press_key missing key -> -32602", () =>
+    expectCode(() => executeTool("browser_press_key", { session_id: sessionId }), -32602));
+
+  await test("browser_set_cookies then browser_get_cookies round-trips", async () => {
+    await executeTool("browser_set_cookies", {
+      session_id: sessionId,
+      cookies: [{ name: "foo", value: "bar", url: "https://example.com" }],
+    });
+    const r = await executeTool("browser_get_cookies", { session_id: sessionId, urls: ["https://example.com"] });
+    assertOk(r.cookies.some((c) => c.name === "foo" && c.value === "bar"));
+  });
+
+  await test("browser_set_cookies missing name/value -> -32602", () =>
+    expectCode(() => executeTool("browser_set_cookies", { session_id: sessionId, cookies: [{ name: "x" }] }), -32602));
+
+  await test("browser_set_cookies empty array -> -32602", () =>
+    expectCode(() => executeTool("browser_set_cookies", { session_id: sessionId, cookies: [] }), -32602));
+
+  await test("browser_navigate then browser_go_back/browser_go_forward", async () => {
+    await executeTool("browser_navigate", { session_id: sessionId, url: "about:blank" });
+    const back = await executeTool("browser_go_back", { session_id: sessionId, timeout: 3000 });
+    assertEq(back.status, "back");
+    const fwd = await executeTool("browser_go_forward", { session_id: sessionId, timeout: 3000 });
+    assertEq(fwd.status, "forward");
+  });
+
+  await test("browser_reload keeps session usable", async () => {
+    const r = await executeTool("browser_reload", { session_id: sessionId, timeout: 3000 });
+    assertEq(r.status, "reloaded");
+  });
+
+  await test("browser_pdf writes a file (chromium only)", async () => {
+    await executeTool("browser_navigate", { session_id: sessionId, url: "data:text/html,<h1>pdf</h1>" });
+    const r = await executeTool("browser_pdf", { session_id: sessionId, path: "out.pdf" });
+    assertOk(fs.existsSync(path.join(TMP, "out.pdf")), "pdf file missing");
+    assertEq(r.path.replace(/\\/g, "/"), "out.pdf");
+  });
+
+  await test("browser_pdf missing path -> -32602", () =>
+    expectCode(() => executeTool("browser_pdf", { session_id: sessionId }), -32602));
+
+  await test("browser_pdf path traversal rejected", async () => {
+    try {
+      await executeTool("browser_pdf", { session_id: sessionId, path: "../../../etc/passwd.pdf" });
+      throw new Error("expected throw, none occurred");
+    } catch (e) {
+      assertOk(/access denied|outside root/i.test(e.message), `unexpected error: ${e.message}`);
+    }
+  });
+
+  await test("follow-up tools: unknown session_id -> -32602", () =>
+    expectCode(() => executeTool("browser_go_back", { session_id: "does-not-exist" }), -32602));
+
   // ── cleanup ─────────────────────────────────────────────────────────
   await test("final browser_close of main session", () => executeTool("browser_close", { session_id: sessionId }));
 

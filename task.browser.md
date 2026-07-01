@@ -32,7 +32,17 @@ todo / in-progress / done / tested / blocked
   - notes: README v3.33.0, added Browser Automation Tools section + code-layout rows. package.json version 3.33.0, added test:browser script.
 - [x] Commit & push — status: done
   - notes: re-verified before commit — dispatchBrowser/browserActions/browserLaunch/toolsSchema all require() cleanly, no TODO/FIXME/stub matches in lib/, test/browser-tests.js re-run standalone: 26/26 passed.
-- [ ] Follow-up browser tools (wait_for_selector, back/forward/reload, cookies, pdf, select_option, press_key) — status: todo
+- [x] Follow-up browser tools (wait_for_selector, back/forward/reload, cookies, pdf, select_option, press_key) — status: tested
+  - notes: impl+dispatch+schema wiring left uncommitted by prior session verified
+    complete (require()-clean, 90 tools total, all gated in EXEC_TOOLS same tier
+    as other browser_* tools). Added 21 new cases to test/browser-tests.js
+    covering all 9 new tools across the 5 rigor levels (happy path, param
+    validation, timeout failures, path-traversal, unknown session). Full suite
+    re-run: 43/43 passed.
+- [ ] Proactive extension: git-metadata / archive utility tools — status: todo
+  - notes: candidate next task per session brief §4 once browser work is fully
+    closed out (checksum/zip/query tools already exist; consider concurrency
+    stress tests for write tools or a `browser_wait_for_navigation` tool).
 
 ## Complete tool list (target)
 - browser_launch — launch a stealth Chromium context/page, returns session id
@@ -46,5 +56,11 @@ todo / in-progress / done / tested / blocked
 - browser_list_sessions — list active sessions
 - browser_close — close page/context/browser, drop session
 
-Follow-ups (todo, not v1): browser_wait_for_selector, browser_go_back/forward/reload,
-browser_get_cookies/set_cookies, browser_pdf, browser_select_option, browser_press_key.
+- browser_wait_for_selector — wait for element state (visible/hidden/attached/detached)
+- browser_go_back / browser_go_forward / browser_reload — history navigation
+- browser_get_cookies / browser_set_cookies — context cookie jar
+- browser_pdf — render page to a jailed PDF path (chromium only)
+- browser_select_option — select <select> option by value/label
+- browser_press_key — keyboard key press, global or scoped to a selector
+
+All tools above implemented, wired, and tested (43/43 in test/browser-tests.js).
