@@ -80,6 +80,7 @@
  *   36-git-show.js               [39] git_show tool (read a file's content at a specific commit/ref)
  *   37-csv-aggregate.js          [40] csv_query aggregate mode (group_by + sum/avg/count/min/max)
  *   38-git-tag-list.js           [41] git_tag_list tool (list git tags with target commit/date/message)
+ *   39-dir-size-stats.js         [42] dir_size_stats tool (directory-level disk-usage rollup, like `du --max-depth=N`)
  *
  * Run with: node test/run-tests.js
  */
@@ -156,6 +157,8 @@ async function main() {
   require("./sections/37-csv-aggregate");
 
   require("./sections/38-git-tag-list");
+
+  require("./sections/39-dir-size-stats");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);
