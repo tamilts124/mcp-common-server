@@ -131,7 +131,17 @@ All tools above implemented, wired, and tested (46/46 in test/browser-tests.js).
     added across 5 rigor levels (idempotent start, filters, clear, missing
     session_id, unknown session, injection-style filter, huge fuzz filter).
     Full isolated suite: 124/124 passing.
-- [ ] browser_route (request mocking/interception — abort, fulfill with
-      custom body/status, or continue) — status: todo
-  - notes: natural follow-up to network inspection; needed for testing
-    error states and mocking APIs without a live backend.
+- [x] browser_route + browser_unroute (request mocking/interception —
+      abort, fulfill with custom body/status, or continue) — status: tested
+  - notes: page.route/unroute wrapper; handlers tracked per-session in an
+    entry.routes Map for targeted or bulk unroute. Wired into
+    browserActions/dispatchBrowser/browserSchemas/toolsSchema EXEC_TOOLS
+    (113 tools total, require()-clean). 12 new tests across 5 rigor levels
+    (fulfill/abort/continue happy paths, missing url_pattern/action,
+    invalid action, unknown session, unknown unroute pattern, no-op
+    unroute-all, huge url_pattern fuzz). Full isolated suite: 136/136
+    passing. package.json v3.41.0.
+- [ ] browser_emulate (viewport size, device scale factor, geolocation,
+      timezone, locale, color-scheme presets) — status: todo
+  - notes: natural next gap; useful for responsive/mobile testing and
+    geo-gated content.

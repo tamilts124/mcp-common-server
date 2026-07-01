@@ -612,6 +612,52 @@ let sessionId;
     assertEq(r.requests.length, 0);
   });
 
+  // ── Request routing/mocking ─────────────────────────────────────────────
+  await test("browser_route fulfill mocks a response (normal)", async () => {
+    const r = await executeTool("browser_route", { session_id: sessionId, url_pattern: "**/mock-api/**", action: "fulfill", status: 200, body: "mocked", content_type: "text/plain" });
+    assertEq(r.status, "routed");
+    await executeTool("browser_navigate", { session_id: sessionId, url: "https://example.com/mock-api/x" });
+    const content = await executeTool("browser_get_content", { session_id: sessionId, mode: "text" });
+    assertOk(content.content.includes("mocked"));
+  });
+  await test("browser_unroute removes a specific route (normal)", async () => {
+    const r = await executeTool("browser_unroute", { session_id: sessionId, url_pattern: "**/mock-api/**" });
+    assertEq(r.status, "unrouted");
+  });
+  await test("browser_route abort blocks a request (normal)", async () => {
+    await executeTool("browser_route", { session_id: sessionId, url_pattern: "**/blocked-api/**", action: "abort" });
+    await expectCode(() => executeTool("browser_navigate", { session_id: sessionId, url: "https://example.com/blocked-api/x", timeout: 5000 }), -32603);
+    await executeTool("browser_unroute", { session_id: sessionId, url_pattern: "**/blocked-api/**" });
+  });
+  await test("browser_route continue lets request through (normal)", async () => {
+    const r = await executeTool("browser_route", { session_id: sessionId, url_pattern: "**/*", action: "continue" });
+    assertEq(r.status, "routed");
+    await executeTool("browser_navigate", { session_id: sessionId, url: netUrl });
+    await executeTool("browser_unroute", { session_id: sessionId });
+  });
+  await test("browser_route missing url_pattern -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_route", { session_id: sessionId, action: "abort" }), -32602));
+  await test("browser_route missing action -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_route", { session_id: sessionId, url_pattern: "**/*" }), -32602));
+  await test("browser_route invalid action -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_route", { session_id: sessionId, url_pattern: "**/*", action: "bogus" }), -32602));
+  await test("browser_route unknown session -> -32602 (high)", () =>
+    expectCode(() => executeTool("browser_route", { session_id: "does-not-exist", url_pattern: "**/*", action: "continue" }), -32602));
+  await test("browser_unroute unknown pattern -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_unroute", { session_id: sessionId, url_pattern: "**/never-routed/**" }), -32602));
+  await test("browser_unroute missing session_id -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_unroute", {}), -32602));
+  await test("browser_unroute all with no routes is a no-op (normal)", async () => {
+    const r = await executeTool("browser_unroute", { session_id: sessionId });
+    assertEq(r.status, "unrouted_all");
+    assertEq(r.count, 0);
+  });
+  await test("browser_route huge url_pattern fuzz doesn't crash (extreme)", async () => {
+    const r = await executeTool("browser_route", { session_id: sessionId, url_pattern: "x".repeat(50000), action: "continue" });
+    assertEq(r.status, "routed");
+    await executeTool("browser_unroute", { session_id: sessionId });
+  });
+
   await test("final browser_close of main session", () => executeTool("browser_close", { session_id: sessionId }));
 
   fs.rmSync(TMP, { recursive: true, force: true });
