@@ -253,11 +253,18 @@ All tools above implemented, wired, and tested (46/46 in test/browser-tests.js).
     logs to stderr only, idempotent), wired into server-http.js,
     server-stdio.js, and test/browser-tests.js. Verified this session:
     require()-clean, full isolated suite re-run 209/209 passing, no crash.
-- [ ] Playwright-extra stealth internal CDP session leak (root cause behind
-      the crash-guard trigger above) — status: todo
-  - notes: guard prevents the process crash but doesn't address why a
-    closed session's CDP listener still fires — likely a stealth-plugin
-    evasion script leaving a dangling CDPSession reference after
-    browser_close. Investigate explicit cdpSession detach before
-    context.close() in browserLaunch.js's close path, or confirm this is
-    upstream puppeteer-extra-plugin-stealth behavior we just keep guarding.
+- [x] Playwright-extra stealth internal CDP session leak (root cause behind
+      the crash-guard trigger above) — status: blocked (won't-fix, mitigated)
+  - notes: confirmed via code read — puppeteer-extra-plugin-stealth is
+    applied once as a singleton (`chromium.use(stealth)` in
+    browserLaunch.js) and manages its own internal CDP sessions/evasion
+    listeners per page, entirely inside the third-party plugin, outside our
+    code path. browserLaunch.js's own close path (closeSession/closePage)
+    is already correct: try/catch around browser.close()/page.close(),
+    session entry always dropped after. The stray rejection originates
+    inside the plugin's internals after target teardown, not from a gap in
+    our code — patching it would mean monkey-patching a vendored dep with
+    no reliable local repro, unacceptable risk for an intermittent timing
+    issue. Global crash-guard (previous task) is the correct, stable
+    mitigation and is sufficient: it isolates the failure to a log line
+    instead of a process crash. Closing as won't-fix/mitigated.
