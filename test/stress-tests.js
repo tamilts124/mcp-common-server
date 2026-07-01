@@ -105,6 +105,27 @@ function assertOk(cond, msg) { if (!cond) throw new Error(msg || "assertion fail
     assertOk(listed.count === 0, "table not clean after mixed race");
   });
 
+  await test("concurrency: parallel evaluate() calls on same session don't corrupt/crash", async () => {
+    const { session_id } = await executeTool("browser_launch", { headless: true });
+    await executeTool("browser_navigate", { session_id, url: "data:text/html,<h1>x</h1>" });
+    const calls = Array.from({ length: 10 }, (_, i) =>
+      executeTool("browser_evaluate", { session_id, script: `${i} * 2` }));
+    const results = await Promise.all(calls);
+    results.forEach((r, i) => assertOk(r.result === i * 2, `evaluate ${i} returned ${r.result}`));
+    await executeTool("browser_close", { session_id });
+  });
+
+  await test("concurrency: rapid route/unroute churn on same session, no crash/leak", async () => {
+    const { session_id } = await executeTool("browser_launch", { headless: true });
+    for (let i = 0; i < 8; i++) {
+      await executeTool("browser_route", { session_id, url_pattern: `**/churn-${i}`, action: "abort" });
+    }
+    const unrouted = await executeTool("browser_unroute", { session_id });
+    assertOk(unrouted.status === "unrouted_all" && unrouted.count === 8, `expected 8 routes cleared, got ${unrouted.count}`);
+    await executeTool("browser_navigate", { session_id, url: "data:text/html,<h1>after-churn</h1>" });
+    await executeTool("browser_close", { session_id });
+  });
+
   // ── fuzz: extreme-length write content doesn't crash the process ────
   await test("fuzz: very large write_file payload handled without crash", async () => {
     const big = "x".repeat(5_000_000); // 5MB

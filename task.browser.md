@@ -233,8 +233,11 @@ All tools above implemented, wired, and tested (46/46 in test/browser-tests.js).
     executeTool/toolsSchema require()-clean. Pure refactor, zero behavior
     change — full isolated test/browser-tests.js re-run: 209/209 passing
     (same count as before the split). package.json v3.48.0.
-- [ ] Extend test/stress-tests.js with browser-specific concurrency cases
+- [x] Extend test/stress-tests.js with browser-specific concurrency cases
       (parallel navigate/evaluate on the same session, rapid route/unroute
-      churn) — status: todo
-  - notes: current stress-tests.js covers write_file races + browser_launch
-    session-cap/leak checks but not same-session concurrent tool calls.
+      churn) — status: tested
+  - notes: added 2 cases — parallel browser_evaluate on one session (10
+    concurrent calls, each result checked against its index to catch any
+    cross-call state bleed) and rapid browser_route/unroute churn (8
+    routes registered then bulk-unrouted, session still navigable after).
+    Full stress-tests.js re-run: 9/9 passing (was 7/7).
