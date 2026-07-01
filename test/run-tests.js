@@ -47,6 +47,7 @@
  *   10-truncate-append.js     [14] truncate_file and append_file tools
  *   11-env-info.js            [15] env_info tool (read-only server environment snapshot)
  *   12-git-diff.js            [16] git_diff tool (unified diff, staged/unstaged/commit-to-commit)
+ *   12b-git-diff-stat-only.js [16-B] git_diff stat_only extension (per-file add/delete counts, no unified text)
  *   13-read-archive.js        [17] read_archive tool (ZIP manifest inspection)
  *   14-git-stash-list.js     [18] git_stash_list tool (list git stash entries)
  *   15-find-duplicates.js     [19] find_duplicates tool (content-hash duplicate detection)
@@ -103,6 +104,7 @@ async function main() {
   require("./sections/10-truncate-append");
   require("./sections/11-env-info");
   require("./sections/12-git-diff");
+  require("./sections/12b-git-diff-stat-only");
   require("./sections/13-read-archive");
   require("./sections/14-git-stash-list");
   require("./sections/15-find-duplicates");
