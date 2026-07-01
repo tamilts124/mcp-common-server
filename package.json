@@ -14,6 +14,7 @@
     "test:browser-edge": "node test/browser-edge-tests.js",
     "test:browser-dialog-queue": "node test/browser-dialog-queue-tests.js",
     "test:browser-viewport": "node test/browser-set-viewport-tests.js",
+    "test:browser-frame-evaluate": "node test/browser-frame-evaluate-tests.js",
     "test:stress": "node test/stress-tests.js"
   },
   "engines": {
@@ -24,5 +25,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "3.52.0"
+  "version": "3.53.0"
 }

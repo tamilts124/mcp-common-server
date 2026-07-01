@@ -347,10 +347,35 @@ All tools above implemented, wired, and tested (46/46 in test/browser-tests.js).
     (9/9) and browser-dialog-queue-tests.js (11/11) for regression check —
     no regressions. README + package.json (v3.52.0, new
     test:browser-viewport script) updated.
-- [ ] browser_frame_evaluate (run arbitrary JS scoped to an <iframe>, mirroring
+- [x] browser_frame_evaluate (run arbitrary JS scoped to an <iframe>, mirroring
       browser_evaluate but via frameLocator — currently only frame_click/
       frame_type/frame_get_content exist, no general JS escape hatch inside
-      a frame) — status: todo
+      a frame) — status: tested
+  - notes: resolves the real Playwright Frame object via
+    page.locator(frame_selector).elementHandle() -> handle.contentFrame(),
+    then frame.evaluate(script) — gives full expression/function-body
+    support identical to browser_evaluate, unlike frameLocator's
+    locator-scoped evaluate (which only evaluates against a single
+    element handle, not a free-form script). Added to
+    lib/browserActions/frames.js, wired into dispatchBrowser.js/
+    browserSchemas.js/toolsSchema.js EXEC_TOOLS/execSchemas.js pipeline
+    enum (134 tools total, require()-clean). New standalone
+    test/browser-frame-evaluate-tests.js (13 cases, 5 rigor levels:
+    frame-scoped vs parent-scoped evaluate isolation, function-body
+    script, missing session_id/frame_selector/script, nonexistent frame,
+    HTML/script-tag-shaped payload treated as literal JS not injected,
+    unknown session, 20k-term huge script fuzz, non-iframe element as
+    frame_selector). Re-ran browser-edge-tests.js (9/9) and
+    browser-dialog-queue-tests.js (11/11) — no regressions. README +
+    package.json (v3.53.0, new test:browser-frame-evaluate script) updated.
+- [ ] browser_replay_actions (record a sequence of {tool, args} calls made
+      on a session into a per-session log, exportable/replayable — useful
+      for building repeatable test scripts from an ad-hoc exploration
+      session) — status: todo
+  - notes: proactive extension — lower priority/exploratory; would need
+    careful scoping to avoid re-recording navigation side effects
+    (screenshots/downloads writing files again on replay). Revisit after
+    core interaction-tool coverage is otherwise exhausted.
   - notes: proactive extension — browser_evaluate runs in the main frame's
     context only; a frame-scoped variant would close the same gap
     frame_click/frame_type closed for click/type.
