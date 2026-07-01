@@ -703,6 +703,64 @@ let sessionId;
     await executeTool("browser_close", { session_id: r.session_id });
   });
 
+  await test("browser_set_extra_headers applies headers (normal)", async () => {
+    const r = await executeTool("browser_set_extra_headers", { session_id: sessionId, headers: { "X-Test": "1", "Authorization": "Bearer abc" } });
+    assertEq(r.headers_set, 2);
+  });
+  await test("browser_set_extra_headers missing headers -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_set_extra_headers", { session_id: sessionId }), -32602));
+  await test("browser_set_extra_headers empty headers object -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_set_extra_headers", { session_id: sessionId, headers: {} }), -32602));
+  await test("browser_set_extra_headers non-string value -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_set_extra_headers", { session_id: sessionId, headers: { "X-N": 5 } }), -32602));
+  await test("browser_set_extra_headers missing session_id -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_set_extra_headers", { headers: { a: "b" } }), -32602));
+  await test("browser_set_extra_headers unknown session -> -32602 (high)", () =>
+    expectCode(() => executeTool("browser_set_extra_headers", { session_id: "does-not-exist", headers: { a: "b" } }), -32602));
+  await test("browser_set_extra_headers injection-style header value (critical)", async () => {
+    const r = await executeTool("browser_set_extra_headers", { session_id: sessionId, headers: { "X-Injected": "'; DROP TABLE users; --" } });
+    assertEq(r.headers_set, 1);
+    await executeTool("browser_set_extra_headers", { session_id: sessionId, headers: { "X-Test": "reset" } });
+  });
+
+  await test("browser_set_local_storage then browser_get_local_storage round-trips (normal)", async () => {
+    await executeTool("browser_navigate", { session_id: sessionId, url: "https://example.com/" });
+    const w = await executeTool("browser_set_local_storage", { session_id: sessionId, items: { foo: "bar", num: "42" } });
+    assertEq(w.items_set, 2);
+    const r = await executeTool("browser_get_local_storage", { session_id: sessionId });
+    assertEq(r.items.foo, "bar");
+    assertEq(r.items.num, "42");
+  });
+  await test("browser_get_local_storage empty store (normal)", async () => {
+    const r = await executeTool("browser_get_local_storage", { session_id: sessionId });
+    assertEq(typeof r.count, "number");
+  });
+  await test("browser_set_local_storage missing items -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_set_local_storage", { session_id: sessionId }), -32602));
+  await test("browser_set_local_storage empty items object -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_set_local_storage", { session_id: sessionId, items: {} }), -32602));
+  await test("browser_set_local_storage non-string value -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_set_local_storage", { session_id: sessionId, items: { a: 1 } }), -32602));
+  await test("browser_get_local_storage missing session_id -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_get_local_storage", {}), -32602));
+  await test("browser_get_local_storage unknown session -> -32602 (high)", () =>
+    expectCode(() => executeTool("browser_get_local_storage", { session_id: "does-not-exist" }), -32602));
+  await test("browser_set_local_storage unknown session -> -32602 (high)", () =>
+    expectCode(() => executeTool("browser_set_local_storage", { session_id: "does-not-exist", items: { a: "b" } }), -32602));
+  await test("browser_set_local_storage script-injection value stored as inert string (critical)", async () => {
+    const payload = "<script>alert(1)</script>";
+    await executeTool("browser_set_local_storage", { session_id: sessionId, items: { xss: payload } });
+    const r = await executeTool("browser_get_local_storage", { session_id: sessionId });
+    assertEq(r.items.xss, payload);
+  });
+  await test("browser_set_local_storage huge value fuzz (extreme)", async () => {
+    const big = "x".repeat(200000);
+    const w = await executeTool("browser_set_local_storage", { session_id: sessionId, items: { big } });
+    assertEq(w.items_set, 1);
+    const r = await executeTool("browser_get_local_storage", { session_id: sessionId });
+    assertEq(r.items.big.length, 200000);
+  });
+
   await test("final browser_close of main session", () => executeTool("browser_close", { session_id: sessionId }));
 
   fs.rmSync(TMP, { recursive: true, force: true });
