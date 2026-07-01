@@ -416,6 +416,74 @@ let sessionId;
   await test("browser_download no download event -> -32603", () =>
     expectCode(() => executeTool("browser_download", { session_id: sessionId, selector: "#nope-xyz", path: "x2.txt", timeout: 500 }), -32603));
 
+  // ── Element state/attribute tools ──────────────────────────────────────
+  await test("browser_get_attribute reads attribute value (normal)", async () => {
+    await executeTool("browser_navigate", { session_id: sessionId, url:
+      "data:text/html,<a id='lnk' href='/foo' data-x='bar'>link</a>" });
+    const r = await executeTool("browser_get_attribute", { session_id: sessionId, selector: "#lnk", attribute: "href" });
+    assertOk(r.value === "/foo", `expected /foo, got ${r.value}`);
+  });
+  await test("browser_get_attribute missing attr -> null (normal)", async () => {
+    const r = await executeTool("browser_get_attribute", { session_id: sessionId, selector: "#lnk", attribute: "nope" });
+    assertEq(r.value, null);
+  });
+  await test("browser_get_attribute missing selector -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_get_attribute", { session_id: sessionId, attribute: "href" }), -32602));
+  await test("browser_get_attribute missing attribute -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_get_attribute", { session_id: sessionId, selector: "#lnk" }), -32602));
+  await test("browser_get_attribute unknown selector -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_get_attribute", { session_id: sessionId, selector: "#nope-xyz", attribute: "href" }), -32602));
+  await test("browser_get_attribute unknown session -> -32602 (high, dep failure)", () =>
+    expectCode(() => executeTool("browser_get_attribute", { session_id: "does-not-exist", selector: "#lnk", attribute: "href" }), -32602));
+  await test("browser_get_attribute path-traversal-style selector inert (critical)", () =>
+    expectCode(() => executeTool("browser_get_attribute", { session_id: sessionId, selector: "../../../etc/passwd", attribute: "href" }), -32602));
+  await test("browser_get_attribute script-injection selector inert (critical)", () =>
+    expectCode(() => executeTool("browser_get_attribute", { session_id: sessionId, selector: "<script>alert(1)</script>", attribute: "href" }), -32603));
+  await test("browser_get_attribute huge selector fuzz doesn't crash (extreme)", () =>
+    expectCode(() => executeTool("browser_get_attribute", { session_id: sessionId, selector: "#x".repeat(20000), attribute: "href" }), -32602));
+
+  await test("browser_is_visible true for visible element (normal)", async () => {
+    const r = await executeTool("browser_is_visible", { session_id: sessionId, selector: "#lnk" });
+    assertEq(r.visible, true);
+  });
+  await test("browser_is_visible false for absent element (normal)", async () => {
+    const r = await executeTool("browser_is_visible", { session_id: sessionId, selector: "#nope-xyz" });
+    assertEq(r.visible, false);
+  });
+  await test("browser_is_visible missing selector -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_is_visible", { session_id: sessionId }), -32602));
+  await test("browser_is_visible unknown session -> -32602 (high)", () =>
+    expectCode(() => executeTool("browser_is_visible", { session_id: "does-not-exist", selector: "#lnk" }), -32602));
+
+  await test("browser_check/uncheck/is_checked round trip (normal)", async () => {
+    await executeTool("browser_navigate", { session_id: sessionId, url:
+      "data:text/html,<input type='checkbox' id='cb'/>" });
+    let r = await executeTool("browser_is_checked", { session_id: sessionId, selector: "#cb" });
+    assertEq(r.checked, false);
+    r = await executeTool("browser_check", { session_id: sessionId, selector: "#cb" });
+    assertEq(r.status, "checked");
+    r = await executeTool("browser_is_checked", { session_id: sessionId, selector: "#cb" });
+    assertEq(r.checked, true);
+    r = await executeTool("browser_uncheck", { session_id: sessionId, selector: "#cb" });
+    assertEq(r.status, "unchecked");
+    r = await executeTool("browser_is_checked", { session_id: sessionId, selector: "#cb" });
+    assertEq(r.checked, false);
+  });
+  await test("browser_check missing selector -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_check", { session_id: sessionId }), -32602));
+  await test("browser_uncheck missing selector -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_uncheck", { session_id: sessionId }), -32602));
+  await test("browser_is_checked missing selector -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_is_checked", { session_id: sessionId }), -32602));
+  await test("browser_check on non-existent element times out -> -32603 (high)", () =>
+    expectCode(() => executeTool("browser_check", { session_id: sessionId, selector: "#nope-xyz", timeout: 500 }), -32603));
+  await test("browser_check unknown session -> -32602 (high)", () =>
+    expectCode(() => executeTool("browser_check", { session_id: "does-not-exist", selector: "#cb" }), -32602));
+  await test("browser_check on non-checkbox element rejected (critical)", async () => {
+    await executeTool("browser_navigate", { session_id: sessionId, url: "data:text/html,<div id='d'>x</div>" });
+    await expectCode(() => executeTool("browser_check", { session_id: sessionId, selector: "#d", timeout: 500 }), -32603);
+  });
+
   await test("final browser_close of main session", () => executeTool("browser_close", { session_id: sessionId }));
 
   fs.rmSync(TMP, { recursive: true, force: true });

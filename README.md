@@ -218,8 +218,13 @@ Stealth Playwright (Chromium) sessions — `playwright-extra` + `puppeteer-extra
 - **`browser_wait_for_selector`**, **`browser_go_back`/`browser_go_forward`/`browser_reload`**, **`browser_get_cookies`/`browser_set_cookies`**, **`browser_pdf`**, **`browser_select_option`**, **`browser_press_key`**, **`browser_wait_for_navigation`**: follow-up navigation/interaction tools.
 - **`browser_hover`**: Move the mouse over an element without clicking.
 - **`browser_upload_file`**: Set file(s) on a `<input type=file>` element via `files`/`path`.
+- **`browser_scroll`**, **`browser_double_click`**, **`browser_right_click`**, **`browser_drag_and_drop`**: extra interaction tools.
+- **`browser_download`**: Click a selector that triggers a download and save it to a jailed path.
+- **`browser_get_attribute`**: Read a named HTML attribute from an element.
+- **`browser_is_visible`**, **`browser_is_checked`**: query element visibility/checkbox state.
+- **`browser_check`**, **`browser_uncheck`**: set checkbox/radio state.
 
-Tested via `npm run test:browser` (`test/browser-tests.js`, 55/55), independent of the frozen bulk suite below.
+Tested via `npm run test:browser` (`test/browser-tests.js`, 93/93), independent of the frozen bulk suite below.
 
 ---
 

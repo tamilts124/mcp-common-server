@@ -102,3 +102,14 @@ All tools above implemented, wired, and tested (46/46 in test/browser-tests.js).
     no-download timeout). Full suite: 73/73 (one run hit a pre-existing
     flaky cdpSession crash in the unrelated concurrency test under
     heavy parallel launches — unrelated to this change, reran clean).
+- [x] Element state/attribute tools (browser_get_attribute, browser_is_visible, browser_is_checked, browser_check, browser_uncheck) — status: tested
+  - notes: query gaps — no way to read attribute values or checkbox/visibility
+    state without evaluate(); added 5 dedicated typed tools. Wired into
+    browserActions/dispatchBrowser/browserSchemas/toolsSchema EXEC_TOOLS
+    (103 tools total, require()-clean). 23 new tests added across 5 rigor
+    levels (normal/medium/high/critical/extreme: injection selectors, huge
+    fuzz selector, non-checkbox check rejection). Full suite: 93/93 passing.
+- [ ] Element info batch tool (browser_get_element_info: bounding box, tag,
+      text, attributes in one call) — status: todo
+  - notes: reduces round-trips for agents inspecting multiple properties of
+    the same element.
