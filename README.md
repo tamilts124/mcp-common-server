@@ -1,4 +1,4 @@
-# 🚀 MCP Common Server (HTTP + SSE) — v3.22.0
+# 🚀 MCP Common Server (HTTP + SSE) — v3.23.0
 
 [![Protocol](https://img.shields.io/badge/MCP-Protocol-orange.svg)](https://modelcontextprotocol.io/)
 [![Runtime](https://img.shields.io/badge/node-%3E%3D18.0.0-green.svg)](https://nodejs.org/)
@@ -163,7 +163,7 @@ Each folder mapped in `MCP_ROOTS` is assigned a lowercased **alias** (derived fr
 
 ### 1c. Git Metadata Tools (Always Available, Read-Only)
 - **`git_status`**: Structured branch/tracking summary — current branch, upstream, ahead/behind counts, and staged/unstaged/untracked/conflicted file counts and entries.
-- **`git_log`**: Last N commits as structured JSON (hash, short hash, author, email, ISO date, subject, body). Supports filtering by file path and reading from a specific branch/ref.
+- **`git_log`**: Last N commits as structured JSON (hash, short hash, author, email, ISO date, subject, body). Supports filtering by file path and reading from a specific branch/ref. Optional `include_files: true` attaches a `filesChanged: [{path, additions, deletions}]` array to each commit (additions/deletions are `null` for binary files) — costs a second `git log --numstat` call, useful for seeing what each of the last N commits touched without a separate `git_show`/`git_diff` call per commit.
 - **`git_blame`**: Per-line authorship for a file — line number, content, commit hash, author, date, and commit summary. Supports an optional `from_line`/`to_line` range.
 - **`git_diff`**: Unified diff between repository states. Four modes: working tree vs HEAD (default), staging index vs HEAD (`staged: true`), working tree vs a specific ref (`from_ref` only), or commit-to-commit (`from_ref` + `to_ref`). Optional `file` argument restricts the diff to a single file/directory. Returns the unified diff text plus structured statistics (`additions`, `deletions`, `hunks`, `changedFiles` with status codes A/D/M/R). Set `stat_only: true` to skip generating the unified diff text entirely and get back only per-file added/deleted line counts (`unified` is `null`, `changedFiles[].additions`/`.deletions` populated instead) — useful for a quick "what changed and how much" overview before deciding whether to pull the full diff; binary files report `additions`/`deletions` as `null` rather than a bogus 0. Always available — does not require `MCP_ALLOW_EXEC`.
 - **`git_stash_list`**: Structured list of all `git stash` entries in the repository. Each entry includes `index`, `ref` (`stash@{N}`), `message`, `author`, `email`, and an ISO 8601 `date`. Returns `{ count: 0, stashes: [] }` when there are no stashes. Always available — does not require `MCP_ALLOW_EXEC`.
@@ -240,7 +240,8 @@ The server logic is split into small, single-purpose modules under `lib/`:
 | `lib/yamlSerializeOps.js` | Minimal zero-dependency YAML serialiser used by `yaml_patch` |
 | `lib/yamlPatchOps.js` | Structured YAML mutation tool: `yaml_patch` (set/delete/insert_at/append_to, dry-run, atomic apply) |
 | `lib/yamlMergeOps.js` | Deep-merge tool: `yaml_merge` (recursive mapping merge, array/scalar replace, dry-run) |
-| `lib/gitOps.js` | Read-only git metadata helpers: `git_status`, `git_log`, `git_blame`, `git_diff`, `git_show` |
+| `lib/gitOps.js` | Read-only git metadata helpers: `git_status`, `git_blame`, `git_diff`, `git_show` (`git_log` moved to `lib/gitLogOps.js`) |
+| `lib/gitLogOps.js` | `git_log`: commit history, with an optional `include_files` extension attaching a `filesChanged: [{path, additions, deletions}]` array per commit via a second numstat-based `git log` call matched back to each commit by hash |
 | `lib/gitDiffStatOps.js` | `git_diff`'s `stat_only` mode — per-file added/deleted line counts via `git diff --numstat`, no unified diff text generated |
 | `lib/gitTagOps.js` | Read-only git metadata helper: `git_tag_list` (lightweight + annotated tags, most-recent-first) |
 | `lib/gitOpsHelpers.js` | Shared git helpers (`gitExec`, `gitExecBuffer`, `assertSafeArg`, `q`) used by `gitOps.js`, `gitStashOps.js`, and `gitBranchOps.js` — `gitExecBuffer` returns raw stdout as a Buffer (no utf8 coercion) for `git_show`'s binary-safe content reads |
