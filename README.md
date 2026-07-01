@@ -1,4 +1,4 @@
-# 🚀 MCP Common Server (HTTP + SSE) — v3.19.0
+# 🚀 MCP Common Server (HTTP + SSE) — v3.20.0
 
 [![Protocol](https://img.shields.io/badge/MCP-Protocol-orange.svg)](https://modelcontextprotocol.io/)
 [![Runtime](https://img.shields.io/badge/node-%3E%3D18.0.0-green.svg)](https://nodejs.org/)
@@ -168,8 +168,9 @@ Each folder mapped in `MCP_ROOTS` is assigned a lowercased **alias** (derived fr
 - **`git_stash_list`**: Structured list of all `git stash` entries in the repository. Each entry includes `index`, `ref` (`stash@{N}`), `message`, `author`, `email`, and an ISO 8601 `date`. Returns `{ count: 0, stashes: [] }` when there are no stashes. Always available — does not require `MCP_ALLOW_EXEC`.
 - **`git_branch_list`**: List of branches in a repository with the current-branch marker and last-commit metadata for each (`lastCommitHash`, `lastCommitShortHash`, `lastCommitDate`, `lastCommitSubject`, `lastCommitAuthor`). By default lists only local branches (`refs/heads`); set `include_remote: true` to also include remote-tracking branches (`refs/remotes`), excluding the synthetic `origin/HEAD` pointer ref. Returns `{ currentBranch, count, branches }`. Always available — does not require `MCP_ALLOW_EXEC`.
 - **`git_show`**: Return the content of a file as it existed at a specific commit/ref, without checking it out into the working tree — reads historical file content directly from git's object store. The `ref` (defaults to `HEAD` when omitted/blank) is resolved to a full 40-char commit hash first, so the result is unambiguous even for relative refs (`HEAD~2`, a branch name, a tag) and an unknown ref surfaces a clear error instead of a raw git failure. Distinguishes a path that does not exist at that ref from a path that is a directory (tree) rather than a file (blob) at that ref. Binary content is detected via a NUL-byte-in-first-8000-bytes heuristic — `isBinary: true` and `content: null` in that case, while `size` is still reported. Returns `{ ref, resolvedHash, file, size, isBinary, content }`. Always available — does not require `MCP_ALLOW_EXEC`.
+- **`git_tag_list`**: List all tags in a git repository with their target commit hash, date, and message, most recent first. Handles both lightweight tags (a plain ref pointing directly at a commit — the reported hash/date/message describe that commit) and annotated tags (a ref pointing at a tag object with its own tagger date and message — `isAnnotated: true`, and `hash` is dereferenced to the tag's target commit). Returns an empty list (not an error) for a repository with no tags. Returns `{ count, tags: [{ name, hash, isAnnotated, date, message }] }`. Always available — does not require `MCP_ALLOW_EXEC`.
 
-These seven never require `MCP_ALLOW_EXEC` (they only read repo metadata via `git`, never modify the working tree) and are jailed through the same root/path safety as every other tool. Arguments passed through to `git` are validated against shell metacharacters before use.
+These eight never require `MCP_ALLOW_EXEC` (they only read repo metadata via `git`, never modify the working tree) and are jailed through the same root/path safety as every other tool. Arguments passed through to `git` are validated against shell metacharacters before use.
 
 ### 2. Write Tools (Disabled when `MCP_READ_ONLY=true`)
 - **`write_file`**: Write/overwrite files (supports partial line range replacements).
@@ -239,6 +240,7 @@ The server logic is split into small, single-purpose modules under `lib/`:
 | `lib/yamlPatchOps.js` | Structured YAML mutation tool: `yaml_patch` (set/delete/insert_at/append_to, dry-run, atomic apply) |
 | `lib/yamlMergeOps.js` | Deep-merge tool: `yaml_merge` (recursive mapping merge, array/scalar replace, dry-run) |
 | `lib/gitOps.js` | Read-only git metadata helpers: `git_status`, `git_log`, `git_blame`, `git_diff`, `git_show` |
+| `lib/gitTagOps.js` | Read-only git metadata helper: `git_tag_list` (lightweight + annotated tags, most-recent-first) |
 | `lib/gitOpsHelpers.js` | Shared git helpers (`gitExec`, `gitExecBuffer`, `assertSafeArg`, `q`) used by `gitOps.js`, `gitStashOps.js`, and `gitBranchOps.js` — `gitExecBuffer` returns raw stdout as a Buffer (no utf8 coercion) for `git_show`'s binary-safe content reads |
 | `lib/gitStashOps.js` | Read-only git stash helper: `git_stash_list` |
 | `lib/gitBranchOps.js` | Read-only git branch helper: `git_branch_list` (local + optional remote-tracking branches, current-branch marker, last-commit metadata) |
