@@ -89,6 +89,7 @@
  *   48-git-reflog.js              [48] git_reflog tool (reflog entries for HEAD/a ref, incl. unreachable commits)
  *   49-git-cherry.js              [49] git_cherry tool (commits on head not yet in upstream, patch-equivalence aware)
  *   50-csv-convert.js              [50] csv_convert tool (CSV <-> JSON document conversion)
+ *   51-zip-directory-hardening.js  [51] zip_directory hardening (WRITE_TOOLS + MCP_IGNORE bug fixes, extended coverage)
  *
  * Run with: node test/run-tests.js
  */
@@ -179,6 +180,7 @@ async function main() {
   require("./sections/48-git-reflog");
   require("./sections/49-git-cherry");
   require("./sections/50-csv-convert");
+  require("./sections/51-zip-directory-hardening");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);

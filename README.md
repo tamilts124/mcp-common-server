@@ -1,4 +1,4 @@
-# 🚀 MCP Common Server (HTTP + SSE) — v3.30.0
+# 🚀 MCP Common Server (HTTP + SSE) — v3.31.0
 
 [![Protocol](https://img.shields.io/badge/MCP-Protocol-orange.svg)](https://modelcontextprotocol.io/)
 [![Runtime](https://img.shields.io/badge/node-%3E%3D18.0.0-green.svg)](https://nodejs.org/)
@@ -134,7 +134,7 @@ Each folder mapped in `MCP_ROOTS` is assigned a lowercased **alias** (derived fr
 ### 1b. Utility Tools (Always Available)
 - **`file_checksum`**: Compute MD5, SHA-1, SHA-256 (default), or SHA-512 digest of any file. Useful for integrity checks, change detection, and deduplication.
 - **`hash_string`**: Compute MD5, SHA-1, SHA-256 (default), or SHA-512 digest of an arbitrary string payload — no file I/O involved. Sibling of `file_checksum` for callers that already have data in hand (an API response body, a generated config, a value read via another tool) and don't want to write it to a temp file just to hash it. Accepts `encoding: 'utf8' | 'base64' | 'hex'` for binary-ish payloads passed as text.
-- **`zip_directory`**: Archive a directory tree to a `.zip` file using DEFLATE compression. Pure Node.js — zero dependencies.
+- **`zip_directory`**: Archive a directory tree to a `.zip` file using DEFLATE compression. Pure Node.js — zero dependencies. MCP_IGNORE'd entries (e.g. `node_modules`, `.git`, `dist`, `build`) are excluded automatically, same convention as every other directory-walking tool in this codebase. Write-gated: blocked when `MCP_READ_ONLY=true`.
 - **`read_archive`**: Inspect the contents of a ZIP file without extracting it. Returns a structured manifest (entry names, sizes, compression method, CRC-32, timestamps) plus aggregate totals. Zero dependencies — reads the ZIP Central Directory directly.
 - **`query_json`**: Parse a JSON file and extract a value by dot-notation path (e.g. `dependencies.lodash`, `users.0.name`). Returns the value and its type.
 - **`query_data`**: Parse a JSON *or* YAML file and extract a value by dot-notation path, with format auto-detected from the file extension (`.json` → JSON, `.yaml`/`.yml` → YAML) or forced via an optional `format` argument. YAML parsing uses a minimal, zero-dependency parser (`lib/yamlOps.js`) covering block/flow mappings and sequences, scalars (strings/numbers/booleans/null), comments, and block scalars (`|` literal / `>` folded, with `-`/`+` chomping indicators and explicit indentation digits) — enough for typical config files (package-manifest-style, docker-compose-style, simple CI configs, multi-line scripts/certs). Not supported: anchors/aliases (`&`/`*`), multi-document streams (`---`/`...`), and YAML tags (`!!str` etc.) — these throw a descriptive error rather than silently misparsing. `query_json` remains available as a JSON-only, backward-compatible entry point.
