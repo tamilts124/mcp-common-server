@@ -307,9 +307,34 @@ All tools above implemented, wired, and tested (46/46 in test/browser-tests.js).
     Marked complete/frozen as-is. All new browser test coverage from here
     on goes in separate standalone scripts (e.g. test/browser-edge-tests.js),
     each run independently with `node test/<name>.js`.
-- [ ] Multi-dialog queueing (arm N one-shot handlers ahead of time via a
+- [x] Multi-dialog queueing (arm N one-shot handlers ahead of time via a
       queue, not just one) + browser_wait_for_dialog (block until next
-      dialog fires, with timeout) — status: todo
-  - notes: proactive extension — current browser_handle_next_dialog only
-    arms a single one-shot; a queue would let callers pre-arm responses
-    for a known sequence of dialogs without polling browser_get_dialog_log.
+      dialog fires, with timeout) — status: tested
+  - notes: browser_handle_next_dialog gains `queue: true` (appends to a FIFO
+    entry.dialogQueue, cap 50, -32602 on overflow; without it, behavior is
+    unchanged — replaces the pending queue with a single one-shot). New
+    browser_wait_for_dialog (`timeout_ms`, default 5000/max 30000) resolves
+    via a per-session entry.dialogWaiters FIFO array serviced by the same
+    page.on('dialog') listener; concurrent waiters each resolve with their
+    own dialog in firing order (verified 3 concurrent waiters -> 3 distinct
+    dialogs, correct order). Wired: dispatchBrowser.js, browserSchemas.js,
+    toolsSchema.js EXEC_TOOLS (132 tools total, require()-clean).
+    Also fixed a pre-existing gap found while wiring this in:
+    lib/schemas/execSchemas.js's execute_pipeline op enum only listed the
+    original 10 browser tools from the abandoned CDP-era design and was
+    never updated across the ~50 browser_* tools added since — most
+    browser tools were silently non-composable via execute_pipeline despite
+    the documented "every tool is pipeline-composable" convention. Added
+    the full current browser_* tool list (now includes browser_wait_for_dialog).
+    New standalone test/browser-dialog-queue-tests.js (11 cases, 5 rigor
+    levels: FIFO queue consumption, queue replacement, wait resolution,
+    missing/invalid params, timeout-with-no-dialog, unknown session, queue
+    overflow, 3 concurrent waiters resolved in order). Re-ran frozen
+    test/browser-edge-tests.js for regression check: 9/9 still passing.
+    README + package.json (v3.51.0, new test:browser-dialog-queue script)
+    updated.
+- [ ] browser_set_viewport dedicated tool (viewport resize is currently only
+      reachable via browser_emulate) — status: todo
+  - notes: proactive extension — low priority, browser_emulate already
+    covers this; would just be a thinner dedicated wrapper for callers who
+    only need viewport and find emulate's broader schema noisy.
