@@ -72,6 +72,9 @@
  *   30b-yaml-patch-de.js        [33-D/E] yaml_patch tool Critical+Extreme
  *   31-yaml-merge.js            [34-A/B/C/D/E] yaml_merge tool, all 5 rigor levels (deep-merge YAML overlay)
  *   32-file-diff-dir.js         [35-A/B/C/D/E] file_diff_dir tool, all 5 rigor levels (compare_directories + diff_files combined)
+ *   33-query-path.js            [36] query_path tool (JSONPath-style query with wildcards/recursive descent)
+ *   33b-query-path-slice.js     [36b] query_path array slice syntax [start:end]
+ *   34-find-replace-dir.js      [37] replace_in_file bulk directory mode + dry_run (find_replace_dir)
  *
  * Run with: node test/run-tests.js
  */
@@ -137,6 +140,8 @@ async function main() {
   require("./sections/33-query-path");
 
   require("./sections/33b-query-path-slice");
+
+  require("./sections/34-find-replace-dir");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);

@@ -113,3 +113,6 @@ public
 .env.test.local
 .env.production.local
 *.env
+
+# Stray test-run output logs (redirected stdout from ad-hoc test/run-tests.js runs)
+test_output*.txt
