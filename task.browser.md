@@ -93,3 +93,12 @@ All tools above implemented, wired, and tested (46/46 in test/browser-tests.js).
   - notes: common interaction gaps (scroll-into-view/by-offset, dblclick, right-click context menus,
     DnD via page.dragAndDrop). Wired into browserActions/dispatchBrowser/browserSchemas/toolsSchema
     EXEC_TOOLS (97 tools total, require()-clean). 12 new tests added. Full suite: 67/67.
+- [x] browser_download tool — status: tested
+  - notes: waits for a Playwright 'download' event (triggered by clicking a
+    selector) and saves the file to a jailed path via resolveClientPath.
+    Wired into browserActions/dispatchBrowser/browserSchemas/toolsSchema
+    EXEC_TOOLS (98 tools total, require()-clean). 6 new tests added (happy
+    path, missing selector, missing path, path traversal, unknown session,
+    no-download timeout). Full suite: 73/73 (one run hit a pre-existing
+    flaky cdpSession crash in the unrelated concurrency test under
+    heavy parallel launches — unrelated to this change, reran clean).

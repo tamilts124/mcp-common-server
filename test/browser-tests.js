@@ -387,6 +387,35 @@ let sessionId;
     expectCode(() => executeTool("browser_drag_and_drop", { session_id: "does-not-exist", source: "#a", target: "#b" }), -32602));
 
   // ── cleanup ─────────────────────────────────────────────────────────
+  await test("browser_download saves file via click trigger", async () => {
+    await executeTool("browser_navigate", { session_id: sessionId, url:
+      "data:text/html,<a id='dl' download='out.txt' href='data:text/plain,hello'>dl</a>" });
+    const r = await executeTool("browser_download", { session_id: sessionId, selector: "#dl", path: "dl.txt" });
+    assertEq(r.status, "downloaded");
+    if (!fs.existsSync(path.join(TMP, "dl.txt"))) throw new Error("download file not written");
+  });
+
+  await test("browser_download missing selector -> -32602", () =>
+    expectCode(() => executeTool("browser_download", { session_id: sessionId, path: "x.txt" }), -32602));
+
+  await test("browser_download missing path -> -32602", () =>
+    expectCode(() => executeTool("browser_download", { session_id: sessionId, selector: "#dl" }), -32602));
+
+  await test("browser_download path traversal rejected", async () => {
+    try {
+      await executeTool("browser_download", { session_id: sessionId, selector: "#dl", path: "../../etc/out.txt" });
+      throw new Error("expected throw, none occurred");
+    } catch (e) {
+      if (!/root|outside|jail/i.test(e.message)) throw e;
+    }
+  });
+
+  await test("browser_download unknown session_id -> -32602", () =>
+    expectCode(() => executeTool("browser_download", { session_id: "does-not-exist", selector: "#dl", path: "x.txt" }), -32602));
+
+  await test("browser_download no download event -> -32603", () =>
+    expectCode(() => executeTool("browser_download", { session_id: sessionId, selector: "#nope-xyz", path: "x2.txt", timeout: 500 }), -32603));
+
   await test("final browser_close of main session", () => executeTool("browser_close", { session_id: sessionId }));
 
   fs.rmSync(TMP, { recursive: true, force: true });
