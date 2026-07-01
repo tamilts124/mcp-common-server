@@ -86,6 +86,7 @@
  *   42-git-nested-repo-root.js   [45] audit: git_status/log/blame/diff/stash_list/branch_list/show/tag_list nested repo-root discovery
  *   46-hash-string.js             [46] hash_string tool (cryptographic digest of an arbitrary string payload, no file I/O)
  *   47-convert-data.js            [47] convert_data tool (JSON <-> YAML document conversion)
+ *   48-git-reflog.js              [48] git_reflog tool (reflog entries for HEAD/a ref, incl. unreachable commits)
  *
  * Run with: node test/run-tests.js
  */
@@ -173,6 +174,7 @@ async function main() {
 
   require("./sections/46-hash-string");
   require("./sections/47-convert-data");
+  require("./sections/48-git-reflog");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);
