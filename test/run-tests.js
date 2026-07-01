@@ -84,6 +84,7 @@
  *   40-git-log-files.js          [43] git_log include_files extension (per-commit filesChanged via a separate numstat call)
  *   41-git-ownership.js          [44] git_ownership tool (blame-aggregate code ownership by author, file or directory)
  *   42-git-nested-repo-root.js   [45] audit: git_status/log/blame/diff/stash_list/branch_list/show/tag_list nested repo-root discovery
+ *   46-hash-string.js             [46] hash_string tool (cryptographic digest of an arbitrary string payload, no file I/O)
  *
  * Run with: node test/run-tests.js
  */
@@ -168,6 +169,8 @@ async function main() {
   require("./sections/41-git-ownership");
 
   require("./sections/42-git-nested-repo-root");
+
+  require("./sections/46-hash-string");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);

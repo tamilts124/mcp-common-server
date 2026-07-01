@@ -1,4 +1,4 @@
-# 🚀 MCP Common Server (HTTP + SSE) — v3.25.0
+# 🚀 MCP Common Server (HTTP + SSE) — v3.26.0
 
 [![Protocol](https://img.shields.io/badge/MCP-Protocol-orange.svg)](https://modelcontextprotocol.io/)
 [![Runtime](https://img.shields.io/badge/node-%3E%3D18.0.0-green.svg)](https://nodejs.org/)
@@ -133,6 +133,7 @@ Each folder mapped in `MCP_ROOTS` is assigned a lowercased **alias** (derived fr
 
 ### 1b. Utility Tools (Always Available)
 - **`file_checksum`**: Compute MD5, SHA-1, SHA-256 (default), or SHA-512 digest of any file. Useful for integrity checks, change detection, and deduplication.
+- **`hash_string`**: Compute MD5, SHA-1, SHA-256 (default), or SHA-512 digest of an arbitrary string payload — no file I/O involved. Sibling of `file_checksum` for callers that already have data in hand (an API response body, a generated config, a value read via another tool) and don't want to write it to a temp file just to hash it. Accepts `encoding: 'utf8' | 'base64' | 'hex'` for binary-ish payloads passed as text.
 - **`zip_directory`**: Archive a directory tree to a `.zip` file using DEFLATE compression. Pure Node.js — zero dependencies.
 - **`read_archive`**: Inspect the contents of a ZIP file without extracting it. Returns a structured manifest (entry names, sizes, compression method, CRC-32, timestamps) plus aggregate totals. Zero dependencies — reads the ZIP Central Directory directly.
 - **`query_json`**: Parse a JSON file and extract a value by dot-notation path (e.g. `dependencies.lodash`, `users.0.name`). Returns the value and its type.
@@ -227,6 +228,7 @@ The server logic is split into small, single-purpose modules under `lib/`:
 | `lib/fileOps.js` | File/directory read, write, search, glob-find, replace, truncate, append helpers |
 | `lib/processOps.js` | `run_command` and background process management |
 | `lib/utilOps.js` | Utility helpers: `file_checksum`, `zip_directory`, `query_json`, `query_data`, `diff_files`, `env_info` |
+| `lib/hashStringOps.js` | `hash_string` — cryptographic digest of an arbitrary string payload, no file I/O |
 | `lib/encodingOps.js` | Base64 encode/decode helpers: `base64Encode`, `base64Decode` |
 | `lib/textOps.js` | JSON formatting and text-transform helpers: `jsonFormat`, `textTransform` |
 | `lib/jsonPatchOps.js` | RFC 6902 JSON Patch engine: `jsonPatch` (all 6 ops, JSON Pointer RFC 6901, atomic apply, dry-run, indent-preserving) |
