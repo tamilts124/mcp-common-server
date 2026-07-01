@@ -237,6 +237,8 @@ Stealth Playwright (Chromium) sessions — `playwright-extra` + `puppeteer-extra
 - **`browser_get_storage_state`**: snapshot cookies + per-origin localStorage as a portable object; pass to `browser_launch`'s `storage_state` to resume a logged-in session in a fresh browser.
 - **`browser_accessibility_snapshot`**: YAML-style accessibility tree of the page or a selector subtree (via Playwright's `ariaSnapshot`; the older `page.accessibility` API is gone from this Playwright version).
 - **`browser_find_by_role`**: locate elements by ARIA role + optional accessible name (`page.getByRole`), returning bounding box/text/visibility per match.
+- **`browser_handle_next_dialog`**/**`browser_get_dialog_log`**: arm a one-shot accept/dismiss (with optional `prompt_text`) for the next alert/confirm/prompt/beforeunload dialog; read the per-session dialog log (auto-dismissed and logged by default when unarmed).
+- **`browser_list_frames`**, **`browser_frame_click`**, **`browser_frame_type`**, **`browser_frame_get_content`**: enumerate and interact inside `<iframe>` boundaries via `page.frameLocator(frame_selector)`, since `page.locator()` can't pierce them.
 
 Tested via `npm run test:browser` (`test/browser-tests.js`, 209/209), independent of the frozen bulk suite below.
 

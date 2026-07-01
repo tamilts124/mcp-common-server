@@ -41,6 +41,16 @@ async function expectCode(fn, code) {
     if (e.code !== code) throw new Error(`expected code ${code}, got ${e.code}: ${e.message}`);
   }
 }
+// Dialog events land asynchronously relative to the click that triggers them;
+// poll rather than assume ordering. Returns the log once it grows past previousCount.
+async function waitForNewDialog(sessionId, previousCount, tries = 30, delayMs = 100) {
+  for (let i = 0; i < tries; i++) {
+    const r = await executeTool("browser_get_dialog_log", { session_id: sessionId });
+    if (r.count > previousCount) return r.dialogs;
+    await new Promise((res) => setTimeout(res, delayMs));
+  }
+  throw new Error("dialog log did not grow in time");
+}
 
 let sessionId;
 
@@ -918,6 +928,117 @@ let sessionId;
     const r = await executeTool("browser_find_by_role", { session_id: sessionId, role: "link", name: "x".repeat(100000) });
     assertEq(r.count, 0);
   });
+
+  // ── DIALOG TOOLS: browser_handle_next_dialog / browser_get_dialog_log ──
+  await executeTool("browser_navigate", {
+    session_id: sessionId,
+    url: "data:text/html,<button id='cb' onclick=\"this.textContent=confirm('sure?')?'confirmed':'cancelled'\">C</button><button id='pb' onclick=\"var v=prompt('name?','x');this.textContent=v===null?'null':v\">P</button><button id='ab' onclick=\"alert('hello-alert')\">A</button>",
+  });
+
+  await test("browser_handle_next_dialog + confirm accept (normal)", async () => {
+    const before = (await executeTool("browser_get_dialog_log", { session_id: sessionId })).count;
+    await executeTool("browser_handle_next_dialog", { session_id: sessionId, action: "accept" });
+    await executeTool("browser_click", { session_id: sessionId, selector: "#cb" });
+    const log = await waitForNewDialog(sessionId, before);
+    assertEq(log[log.length - 1].handledAction, "accept");
+    assertEq(log[log.length - 1].type, "confirm");
+    const r = await executeTool("browser_get_content", { session_id: sessionId, selector: "#cb" });
+    assertEq(r.content, "confirmed");
+  });
+  await test("browser_handle_next_dialog + confirm dismiss (normal)", async () => {
+    const before = (await executeTool("browser_get_dialog_log", { session_id: sessionId })).count;
+    await executeTool("browser_handle_next_dialog", { session_id: sessionId, action: "dismiss" });
+    await executeTool("browser_click", { session_id: sessionId, selector: "#cb" });
+    const log = await waitForNewDialog(sessionId, before);
+    assertEq(log[log.length - 1].handledAction, "dismiss");
+    const r = await executeTool("browser_get_content", { session_id: sessionId, selector: "#cb" });
+    assertEq(r.content, "cancelled");
+  });
+  await test("browser_handle_next_dialog + prompt accept with text (normal)", async () => {
+    const before = (await executeTool("browser_get_dialog_log", { session_id: sessionId })).count;
+    await executeTool("browser_handle_next_dialog", { session_id: sessionId, action: "accept", prompt_text: "claude-test" });
+    await executeTool("browser_click", { session_id: sessionId, selector: "#pb" });
+    const log = await waitForNewDialog(sessionId, before);
+    assertEq(log[log.length - 1].type, "prompt");
+    const r = await executeTool("browser_get_content", { session_id: sessionId, selector: "#pb" });
+    assertEq(r.content, "claude-test");
+  });
+  await test("un-armed dialog auto-dismisses by default (normal)", async () => {
+    const before = (await executeTool("browser_get_dialog_log", { session_id: sessionId })).count;
+    await executeTool("browser_click", { session_id: sessionId, selector: "#ab" });
+    const log = await waitForNewDialog(sessionId, before);
+    assertEq(log[log.length - 1].handledAction, "auto-dismiss");
+    assertEq(log[log.length - 1].type, "alert");
+  });
+  await test("browser_handle_next_dialog missing action -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_handle_next_dialog", { session_id: sessionId }), -32602));
+  await test("browser_handle_next_dialog invalid action -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_handle_next_dialog", { session_id: sessionId, action: "maybe" }), -32602));
+  await test("browser_handle_next_dialog missing session_id -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_handle_next_dialog", { action: "accept" }), -32602));
+  await test("browser_handle_next_dialog unknown session -> -32602 (high)", () =>
+    expectCode(() => executeTool("browser_handle_next_dialog", { session_id: "does-not-exist", action: "accept" }), -32602));
+  await test("browser_get_dialog_log unknown session -> -32602 (high)", () =>
+    expectCode(() => executeTool("browser_get_dialog_log", { session_id: "does-not-exist" }), -32602));
+  await test("dialog message with script-like text stored inert (critical)", async () => {
+    await executeTool("browser_navigate", { session_id: sessionId, url: "data:text/html,<button id='xb' onclick=\"alert('<script>alert(1)<\\/script>')\">X</button>" });
+    const before = (await executeTool("browser_get_dialog_log", { session_id: sessionId })).count;
+    await executeTool("browser_handle_next_dialog", { session_id: sessionId, action: "accept" });
+    await executeTool("browser_click", { session_id: sessionId, selector: "#xb" });
+    const log = await waitForNewDialog(sessionId, before);
+    assertOk(log[log.length - 1].message.includes("<script>"));
+  });
+  await test("browser_get_dialog_log clear empties log (extreme)", async () => {
+    const r = await executeTool("browser_get_dialog_log", { session_id: sessionId, clear: true });
+    assertOk(r.count > 0);
+    const r2 = await executeTool("browser_get_dialog_log", { session_id: sessionId });
+    assertEq(r2.count, 0);
+  });
+
+  // ── FRAME TOOLS: browser_list_frames / browser_frame_click / browser_frame_type / browser_frame_get_content ──
+  const FRAME_INNER = "<button id=\"fb\" onclick=\"this.textContent='clicked'\">Go</button><input id=\"fi\"/><button id=\"fb2\" onclick=\"this.textContent=document.getElementById('fi').value\">Read</button><p id=\"fp\">frame-text</p>";
+  const FRAME_PARENT_URL = "data:text/html," + encodeURIComponent(
+    `<html><body><h1>parent</h1><iframe id="frame1" srcdoc="${FRAME_INNER.replace(/"/g, "&quot;")}"></iframe></body></html>`
+  );
+  await test("browser_navigate to iframe fixture page", () => executeTool("browser_navigate", { session_id: sessionId, url: FRAME_PARENT_URL }));
+  await test("browser_list_frames returns main + child (normal)", async () => {
+    const r = await executeTool("browser_list_frames", { session_id: sessionId });
+    assertEq(r.count, 2);
+    assertOk(r.frames.some((f) => f.isMainFrame));
+    assertOk(r.frames.some((f) => !f.isMainFrame));
+  });
+  await test("browser_frame_click clicks inside iframe (normal)", async () => {
+    const r = await executeTool("browser_frame_click", { session_id: sessionId, frame_selector: "#frame1", selector: "#fb" });
+    assertEq(r.status, "clicked");
+    const c = await executeTool("browser_frame_get_content", { session_id: sessionId, frame_selector: "#frame1", selector: "#fb" });
+    assertEq(c.content, "clicked");
+  });
+  await test("browser_frame_type fills field inside iframe (normal)", async () => {
+    await executeTool("browser_frame_type", { session_id: sessionId, frame_selector: "#frame1", selector: "#fi", text: "hello-frame" });
+    await executeTool("browser_frame_click", { session_id: sessionId, frame_selector: "#frame1", selector: "#fb2" });
+    const c = await executeTool("browser_frame_get_content", { session_id: sessionId, frame_selector: "#frame1", selector: "#fb2" });
+    assertEq(c.content, "hello-frame");
+  });
+  await test("browser_frame_get_content mode html includes text (normal)", async () => {
+    const c = await executeTool("browser_frame_get_content", { session_id: sessionId, frame_selector: "#frame1", selector: "#fp", mode: "html" });
+    assertOk(c.content.includes("frame-text"));
+  });
+  await test("browser_list_frames missing session_id -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_list_frames", {}), -32602));
+  await test("browser_frame_click missing frame_selector -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_frame_click", { session_id: sessionId, selector: "#fb" }), -32602));
+  await test("browser_frame_click missing selector -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_frame_click", { session_id: sessionId, frame_selector: "#frame1" }), -32602));
+  await test("browser_frame_type missing text -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_frame_type", { session_id: sessionId, frame_selector: "#frame1", selector: "#fi" }), -32602));
+  await test("browser_frame_click unknown session -> -32602 (high)", () =>
+    expectCode(() => executeTool("browser_frame_click", { session_id: "does-not-exist", frame_selector: "#frame1", selector: "#fb" }), -32602));
+  await test("browser_frame_click unknown frame_selector times out -> -32603 (high)", () =>
+    expectCode(() => executeTool("browser_frame_click", { session_id: sessionId, frame_selector: "#no-such-frame", selector: "#fb", timeout: 500 }), -32603));
+  await test("browser_frame_click injection-style selector rejected cleanly (critical)", () =>
+    expectCode(() => executeTool("browser_frame_click", { session_id: sessionId, frame_selector: "#frame1", selector: "<script>alert(1)</script>", timeout: 500 }), -32603));
+  await test("browser_frame_get_content huge selector fuzz doesn't crash (extreme)", () =>
+    expectCode(() => executeTool("browser_frame_get_content", { session_id: sessionId, frame_selector: "#frame1", selector: "#" + "x".repeat(50000), timeout: 500 }), -32602));
 
   await test("final browser_close of main session", () => executeTool("browser_close", { session_id: sessionId }));
 

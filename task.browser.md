@@ -268,3 +268,27 @@ All tools above implemented, wired, and tested (46/46 in test/browser-tests.js).
     issue. Global crash-guard (previous task) is the correct, stable
     mitigation and is sufficient: it isolates the failure to a log line
     instead of a process crash. Closing as won't-fix/mitigated.
+- [x] Dialog handling (browser_handle_next_dialog, browser_get_dialog_log) — status: tested
+  - notes: page.on('dialog') listener in attachPageListeners logs every
+    dialog to a capped (200) per-session ring buffer and auto-dismisses by
+    default unless a one-shot action was armed via browser_handle_next_dialog
+    (accept/dismiss, optional prompt_text). Verified this session (work was
+    left uncommitted by a prior cut-off session): browserLaunch/dialogs.js/
+    dispatchBrowser/browserSchemas/toolsSchema all require()-clean, barrel
+    wired. Full isolated suite run for real: 233/233 passing (14 new dialog
+    cases across 5 rigor levels).
+- [x] iframe/frame support (browser_list_frames, browser_frame_click,
+      browser_frame_type, browser_frame_get_content) — status: tested
+  - notes: page.frameLocator(frame_selector) scoped locators, since
+    page.locator() can't pierce iframe boundaries. Verified this session
+    (also left uncommitted by the prior cut-off session, already fully
+    implemented and wired): require()-clean, barrel wired. Full isolated
+    suite run for real: 233/233 passing (11 new frame cases across 5 rigor
+    levels, real srcdoc iframe fixture). README + package.json v3.50.0
+    updated.
+- [ ] Multiple dialogs in flight / dialog on frame navigation edge cases,
+      and drag-and-drop across iframe boundaries — status: todo
+  - notes: proactive extension — current dialog/frame tools cover the
+    common single-dialog, same-document-frame cases; not yet exercised:
+    a dialog firing during a pending frame navigation, or drag_and_drop
+    with source/target in different frames.
