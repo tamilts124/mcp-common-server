@@ -51,6 +51,9 @@ const crypto = require("crypto");
 const { PORT, AUTH_TOKEN, READ_ONLY, ALLOW_EXEC, CMD_TIMEOUT, IGNORE_PATTERNS } = require("./lib/config");
 const { ROOTS, buildRoots } = require("./lib/roots");
 const { TOOLS, executeTool, getErrorCode } = require("./lib/executeTool");
+const { installCrashGuard } = require("./lib/crashGuard");
+
+installCrashGuard();
 
 buildRoots();
 

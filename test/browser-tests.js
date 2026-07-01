@@ -17,6 +17,8 @@ process.env.MCP_READ_ONLY = "false";
 const { buildRoots } = require("../lib/roots");
 buildRoots();
 const { executeTool } = require("../lib/executeTool");
+const { installCrashGuard } = require("../lib/crashGuard");
+installCrashGuard();
 
 const counters = { pass: 0, fail: 0 };
 async function test(name, fn) {

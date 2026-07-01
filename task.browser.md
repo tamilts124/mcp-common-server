@@ -241,3 +241,23 @@ All tools above implemented, wired, and tested (46/46 in test/browser-tests.js).
     cross-call state bleed) and rapid browser_route/unroute churn (8
     routes registered then bulk-unrouted, session still navigable after).
     Full stress-tests.js re-run: 9/9 passing (was 7/7).
+- [x] Global process crash-guard for stray playwright-extra/CDP rejections — status: tested
+  - notes: found by re-running test/browser-tests.js this session — it threw
+    `cdpSession.send: Target page, context or browser has been closed` as an
+    UNHANDLED promise rejection (not from any awaited tool call — from a
+    stealth-plugin internal CDP listener firing after a session closed),
+    which kills the whole Node process via Node's default unhandledRejection
+    behavior. No process.on('unhandledRejection'/'uncaughtException') guard
+    existed anywhere in the codebase. Added lib/crashGuard.js
+    (installCrashGuard: process.on unhandledRejection/uncaughtException,
+    logs to stderr only, idempotent), wired into server-http.js,
+    server-stdio.js, and test/browser-tests.js. Verified this session:
+    require()-clean, full isolated suite re-run 209/209 passing, no crash.
+- [ ] Playwright-extra stealth internal CDP session leak (root cause behind
+      the crash-guard trigger above) — status: todo
+  - notes: guard prevents the process crash but doesn't address why a
+    closed session's CDP listener still fires — likely a stealth-plugin
+    evasion script leaving a dangling CDPSession reference after
+    browser_close. Investigate explicit cdpSession detach before
+    context.close() in browserLaunch.js's close path, or confirm this is
+    upstream puppeteer-extra-plugin-stealth behavior we just keep guarding.

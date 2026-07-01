@@ -52,6 +52,9 @@
 const { READ_ONLY, ALLOW_EXEC, CMD_TIMEOUT, IGNORE_PATTERNS } = require("./lib/config");
 const { ROOTS, buildRoots } = require("./lib/roots");
 const { splitLines, parseLine, handleMessage, SERVER_VERSION } = require("./lib/stdioProtocol");
+const { installCrashGuard } = require("./lib/crashGuard");
+
+installCrashGuard();
 
 try {
   buildRoots();
