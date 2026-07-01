@@ -177,11 +177,17 @@ test("git_reflog: non-git directory throws a descriptive error (not a crash)", (
   );
 });
 
-test("git_reflog: unknown/nonexistent ref throws a descriptive error", () => {
+test("git_reflog: unknown/nonexistent ref throws a descriptive error mentioning 'unknown ref'", () => {
+  // Regression test: a prior bug classified errors by testing only the
+  // first line of execSync's thrown message ("Command failed: <cmd>"),
+  // never the actual git stderr on a later line, so this branch never
+  // fired and the error silently fell through to a generic "Command
+  // failed: ..." message instead. Assert the specific text, not just
+  // "any error", so a regression here is caught.
   const repoDir = makeRepo("reflog-unknown-ref");
   assert.throws(
     () => executeTool("git_reflog", { path: path.relative(TMP, repoDir), ref: "totally-does-not-exist-branch" }),
-    /unknown ref|git reflog failed/i
+    /unknown ref/i
   );
 });
 

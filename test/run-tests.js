@@ -87,6 +87,7 @@
  *   46-hash-string.js             [46] hash_string tool (cryptographic digest of an arbitrary string payload, no file I/O)
  *   47-convert-data.js            [47] convert_data tool (JSON <-> YAML document conversion)
  *   48-git-reflog.js              [48] git_reflog tool (reflog entries for HEAD/a ref, incl. unreachable commits)
+ *   49-git-cherry.js              [49] git_cherry tool (commits on head not yet in upstream, patch-equivalence aware)
  *
  * Run with: node test/run-tests.js
  */
@@ -175,6 +176,7 @@ async function main() {
   require("./sections/46-hash-string");
   require("./sections/47-convert-data");
   require("./sections/48-git-reflog");
+  require("./sections/49-git-cherry");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);
