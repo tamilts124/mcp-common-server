@@ -85,6 +85,7 @@
  *   41-git-ownership.js          [44] git_ownership tool (blame-aggregate code ownership by author, file or directory)
  *   42-git-nested-repo-root.js   [45] audit: git_status/log/blame/diff/stash_list/branch_list/show/tag_list nested repo-root discovery
  *   46-hash-string.js             [46] hash_string tool (cryptographic digest of an arbitrary string payload, no file I/O)
+ *   47-convert-data.js            [47] convert_data tool (JSON <-> YAML document conversion)
  *
  * Run with: node test/run-tests.js
  */
@@ -171,6 +172,7 @@ async function main() {
   require("./sections/42-git-nested-repo-root");
 
   require("./sections/46-hash-string");
+  require("./sections/47-convert-data");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);
