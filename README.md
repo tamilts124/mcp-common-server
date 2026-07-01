@@ -1,4 +1,4 @@
-# 🚀 MCP Common Server (HTTP + SSE) — v3.24.0
+# 🚀 MCP Common Server (HTTP + SSE) — v3.25.0
 
 [![Protocol](https://img.shields.io/badge/MCP-Protocol-orange.svg)](https://modelcontextprotocol.io/)
 [![Runtime](https://img.shields.io/badge/node-%3E%3D18.0.0-green.svg)](https://nodejs.org/)
@@ -173,6 +173,8 @@ Each folder mapped in `MCP_ROOTS` is assigned a lowercased **alias** (derived fr
 - **`git_ownership`**: Aggregate `git blame` line counts by author for a single file or an entire directory tree — a "who owns this code" query. For a directory, enumerates tracked files via `git ls-files` (respects `.gitignore`, only tracked files considered) up to `max_files` (1–500, default 100 — remaining files are omitted with `truncated: true` rather than erroring), blames each one using the compact `git blame --porcelain` format (not `--line-porcelain`, so headers aren't repeated per line), and sums line counts per author across the whole set. In directory mode, a file `git blame` can't process (e.g. binary) is recorded in `filesSkipped: [{path, reason}]` rather than aborting the scan; in single-file mode a blame failure is surfaced directly, since the caller named exactly that file. Optional `extensions` filter narrows directory-mode scans. Repo-root discovery walks upward from the target looking for `.git`, but never ascends above the jailed MCP root the path was resolved against — this prevents an unrelated ancestor repository outside the sandbox (e.g. a dotfiles repo in the user's home directory) from ever being silently adopted. Returns `{ path, filesScanned, filesSkipped, truncated, totalLines, authors: [{name, lines, percentage}] }` sorted by lines descending. Always available — does not require `MCP_ALLOW_EXEC`.
 
 These nine never require `MCP_ALLOW_EXEC` (they only read repo metadata via `git`, never modify the working tree) and are jailed through the same root/path safety as every other tool. Arguments passed through to `git` are validated against shell metacharacters before use.
+
+All nine tools resolve the true repository root via a jail-bounded upward `.git` search (`findRepoRoot` in `lib/gitOpsHelpers.js`) before running any `git` command — a `path` argument nested two or more levels inside a repo (with no `.git` in its immediate parent) is correctly discovered rather than silently reporting "not a git repository", while the search still never ascends above the jailed MCP root the path was resolved against (originally hardened for `git_ownership`, now shared by `git_status`/`git_log`/`git_blame`/`git_diff`/`git_stash_list`/`git_branch_list`/`git_show`/`git_tag_list` too).
 
 ### 2. Write Tools (Disabled when `MCP_READ_ONLY=true`)
 - **`write_file`**: Write/overwrite files (supports partial line range replacements).

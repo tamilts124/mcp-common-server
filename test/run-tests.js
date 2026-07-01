@@ -83,6 +83,7 @@
  *   39-dir-size-stats.js         [42] dir_size_stats tool (directory-level disk-usage rollup, like `du --max-depth=N`)
  *   40-git-log-files.js          [43] git_log include_files extension (per-commit filesChanged via a separate numstat call)
  *   41-git-ownership.js          [44] git_ownership tool (blame-aggregate code ownership by author, file or directory)
+ *   42-git-nested-repo-root.js   [45] audit: git_status/log/blame/diff/stash_list/branch_list/show/tag_list nested repo-root discovery
  *
  * Run with: node test/run-tests.js
  */
@@ -165,6 +166,8 @@ async function main() {
   require("./sections/40-git-log-files");
 
   require("./sections/41-git-ownership");
+
+  require("./sections/42-git-nested-repo-root");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);
