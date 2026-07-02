@@ -312,3 +312,6 @@ No outstanding tasks beyond the above — all previous work items (gzip, brotli,
     not the stale [todo] bullet list previously here. Verified this session:
     re-ran test/browser-tests.js fresh (real headless Chromium) — 233/233
     passed, 0 failed. No new browser work needed right now.
+
+- [ ] Add IMAP email tools (email_list_mailboxes, email_search) — status: in-progress
+  - notes: User explicitly requested a JS port of a Python imaplib-based EmailReader (connect, list mailboxes, fetch/filter emails by subject/date/sender, RFC2047 header decode, multipart body parsing). Implementing as a zero-dependency raw IMAP client over tls (no imap/mailparser npm packages, matching project's zero-dep-for-core-tools philosophy) in lib/emailOps.js, wired via lib/dispatchEmail.js + lib/schemas/emailSchemas.js, always-available (not exec-gated, same trust tier as http_fetch). Tests in test/sections/55-email-ops.js targeting pure parsing functions across all 5 rigor levels plus network-failure-path tests.

@@ -182,6 +182,10 @@ async function main() {
   require("./sections/50-csv-convert");
   require("./sections/51-zip-directory-hardening");
   require("./sections/43-docx-convert");
+  require("./sections/53-pdf-convert");
+  require("./sections/54-scan-todos");
+  // Section 55 makes real (fast-failing) TCP connections; await like 29/29b.
+  await require("./sections/55-email-ops");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);
