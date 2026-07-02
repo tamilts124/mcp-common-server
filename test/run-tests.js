@@ -198,6 +198,7 @@ async function main() {
   await require("./sections/64-search-in-document");
   require("./sections/65-env-diff");
   require("./sections/66-scan-conflict-markers");
+  require("./sections/67-scan-secrets");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);
