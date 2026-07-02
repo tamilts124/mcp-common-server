@@ -1,4 +1,4 @@
-# 🚀 MCP Common Server (HTTP + SSE) — v3.69.0
+# 🚀 MCP Common Server (HTTP + SSE) — v3.70.0
 
 [![Protocol](https://img.shields.io/badge/MCP-Protocol-orange.svg)](https://modelcontextprotocol.io/)
 [![Runtime](https://img.shields.io/badge/node-%3E%3D18.0.0-green.svg)](https://nodejs.org/)
@@ -333,7 +333,11 @@ The server logic is split into small, single-purpose modules under `lib/`:
 | `lib/browserActions/network.js` | request/response capture + route/unroute interception tools |
 | `lib/browserActions/a11y.js` | accessibility snapshot + find-by-role tools |
 | `lib/dispatchBrowser.js` | `browser_*` tool name → handler map |
-| `lib/schemas/browserSchemas.js` | JSON schemas for all `browser_*` tools |
+| `lib/schemas/browserSchemas.js` | Thin barrel: concatenates schema groups from `lib/schemas/browserSchemas/{session,interaction,pageState,advanced}.js` |
+| `lib/schemas/browserSchemas/session.js` | Schemas: session/tab lifecycle (launch/navigate/close/pages) + action recording |
+| `lib/schemas/browserSchemas/interaction.js` | Schemas: content reading, evaluate, and all user-input interaction tools |
+| `lib/schemas/browserSchemas/pageState.js` | Schemas: nav history, element/page state queries, capture, page-scripting tools |
+| `lib/schemas/browserSchemas/advanced.js` | Schemas: cookies/storage/emulation, network capture+mocking, accessibility, dialogs, iframes |
 | `lib/gitOps.js` | Read-only git metadata helpers: `git_status`, `git_blame`, `git_diff`, `git_show` (`git_log` moved to `lib/gitLogOps.js`) |
 | `lib/gitLogOps.js` | `git_log`: commit history, with an optional `include_files` extension attaching a `filesChanged: [{path, additions, deletions}]` array per commit via a second numstat-based `git log` call matched back to each commit by hash |
 | `lib/gitDiffStatOps.js` | `git_diff`'s `stat_only` mode — per-file added/deleted line counts via `git diff --numstat`, no unified diff text generated |
