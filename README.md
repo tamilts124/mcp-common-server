@@ -1,4 +1,4 @@
-# 🚀 MCP Common Server (HTTP + SSE) — v3.67.0
+# 🚀 MCP Common Server (HTTP + SSE) — v3.68.0
 
 [![Protocol](https://img.shields.io/badge/MCP-Protocol-orange.svg)](https://modelcontextprotocol.io/)
 [![Runtime](https://img.shields.io/badge/node-%3E%3D18.0.0-green.svg)](https://nodejs.org/)
@@ -298,6 +298,9 @@ The server logic is split into small, single-purpose modules under `lib/`:
 | `lib/envInfoOps.js` | `env_info` — read-only, secret-free snapshot of the server's runtime environment |
 | `lib/systemResourcesOps.js` | `system_resources` — live CPU/memory/disk metrics, complementing `env_info` |
 | `lib/whichOps.js` | `which_command` — resolve an executable's location(s) via `PATH`/`PATHEXT` |
+| `lib/docxToPdfOps.js` | `docx_to_pdf` — zero-dependency Word→PDF converter with inline images; page layout, text-flow, and PDF object serialization (uses `docxXmlOps.js` + `imageDecodeOps.js`) |
+| `lib/docxXmlOps.js` | DOCX `word/document.xml` + relationship-map parsing shared by `docxToPdfOps.js` |
+| `lib/imageDecodeOps.js` | Zero-dependency JPEG dimension reader + hand-rolled PNG decoder shared by `docxToPdfOps.js` |
 | `lib/hashStringOps.js` | `hash_string` — cryptographic digest of an arbitrary string payload, no file I/O |
 | `lib/encodingOps.js` | Base64 encode/decode helpers: `base64Encode`, `base64Decode` |
 | `lib/textOps.js` | JSON formatting and text-transform helpers: `jsonFormat`, `textTransform` |
