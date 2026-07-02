@@ -584,6 +584,31 @@ let sessionId;
   await test("browser_frame_get_content huge selector fuzz doesn't crash (extreme)", () =>
     expectCode(() => executeTool("browser_frame_get_content", { session_id: sessionId, frame_selector: "#frame1", selector: "#" + "x".repeat(50000), timeout: 500 }), -32602));
 
+  // ── browser_get_current_url / browser_get_title ────────────────────────
+  await test("browser_get_current_url returns page url (normal)", async () => {
+    await executeTool("browser_navigate", { session_id: sessionId, url: "data:text/html,<h1>u</h1>" });
+    const r = await executeTool("browser_get_current_url", { session_id: sessionId });
+    assertOk(r.url.startsWith("data:"));
+  });
+  await test("browser_get_title returns page title (normal)", async () => {
+    await executeTool("browser_navigate", { session_id: sessionId, url: "data:text/html,<title>MyTitle</title>" });
+    const r = await executeTool("browser_get_title", { session_id: sessionId });
+    assertEq(r.title, "MyTitle");
+  });
+  await test("browser_get_current_url missing session_id -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_get_current_url", {}), -32602));
+  await test("browser_get_title missing session_id -> -32602 (medium)", () =>
+    expectCode(() => executeTool("browser_get_title", {}), -32602));
+  await test("browser_get_current_url unknown session -> -32602 (high)", () =>
+    expectCode(() => executeTool("browser_get_current_url", { session_id: "does-not-exist" }), -32602));
+  await test("browser_get_title unknown session -> -32602 (high)", () =>
+    expectCode(() => executeTool("browser_get_title", { session_id: "does-not-exist" }), -32602));
+  await test("browser_get_title on about:blank returns empty string, not throw (extreme)", async () => {
+    await executeTool("browser_navigate", { session_id: sessionId, url: "about:blank" });
+    const r = await executeTool("browser_get_title", { session_id: sessionId });
+    assertEq(r.title, "");
+  });
+
   await test("final browser_close of main session", () => executeTool("browser_close", { session_id: sessionId }));
 
   fs.rmSync(TMP, { recursive: true, force: true });
