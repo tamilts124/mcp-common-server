@@ -1,4 +1,4 @@
-# 🚀 MCP Common Server (HTTP + SSE) — v3.68.0
+# 🚀 MCP Common Server (HTTP + SSE) — v3.69.0
 
 [![Protocol](https://img.shields.io/badge/MCP-Protocol-orange.svg)](https://modelcontextprotocol.io/)
 [![Runtime](https://img.shields.io/badge/node-%3E%3D18.0.0-green.svg)](https://nodejs.org/)
@@ -323,8 +323,12 @@ The server logic is split into small, single-purpose modules under `lib/`:
 | `lib/gzipOps.js` | Compression tools: `gzip_compress` / `gzip_decompress` (zero-dep Node `zlib`, write-gated) |
 | `lib/brotliOps.js` | Compression tools: `brotli_compress` / `brotli_decompress` (zero-dep Node `zlib` Brotli API, write-gated) |
 | `lib/browserLaunch.js` | Stealth Playwright/Chromium session table: launch, session lookup, close |
-| `lib/browserActions.js` | Thin barrel re-exporting `lib/browserActions/{core,storage,network,a11y}.js` |
-| `lib/browserActions/core.js` | navigate/content/evaluate/click/type/interaction/element-state/scripting tools |
+| `lib/browserActions.js` | Thin barrel re-exporting `lib/browserActions/{core,interaction,pageState,capture,scripting,storage,network,a11y,dialogs,frames}.js` |
+| `lib/browserActions/core.js` | navigate/get_content/evaluate tools |
+| `lib/browserActions/interaction.js` | click/type/hover/scroll/drag-and-drop/upload/checkbox/select/key-press tools |
+| `lib/browserActions/pageState.js` | nav-history (back/forward/reload), waits, element-state queries, page metrics |
+| `lib/browserActions/capture.js` | screenshot/pdf/download tools |
+| `lib/browserActions/scripting.js` | init-script/exposed-function/wait-for-response tools |
 | `lib/browserActions/storage.js` | cookies/localStorage/storageState/headers/emulate tools |
 | `lib/browserActions/network.js` | request/response capture + route/unroute interception tools |
 | `lib/browserActions/a11y.js` | accessibility snapshot + find-by-role tools |
