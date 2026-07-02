@@ -199,6 +199,7 @@ async function main() {
   require("./sections/65-env-diff");
   require("./sections/66-scan-conflict-markers");
   require("./sections/67-scan-secrets");
+  require("./sections/68-json-schema-validate");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);
