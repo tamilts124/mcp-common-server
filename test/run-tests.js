@@ -190,6 +190,7 @@ async function main() {
   await require("./sections/55-email-ops");
   await require("./sections/58-email-send");
   require("./sections/59-tar-archive");
+  require("./sections/60-system-resources");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);
