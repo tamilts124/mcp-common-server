@@ -193,6 +193,8 @@ async function main() {
   require("./sections/60-system-resources");
   require("./sections/61-which-command");
   require("./sections/62-git-worktree-list");
+  // Section 63 is async (run_command now returns a Promise); await like 55/58.
+  await require("./sections/63-run-command-async");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);
