@@ -183,6 +183,8 @@ async function main() {
   require("./sections/51-zip-directory-hardening");
   require("./sections/43-docx-convert");
   require("./sections/53-pdf-convert");
+  require("./sections/56-docx-to-pdf");
+  require("./sections/57-pdf-to-docx");
   require("./sections/54-scan-todos");
   // Section 55 makes real (fast-failing) TCP connections; await like 29/29b.
   await require("./sections/55-email-ops");

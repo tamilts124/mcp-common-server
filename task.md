@@ -322,3 +322,7 @@ No outstanding tasks beyond the above — all previous work items (gzip, brotli,
   - Full suite (background process, ~3 min): **1529 passed, 0 failed**.
 
 - [ ] Proactive: add `email_send` tool (SMTP, zero-dep raw `tls` client mirroring the email_search/email_list_mailboxes trust tier and .env fallback pattern) — status: todo
+- [x] Test docx_to_pdf (was implemented/registered but had zero test coverage) — status: tested
+  - notes: Added test/sections/56-docx-to-pdf.js, 25 tests across all 5 rigor levels. Hand-builds real .docx ZIPs (bypassing md_to_docx, which has no image support) to exercise the actual image-embedding path: valid 8-bit RGB PNG embedded as a PDF Image XObject, unsupported-format placeholder fallback, missing/traversal-shaped relationship targets, corrupt PNG IDAT, path traversal, injection-shaped text, 800-paragraph doc, fuzzing, concurrency. All 25 passed.
+- [x] Implement pdf_to_docx (new tool; inverse of docx_to_pdf, text-only — no image extraction path exists in this codebase) — status: tested
+  - notes: lib/pdfToDocxOps.js reuses pdf_to_md's extractTextFromContentStream + md_to_docx's buildZip. Registered in dispatchWrite.js, writeSchemas.js, toolsSchema.js WRITE_TOOLS, execSchemas.js pipeline enum. Added test/sections/57-pdf-to-docx.js, 22 tests across all 5 rigor levels (round-trip via docx_to_md, param validation, traversal/injection safety, 1200-line fuzz, concurrency). All 22 passed. Both new sections registered in test/run-tests.js.
