@@ -73,6 +73,30 @@ test("md_to_pdf: long paragraph triggers word-wrap into multiple content lines",
   assert.ok(text.includes("word59"));
 });
 
+test("pdf_to_md: GFM table round-trips cell text with header/data rows pipe-delimited", () => {
+  const src = writeFixture(uq("pdf-t1"), "| Name | Age |\n|---|---|\n| Alice | 30 |\n| Bob | 25 |\n");
+  const pdf = uq("pdf-t1-mid") + ".pdf";
+  executeTool("md_to_pdf", { path: src, destination: pdf });
+  const mdOut = uq("pdf-t1-out") + ".md";
+  executeTool("pdf_to_md", { path: pdf, destination: mdOut });
+  const text = fs.readFileSync(path.join(TMP, mdOut), "utf8");
+  assert.ok(text.includes("Name") && text.includes("Age"));
+  assert.ok(text.includes("Alice") && text.includes("30"));
+  assert.ok(text.includes("Bob") && text.includes("25"));
+});
+
+test("md_to_pdf: horizontal rule (---) renders as a distinct dash-fill line", () => {
+  const src = writeFixture(uq("pdf-t2"), "above\n\n---\n\nbelow\n");
+  const pdf = uq("pdf-t2-mid") + ".pdf";
+  executeTool("md_to_pdf", { path: src, destination: pdf });
+  const mdOut = uq("pdf-t2-out") + ".md";
+  executeTool("pdf_to_md", { path: pdf, destination: mdOut });
+  const text = fs.readFileSync(path.join(TMP, mdOut), "utf8");
+  assert.ok(text.includes("above"));
+  assert.ok(text.includes("below"));
+  assert.ok(/-{10,}/.test(text));
+});
+
 // ── MEDIUM — boundary & param validation ───────────────────────────────────
 
 test("md_to_pdf: missing 'path' throws -32602", () => {
@@ -181,6 +205,24 @@ test("md_to_pdf: PDF-syntax-shaped content (parens, backslashes) is escaped, not
   assert.ok(r2.bytes > 0);
   const text = fs.readFileSync(path.join(TMP, mdOut), "utf8");
   assert.ok(text.includes("parens"));
+});
+
+test("md_to_pdf: table row with pipe/malicious-shaped cell content is embedded as literal text", () => {
+  const src = writeFixture(uq("pdf-t3"), "| a | b |\n|---|---|\n| $(rm -rf /) | <script>x</script> |\n");
+  const dest = uq("pdf-t3-out") + ".pdf";
+  const r = executeTool("md_to_pdf", { path: src, destination: dest });
+  assert.ok(r.bytes > 0);
+  const mdOut = uq("pdf-t3-md") + ".md";
+  executeTool("pdf_to_md", { path: dest, destination: mdOut });
+  const text = fs.readFileSync(path.join(TMP, mdOut), "utf8");
+  assert.ok(text.includes("rm -rf") || text.includes("script"));
+});
+
+test("md_to_pdf: malformed table (no separator row) falls back to plain paragraph, no crash", () => {
+  const src = writeFixture(uq("pdf-t4"), "| a | b |\nnot a separator\n");
+  const dest = uq("pdf-t4-out") + ".pdf";
+  const r = executeTool("md_to_pdf", { path: src, destination: dest });
+  assert.ok(r.bytes > 0);
 });
 
 // ── EXTREME — fuzzing, concurrency, cleanup, large payloads ─────────────────

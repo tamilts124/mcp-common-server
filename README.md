@@ -1,4 +1,4 @@
-# 🚀 MCP Common Server (HTTP + SSE) — v3.62.0
+# 🚀 MCP Common Server (HTTP + SSE) — v3.63.0
 
 [![Protocol](https://img.shields.io/badge/MCP-Protocol-orange.svg)](https://modelcontextprotocol.io/)
 [![Runtime](https://img.shields.io/badge/node-%3E%3D18.0.0-green.svg)](https://nodejs.org/)
@@ -332,7 +332,7 @@ The server logic is split into small, single-purpose modules under `lib/`:
 | `lib/httpFetchOps.js` | Outbound HTTP/HTTPS request tool: `http_fetch` (zero-dep `http`/`https`, redirect following, body truncation, scheme validation) |
 | `lib/portCheckOps.js` | TCP port probe + poll: `port_check`, `wait_for_port` (raw `net.Socket` connect, open/closed/timeout detection, zero-dep) |
 | `lib/docxConvertOps.js` | Markdown ↔ Word .docx converter: `md_to_docx`, `docx_to_md` (hand-built minimal OOXML, custom in-memory ZIP writer, zero-dep) |
-| `lib/pdfConvertOps.js` | Markdown ↔ PDF converter: `md_to_pdf` (hand-built multi-page PDF, base-14 Helvetica/Helvetica-Bold, word-wrap + page breaks), `pdf_to_md` (regex stream scan, zlib-inflate FlateDecode, Tj/TJ text extraction, zero-dep) |
+| `lib/pdfConvertOps.js` | Markdown ↔ PDF converter: `md_to_pdf` (hand-built multi-page PDF, base-14 Helvetica/Helvetica-Bold, word-wrap + page breaks, GFM tables, hr rules), `pdf_to_md` (regex stream scan, zlib-inflate FlateDecode, Tj/TJ text extraction, zero-dep) |
 | `lib/gitOwnershipOps.js` | Read-only git metadata helper: `git_ownership` (blame-aggregate line counts by author for a file or directory tree, jail-bounded repo-root discovery) |
 
 Isolated functional tests (no live server/inspector) live in `test/run-tests.js`, split into per-feature files under `test/sections/` sharing `test/test-harness.js` — run with `node test/run-tests.js`.
