@@ -1,4 +1,4 @@
-# 🚀 MCP Common Server (HTTP + SSE) — v3.71.0
+# 🚀 MCP Common Server (HTTP + SSE) — v3.72.0
 
 [![Protocol](https://img.shields.io/badge/MCP-Protocol-orange.svg)](https://modelcontextprotocol.io/)
 [![Runtime](https://img.shields.io/badge/node-%3E%3D18.0.0-green.svg)](https://nodejs.org/)
@@ -129,6 +129,7 @@ Each folder mapped in `MCP_ROOTS` is assigned a lowercased **alias** (derived fr
 - **`file_info`**: Fetch detailed metadata (size, permissions, timestamps, line counts).
 - **`search_files`**: Run fast text search patterns (similar to grep/ripgrep) across files.
 - **`search_lines`**: Grep-like line-level search — for each matching line in a file (or recursively in a directory), returns the 1-based line number, the matching line text, and optional surrounding context lines (`context` param, 0–10). Complements `search_files` (which returns file names) by pinpointing exact lines. Supports literal substring or regex matching, case-insensitive mode (`ignore_case`), extension filtering in directory mode, and a configurable result cap (`max_matches`, default 200). MCP_IGNORE'd directories are skipped automatically. Always available — does not require `MCP_ALLOW_EXEC`.
+- **`search_in_document`**: Grep-like text search inside a `.docx` or `.pdf` file's extracted plain text, without writing a converted markdown file to disk first (unlike `docx_to_md`/`pdf_to_md`, this is read-only). For `.docx`, each paragraph/heading/bullet is one searchable line (images skipped); for `.pdf`, text is extracted with the same stream-decoding logic as `pdf_to_md`. Matching semantics mirror `search_lines`: literal substring (auto-escaped) or regex, `ignore_case`, `context` (0–10), and `max_matches` (default 200). Returns `{ path, format, pattern, isRegex, ignoreCase, totalLines, totalMatches, truncated, matches }`. Always available — does not require `MCP_ALLOW_EXEC`.
 - **`find_files`**: Glob-based file finder.
 
 ### 1b. Utility Tools (Always Available)

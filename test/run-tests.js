@@ -195,6 +195,7 @@ async function main() {
   require("./sections/62-git-worktree-list");
   // Section 63 is async (run_command now returns a Promise); await like 55/58.
   await require("./sections/63-run-command-async");
+  await require("./sections/64-search-in-document");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);
