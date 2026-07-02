@@ -368,11 +368,56 @@ All tools above implemented, wired, and tested (46/46 in test/browser-tests.js).
     frame_selector). Re-ran browser-edge-tests.js (9/9) and
     browser-dialog-queue-tests.js (11/11) — no regressions. README +
     package.json (v3.53.0, new test:browser-frame-evaluate script) updated.
-- [ ] browser_replay_actions (record a sequence of {tool, args} calls made
+- [x] browser_replay_actions (record a sequence of {tool, args} calls made
       on a session into a per-session log, exportable/replayable — useful
       for building repeatable test scripts from an ad-hoc exploration
-      session) — status: todo
-  - notes: proactive extension — lower priority/exploratory; would need
-    careful scoping to avoid re-recording navigation side effects
-    (screenshots/downloads writing files again on replay). Revisit after
-    core interaction-tool coverage is otherwise exhausted.
+      session) — status: tested
+  - notes: Implemented this session (no prior-session artifacts). Design:
+    single central recording hook at executeTool.js's one BROWSER_DISPATCH
+    call site (`recordAction`, imported from lib/browserLaunch.js) — not
+    scattered across every browserActions.js function — appends
+    {tool, args, ts} to the session's entry.actionLog (capped 500, oldest
+    dropped) whenever a browser_* tool is called with a session_id whose
+    session has recording:true, excluding browser_launch/browser_close/
+    browser_replay_actions/the 4 recording-control tools themselves.
+    New lib/browserLaunch.js exports: startRecording (clears log by default,
+    clear:false to append), stopRecording (returns + stops), getRecording
+    (read without stopping), clearRecording, recordAction. Session table
+    entries gained `recording: false, actionLog: []`.
+    browser_replay_actions (in lib/dispatchBrowser.js, alongside
+    BROWSER_DISPATCH since it needs to call back into it) replays either the
+    session's own recording (actions omitted) or an explicit `actions`
+    array against `session_id` or a different `target_session_id` — each
+    action's own embedded session_id is ignored/overridden, so a recording
+    made on one session replays cleanly onto a fresh one.
+    browser_launch/browser_close/browser_replay_actions itself/recording-
+    control tools are always skipped (not replayed, reason returned);
+    browser_screenshot/browser_download/browser_pdf (file-writing) skipped
+    by default per the original scoping concern — include_side_effects:true
+    opts in. stop_on_error defaults true (stops at first failure), settable
+    false to continue. Capped at 500 actions per replay call. Wired:
+    lib/schemas/browserSchemas.js (5 new schemas), lib/toolsSchema.js
+    EXEC_TOOLS, lib/schemas/execSchemas.js execute_pipeline op enum.
+    New standalone test/browser-replay-actions-tests.js (21 tests across
+    Normal/Medium/High/Critical/Extreme: record-then-get-recording shape,
+    stop_recording freezes the log, replay-own-recording happy path,
+    missing session_id -32602, clear_recording resets to 0, empty/absent
+    actions -32602, non-array actions -32602, unknown-tool-in-replay stops
+    by default then continues with stop_on_error:false, side-effect tool
+    skipped-then-replayed with include_side_effects, control/lifecycle
+    tools in an explicit actions list are skipped not replayed, unknown
+    session_id throws, shell/SQL-injection-shaped script content round-
+    trips literally as data via browser_evaluate not executed as shell,
+    action.args.session_id spoofing attempt is ignored/overridden by
+    target_session_id, malformed/missing 'tool' field per-action handled
+    cleanly with stop_on_error:false, 501 actions rejected (>500 cap),
+    500-action boundary replays successfully, 520-call recording caps at
+    500 with oldest entries dropped, final cleanup) — 21/21 passing. Also
+    re-ran test/browser-edge-tests.js (9/9, no regressions from the shared
+    executeTool.js dispatch-path hook). README updated (v3.57.0 → v3.58.0,
+    new bullet under Browser Automation Tools), package.json version bumped
+    + new test:browser-replay-actions script. All touched files remain
+    under the 500-line threshold (largest: lib/dispatchBrowser.js at 152
+    lines, lib/browserLaunch.js at 296 lines).
+
+
