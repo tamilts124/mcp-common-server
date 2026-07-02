@@ -189,6 +189,7 @@ async function main() {
   // Section 55 makes real (fast-failing) TCP connections; await like 29/29b.
   await require("./sections/55-email-ops");
   await require("./sections/58-email-send");
+  require("./sections/59-tar-archive");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);
