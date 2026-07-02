@@ -133,6 +133,7 @@ Each folder mapped in `MCP_ROOTS` is assigned a lowercased **alias** (derived fr
 
 ### 1b. Utility Tools (Always Available)
 - **`file_checksum`**: Compute MD5, SHA-1, SHA-256 (default), or SHA-512 digest of any file. Useful for integrity checks, change detection, and deduplication.
+- **`checksum_verify`**: Compute a file's checksum and compare it against an expected hex digest in one call — the common "verify a download/artifact matches its published hash" workflow, without requiring the caller to compute via `file_checksum` and compare client-side. `expected` is compared case-insensitively after trimming; a non-hex `expected` throws a clean validation error. Returns `{ path, match, algorithm, expected, actual, sizeBytes }`. Always available — does not require `MCP_ALLOW_EXEC`.
 - **`hash_string`**: Compute MD5, SHA-1, SHA-256 (default), or SHA-512 digest of an arbitrary string payload — no file I/O involved. Sibling of `file_checksum` for callers that already have data in hand (an API response body, a generated config, a value read via another tool) and don't want to write it to a temp file just to hash it. Accepts `encoding: 'utf8' | 'base64' | 'hex'` for binary-ish payloads passed as text.
 - **`zip_directory`**: Archive a directory tree to a `.zip` file using DEFLATE compression. Pure Node.js — zero dependencies. MCP_IGNORE'd entries (e.g. `node_modules`, `.git`, `dist`, `build`) are excluded automatically, same convention as every other directory-walking tool in this codebase. Write-gated: blocked when `MCP_READ_ONLY=true`.
 - **`read_archive`**: Inspect the contents of a ZIP file without extracting it. Returns a structured manifest (entry names, sizes, compression method, CRC-32, timestamps) plus aggregate totals. Zero dependencies — reads the ZIP Central Directory directly.
@@ -276,7 +277,7 @@ The server logic is split into small, single-purpose modules under `lib/`:
 | `lib/stdioProtocol.js` | Pure (no I/O) stdio message-framing/dispatch logic shared by `server-stdio.js` |
 | `lib/fileOps.js` | File/directory read, write, search, glob-find, replace, truncate, append helpers |
 | `lib/processOps.js` | `run_command` and background process management |
-| `lib/checksumOps.js` | `file_checksum` — MD5/SHA-1/SHA-256/SHA-512 digest of a file |
+| `lib/checksumOps.js` | `file_checksum` / `checksum_verify` — MD5/SHA-1/SHA-256/SHA-512 digest of a file, plus one-call expected-hash comparison |
 | `lib/zipDirOps.js` | `zip_directory` — pure-Node ZIP writer (LFH + Central Directory + EOCD, DEFLATE via zlib), MCP_IGNORE-aware, companion to `lib/unzipOps.js` |
 | `lib/queryOps.js` | `query_json`/`query_data` — dot-path extraction from JSON/YAML files, plus the shared `traverseByPath` helper |
 | `lib/diffFileOps.js` | `diff_files` — pure-JS LCS-based unified diff between two files (`diffFiles`/`computeEdits`) |
