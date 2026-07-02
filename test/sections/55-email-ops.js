@@ -73,18 +73,57 @@ module.exports = (async () => {
   });
 
   // ── MEDIUM — boundary & param validation ───────────────────────────────
-  await test("email_search: missing username throws -32602", () => {
-    try { executeTool("email_search", { password: "x" }); assert.fail("should throw"); }
+  // NOTE: username/password are no longer schema-required (env fallback via
+  // EMAIL_USERNAME/EMAIL_APP_PASSWORD — see lib/emailOps.js validateConnParams),
+  // so the throw now happens inside the async handler, not synchronously at
+  // schema-validation time. These tests must await + delete any stray env vars
+  // so they don't accidentally pass because a real .env has credentials set.
+  const savedEnvUser = process.env.EMAIL_USERNAME;
+  const savedEnvPass = process.env.EMAIL_APP_PASSWORD;
+  delete process.env.EMAIL_USERNAME;
+  delete process.env.EMAIL_APP_PASSWORD;
+  await test("email_search: missing username throws -32602", async () => {
+    try { await executeTool("email_search", { password: "x" }); assert.fail("should throw"); }
     catch (e) { assert.strictEqual(e.code, -32602); }
   });
-  await test("email_search: missing password throws -32602", () => {
-    try { executeTool("email_search", { username: "a@b.com" }); assert.fail("should throw"); }
+  await test("email_search: missing password throws -32602", async () => {
+    try { await executeTool("email_search", { username: "a@b.com" }); assert.fail("should throw"); }
     catch (e) { assert.strictEqual(e.code, -32602); }
   });
-  await test("email_list_mailboxes: missing both credentials throws -32602", () => {
-    try { executeTool("email_list_mailboxes", {}); assert.fail("should throw"); }
+  await test("email_list_mailboxes: missing both credentials throws -32602", async () => {
+    try { await executeTool("email_list_mailboxes", {}); assert.fail("should throw"); }
     catch (e) { assert.strictEqual(e.code, -32602); }
   });
+  await test("email_search: falls back to EMAIL_USERNAME/EMAIL_APP_PASSWORD env vars when args omit them", async () => {
+    process.env.EMAIL_USERNAME = "envuser@example.com";
+    process.env.EMAIL_APP_PASSWORD = "envpass";
+    try {
+      await executeTool("email_search", { host: "127.0.0.1", port: 1 });
+      assert.fail("should have rejected (connection refused), proving it got past credential validation");
+    } catch (e) {
+      assert.strictEqual(e.code, -32603); // connection-refused, not -32602 — env creds were accepted
+    } finally {
+      delete process.env.EMAIL_USERNAME;
+      delete process.env.EMAIL_APP_PASSWORD;
+    }
+  });
+  await test("email_search: explicit args override EMAIL_USERNAME/EMAIL_APP_PASSWORD env vars", async () => {
+    process.env.EMAIL_USERNAME = "envuser@example.com\r\nEVIL"; // would fail control-char check if used
+    process.env.EMAIL_APP_PASSWORD = "envpass";
+    try {
+      await executeTool("email_search", { username: "explicit@example.com", password: "x", host: "127.0.0.1", port: 1 });
+      assert.fail("should have rejected (connection refused)");
+    } catch (e) {
+      // -32603 (connection refused) proves the clean explicit args were used,
+      // not the control-char-poisoned env username (which would be -32602).
+      assert.strictEqual(e.code, -32603);
+    } finally {
+      delete process.env.EMAIL_USERNAME;
+      delete process.env.EMAIL_APP_PASSWORD;
+    }
+  });
+  if (savedEnvUser !== undefined) process.env.EMAIL_USERNAME = savedEnvUser;
+  if (savedEnvPass !== undefined) process.env.EMAIL_APP_PASSWORD = savedEnvPass;
   await test("toImapDate: malformed date string throws -32602", () => {
     try { toImapDate("2024/12/25"); assert.fail("should throw"); }
     catch (e) { assert.strictEqual(e.code, -32602); }
@@ -125,8 +164,8 @@ module.exports = (async () => {
     const c = buildSearchCriteria({ subject_keyword: 'he said "hi" \\ ok' });
     assert.strictEqual(c, 'SUBJECT "he said \\"hi\\" \\\\ ok"');
   });
-  await test("email_search: control characters in username/password rejected before any network I/O", () => {
-    try { executeTool("email_search", { username: "a@b.com\r\nEVIL", password: "x" }); assert.fail("should throw"); }
+  await test("email_search: control characters in username/password rejected before any network I/O", async () => {
+    try { await executeTool("email_search", { username: "a@b.com\r\nEVIL", password: "x" }); assert.fail("should throw"); }
     catch (e) { assert.strictEqual(e.code, -32602); }
   });
   await test("email_search: control characters in mailbox name rejected", async () => {
