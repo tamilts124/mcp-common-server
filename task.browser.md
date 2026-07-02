@@ -376,6 +376,3 @@ All tools above implemented, wired, and tested (46/46 in test/browser-tests.js).
     careful scoping to avoid re-recording navigation side effects
     (screenshots/downloads writing files again on replay). Revisit after
     core interaction-tool coverage is otherwise exhausted.
-  - notes: proactive extension — browser_evaluate runs in the main frame's
-    context only; a frame-scoped variant would close the same gap
-    frame_click/frame_type closed for click/type.
