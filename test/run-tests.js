@@ -181,6 +181,7 @@ async function main() {
   require("./sections/49-git-cherry");
   require("./sections/50-csv-convert");
   require("./sections/51-zip-directory-hardening");
+  require("./sections/43-docx-convert");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);
