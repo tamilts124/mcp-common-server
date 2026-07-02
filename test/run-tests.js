@@ -197,6 +197,7 @@ async function main() {
   await require("./sections/63-run-command-async");
   await require("./sections/64-search-in-document");
   require("./sections/65-env-diff");
+  require("./sections/66-scan-conflict-markers");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);
