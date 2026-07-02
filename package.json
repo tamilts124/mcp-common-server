@@ -18,7 +18,8 @@
     "test:gzip": "node test/gzip-tests.js",
     "test:brotli": "node test/brotli-tests.js",
     "test:checksum-verify": "node test/checksum-verify-tests.js",
-    "test:stress": "node test/stress-tests.js"
+    "test:stress": "node test/stress-tests.js",
+    "test:disk-usage": "node test/disk-usage-tests.js"
   },
   "engines": {
     "node": ">=18"
@@ -28,5 +29,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "3.56.0"
+  "version": "3.57.0"
 }
