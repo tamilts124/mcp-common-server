@@ -192,6 +192,7 @@ async function main() {
   require("./sections/59-tar-archive");
   require("./sections/60-system-resources");
   require("./sections/61-which-command");
+  require("./sections/62-git-worktree-list");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);
