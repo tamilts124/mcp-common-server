@@ -224,6 +224,7 @@ async function main() {
   require("./sections/90-find-large-git-objects");
   require("./sections/91-check-lfs-coverage");
   require("./sections/92-merge-conflict-risk");
+  require("./sections/93-check-binary-file");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);
