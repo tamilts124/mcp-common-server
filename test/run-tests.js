@@ -231,6 +231,7 @@ async function main() {
   require("./sections/97-json-merge");
   await require("./sections/98-http-download");
   require("./sections/99-json-path-set");
+  require("./sections/100-jwt-decode");
 
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
