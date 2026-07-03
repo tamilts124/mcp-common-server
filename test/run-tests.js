@@ -226,6 +226,7 @@ async function main() {
   require("./sections/92-merge-conflict-risk");
   require("./sections/93-check-binary-file");
   require("./sections/94-find-duplicate-dependencies");
+  require("./sections/95-git-contributors-summary");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);
