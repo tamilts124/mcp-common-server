@@ -217,6 +217,7 @@ async function main() {
   require("./sections/83-git-blame-hotspots");
   require("./sections/84-git-file-age");
   require("./sections/85-find-dead-exports");
+  require("./sections/86-find-unused-dependencies");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);
