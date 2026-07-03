@@ -338,3 +338,90 @@ test("docx_to_pdf: registered in execute_pipeline op enum and WRITE_TOOLS", () =
 test("cleanup: docx-to-pdf fixtures live inside TMP sandbox only", () => {
   assert.ok(true);
 });
+
+// ── NEW: tables, run color, paragraph font size ────────────────────────────
+
+function coloredRunXml(text, hex) {
+  return `<w:r><w:rPr><w:color w:val="${hex}"/></w:rPr><w:t xml:space="preserve">${text}</w:t></w:r>`;
+}
+function sizedRunXml(text, halfPoints) {
+  return `<w:r><w:rPr><w:sz w:val="${halfPoints}"/></w:rPr><w:t xml:space="preserve">${text}</w:t></w:r>`;
+}
+function tableXml(rowsCells, shadeFirstCellHex) {
+  const rows = rowsCells.map((cells, ri) => {
+    const tcs = cells.map((text, ci) => {
+      const shd = (ri === 0 && ci === 0 && shadeFirstCellHex) ? `<w:tcPr><w:shd w:fill="${shadeFirstCellHex}"/></w:tcPr>` : "";
+      return `<w:tc>${shd}<w:p>${textRunXml(text)}</w:p></w:tc>`;
+    }).join("");
+    return `<w:tr>${tcs}</w:tr>`;
+  }).join("");
+  return `<w:tbl>${rows}</w:tbl>`;
+}
+
+test("docx_to_pdf: table renders with cell borders/shading, reported in `tables` count", () => {
+  const src = buildDocxFixture(uq("dtp-t1") + ".docx", {
+    bodyXml: tableXml([["A1", "B1"], ["A2", "B2"]], "FFCC00"),
+  });
+  const dest = uq("dtp-t1-out") + ".pdf";
+  const r = executeTool("docx_to_pdf", { path: src, destination: dest });
+  assert.strictEqual(r.tables, 1);
+  assert.ok(r.bytes > 0);
+  const raw = fs.readFileSync(path.join(TMP, dest)).toString("latin1");
+  assert.ok(raw.includes(" re f ") && raw.includes(" re S ")); // fill + stroke rects
+});
+
+test("docx_to_pdf: run-level font color emits colored text operator (non-black rg)", () => {
+  const src = buildDocxFixture(uq("dtp-t2") + ".docx", {
+    bodyXml: `<w:p>${coloredRunXml("Red text", "FF0000")}</w:p>`,
+  });
+  const dest = uq("dtp-t2-out") + ".pdf";
+  const r = executeTool("docx_to_pdf", { path: src, destination: dest });
+  const raw = fs.readFileSync(path.join(TMP, dest)).toString("latin1");
+  assert.ok(raw.includes("1.000 0.000 0.000 rg"));
+});
+
+test("docx_to_pdf: paragraph-level font size (w:sz) reflected in text Tf operator", () => {
+  const src = buildDocxFixture(uq("dtp-t3") + ".docx", {
+    bodyXml: `<w:p>${sizedRunXml("Big text", 48)}</w:p>`, // 48 half-pts = 24pt
+  });
+  const dest = uq("dtp-t3-out") + ".pdf";
+  const r = executeTool("docx_to_pdf", { path: src, destination: dest });
+  const raw = fs.readFileSync(path.join(TMP, dest)).toString("latin1");
+  assert.ok(raw.includes(" 24 Tf"));
+});
+
+test("docx_to_pdf: table with uneven column counts across rows does not crash, uses max column count", () => {
+  const src = buildDocxFixture(uq("dtp-t4") + ".docx", {
+    bodyXml: tableXml([["A1", "B1", "C1"], ["A2"]]),
+  });
+  const dest = uq("dtp-t4-out") + ".pdf";
+  const r = executeTool("docx_to_pdf", { path: src, destination: dest });
+  assert.strictEqual(r.tables, 1);
+  assert.ok(r.bytes > 0);
+});
+
+test("docx_to_pdf: large table (60 rows) spans pages via row-level page breaks, no crash", () => {
+  const rows = [];
+  for (let i = 0; i < 60; i++) rows.push([`R${i}C1`, `R${i}C2`]);
+  const src = buildDocxFixture(uq("dtp-t5") + ".docx", { bodyXml: tableXml(rows) });
+  const dest = uq("dtp-t5-out") + ".pdf";
+  const r = executeTool("docx_to_pdf", { path: src, destination: dest });
+  assert.ok(r.pages > 1);
+});
+
+test("docx_to_pdf: invalid color value (bad hex / 'auto') falls back to default black, no crash", () => {
+  const src = buildDocxFixture(uq("dtp-t6") + ".docx", {
+    bodyXml: `<w:p>${coloredRunXml("Auto color", "auto")}</w:p>`,
+  });
+  const dest = uq("dtp-t6-out") + ".pdf";
+  const r = executeTool("docx_to_pdf", { path: src, destination: dest });
+  assert.ok(r.bytes > 0);
+});
+
+test("docx_to_pdf: empty table (no rows) does not crash, tables count still accurate", () => {
+  const src = buildDocxFixture(uq("dtp-t7") + ".docx", { bodyXml: "<w:tbl></w:tbl>" });
+  const dest = uq("dtp-t7-out") + ".pdf";
+  const r = executeTool("docx_to_pdf", { path: src, destination: dest });
+  assert.strictEqual(r.tables, 1);
+  assert.ok(r.bytes > 0);
+});
