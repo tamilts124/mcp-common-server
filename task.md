@@ -395,3 +395,6 @@ All three proactive split tasks from this batch are now done. No outstanding tas
 
 - [ ] Proactive: add a `find_todo_owners` or similar cross-tool consistency sweep — audit that every read-only tool registered in dispatchRead.js/toolsSchema.js also appears in lib/schemas/execSchemas.js's execute_pipeline op enum (currently several tools from #66 onward, e.g. scan_secrets/check_line_endings/find_large_files/find_empty_dirs/git_untracked_size/json_flatten/package_json_audit/readme_link_check, are callable directly but not via execute_pipeline) — status: todo
   - notes: Discovered while verifying readme_link_check wiring this session. Not a bug (tools work fine called directly), but a usability gap for agents chaining these newer tools via execute_pipeline. Low priority — revisit if execute_pipeline coverage becomes a real friction point.
+
+- [ ] Proactive: add a `find_stale_branches` or `port_scan_range` style tool, OR tackle the execute_pipeline op-enum coverage gap noted above (tools #66-75 not in the enum) — status: todo
+  - notes: Pick one next session. The op-enum gap is low-effort/high-clarity (just adding ~10 tool names to lib/schemas/execSchemas.js's enum array + a couple regression tests); a new tool is higher-value if a good candidate emerges. Full suite is healthy: 1791 passed, 0 failed as of commit bd010b5.
