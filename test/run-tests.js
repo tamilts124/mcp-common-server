@@ -222,6 +222,7 @@ async function main() {
   require("./sections/88-find-todo-owners");
   require("./sections/89-generate-pr-description");
   require("./sections/90-find-large-git-objects");
+  require("./sections/91-check-lfs-coverage");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);
