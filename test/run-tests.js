@@ -215,6 +215,7 @@ async function main() {
   require("./sections/81-find-circular-deps");
   require("./sections/82-git-diff-summary");
   require("./sections/83-git-blame-hotspots");
+  require("./sections/84-git-file-age");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);
