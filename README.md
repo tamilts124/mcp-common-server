@@ -304,8 +304,9 @@ The server logic is split into small, single-purpose modules under `lib/`:
 | `lib/schemas/writeSchemas.js` | JSON-RPC input schemas for write tools |
 | `lib/schemas/execSchemas.js` | JSON-RPC input schemas for exec tools + `execute_pipeline` enum |
 | `lib/executeTool.js` | Tool dispatch coordinator: validates args, enforces policy, delegates to dispatch modules |
-| `lib/dispatchRead.js` | Handler functions for all read/utility tools (spreads `GIT_DISPATCH` from `lib/dispatchGit.js` for git tools) |
+| `lib/dispatchRead.js` | Handler functions for all read/utility tools (spreads `GIT_DISPATCH` from `lib/dispatchGit.js` and `SCAN_DISPATCH` from `lib/dispatchScan.js`) |
 | `lib/dispatchGit.js` | Handler functions for all `git_*` tools + shared jail-bounded `resolveRepoDir()` helper (extracted from `lib/dispatchRead.js`) |
+| `lib/dispatchScan.js` | Handler functions for the scan/static-analysis tool family (scan_todos/scan_secrets/scan_conflict_markers/check_line_endings, find_large_files/find_empty_dirs/find_duplicates/compare_directories/file_diff_dir, find_circular_deps/find_dead_exports/find_unused_dependencies, package_json_audit/readme_link_check) — extracted from `lib/dispatchRead.js` |
 | `lib/dispatchWrite.js` | Handler functions for all write/exec tools |
 | `lib/moveOps.js` | Audited `move_file`/`copy_file` helpers: symlink-escape detection (realpath check), EXDEV cross-device fallback, overwrite-safety, directory-source rejection, same-path no-op |
 | `lib/moveDirOps.js` | Recursive-tree `move_directory`/`copy_directory` helpers built on `lib/moveOps.js`'s safety primitives: whole-tree symlink rejection, fast-rename-first with copy+delete EXDEV/merge fallback, overwrite-gated merging, same-path no-op |
