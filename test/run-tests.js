@@ -200,6 +200,7 @@ async function main() {
   require("./sections/66-scan-conflict-markers");
   require("./sections/67-scan-secrets");
   require("./sections/68-json-schema-validate");
+  require("./sections/69-check-line-endings");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);

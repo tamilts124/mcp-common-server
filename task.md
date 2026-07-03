@@ -371,3 +371,8 @@ All three proactive split tasks from this batch are now done. No outstanding tas
 
 - [x] Proactive: add `json_schema_validate` tool — validate a JSON file against a JSON Schema file (subset: type, required, properties, items, enum, min/max, minLength/maxLength, pattern, minItems/maxItems, additionalProperties) — status: tested
   - notes: lib/jsonSchemaValidateOps.js, hand-rolled subset validator (no ajv dependency). Recursive validateNode collects ALL violations (not short-circuited) with dot/bracket paths (e.g. items[2].id). Wired into dispatchRead.js + coreSchemas.js. test/sections/68-json-schema-validate.js: 9/9 pass (normal/medium/high/critical/extreme incl. invalid schema.pattern regex reported as error not crashed, additionalProperties:false rejecting __proto__/script-tag-shaped keys, nested array-of-objects recursion collecting 3 independent errors in one pass). Linked into run-tests.js.
+
+- [x] Proactive: add `check_line_endings` tool — recursively scan files/dirs and classify each as LF/CRLF/mixed/none, surfacing mixed-line-ending files that commonly cause noisy git diffs on cross-platform teams — status: tested
+  - notes: lib/lineEndingsOps.js (same MCP_IGNORE-aware walk pattern as scan_todos/scan_conflict_markers/scan_secrets), wired into dispatchRead.js + utilSchemas.js. test/sections/69-check-line-endings.js: 9/9 pass (normal LF/CRLF, medium none-classification + ENOENT -32602, high dir-mode aggregation + extension filter, critical mixed-file lf/crlf counts + binary-skip, extreme max_mixed_files cap + mixedTruncated flag). Linked into run-tests.js.
+
+- [ ] Proactive: add `find_large_files` tool — recursively scan a directory and return files above a size threshold, sorted descending, with human-readable sizes — status: todo
