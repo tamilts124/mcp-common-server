@@ -755,3 +755,155 @@ test("pdf_to_docx: detectGeometricTable unit — fewer than 3 horizontal/vertica
   const blocks = walkContentStream(stream, new Map());
   assert.strictEqual(detectGeometricTable(blocks, stream), null);
 });
+
+// ── NEW: merged-cell (rowspan/colspan) support in detectGeometricTable ──────
+// A merged cell is a single wider/taller `re S` rect (rect-grid case) or a
+// unit-cell region whose internal divider line is simply absent
+// (line-segment case). w:gridSpan/w:vMerge are emitted so Word renders the
+// merge, not a duplicated cell.
+
+test("pdf_to_docx: rect-grid colspan-2 header cell detected with correct span", () => {
+  const { walkContentStream, detectGeometricTable } = require("../../lib/pdfRichExtractOps");
+  const stream = [
+    cellStream(72, 680, 200, 20, "Header", 76, 686),   // spans both columns, row 0
+    cellStream(72, 660, 100, 20, "A2", 76, 666),
+    cellStream(172, 660, 100, 20, "B2", 176, 666),
+  ].join("\n");
+  const blocks = walkContentStream(stream, new Map());
+  const geo = detectGeometricTable(blocks, stream);
+  assert.ok(geo && Array.isArray(geo.cells), "expected merged-cell shape");
+  assert.strictEqual(geo.numRows, 2);
+  assert.strictEqual(geo.numCols, 2);
+  const header = geo.cells.find(c => c.text === "Header");
+  assert.ok(header);
+  assert.strictEqual(header.rowStart, 0);
+  assert.strictEqual(header.rowEnd, 1);
+  assert.strictEqual(header.colStart, 0);
+  assert.strictEqual(header.colEnd, 2); // colSpan 2
+});
+
+test("pdf_to_docx: rect-grid rowspan-2 left cell detected with correct span", () => {
+  const { walkContentStream, detectGeometricTable } = require("../../lib/pdfRichExtractOps");
+  const stream = [
+    cellStream(72, 660, 100, 40, "Side", 76, 676),     // spans both rows, col 0
+    cellStream(172, 680, 100, 20, "B1", 176, 686),
+    cellStream(172, 660, 100, 20, "B2", 176, 666),
+  ].join("\n");
+  const blocks = walkContentStream(stream, new Map());
+  const geo = detectGeometricTable(blocks, stream);
+  assert.ok(geo && Array.isArray(geo.cells), "expected merged-cell shape");
+  const side = geo.cells.find(c => c.text === "Side");
+  assert.ok(side);
+  assert.strictEqual(side.colStart, 0);
+  assert.strictEqual(side.colEnd, 1);
+  assert.strictEqual(side.rowStart, 0);
+  assert.strictEqual(side.rowEnd, 2); // rowSpan 2
+});
+
+test("pdf_to_docx: line-segment grid with missing internal divider merges top row (colspan)", () => {
+  const { walkContentStream, detectGeometricTable } = require("../../lib/pdfRichExtractOps");
+  // Outer border + one full horizontal divider at y=680, but the vertical
+  // divider at x=172 only covers the bottom row (660-680) — top row merges.
+  const stream = [
+    "q 0 0 0 RG 0.75 w 72 700 m 272 700 l S Q",
+    "q 0 0 0 RG 0.75 w 72 680 m 272 680 l S Q",
+    "q 0 0 0 RG 0.75 w 72 660 m 272 660 l S Q",
+    "q 0 0 0 RG 0.75 w 72 700 m 72 660 l S Q",
+    "q 0 0 0 RG 0.75 w 272 700 m 272 660 l S Q",
+    "q 0 0 0 RG 0.75 w 172 680 m 172 660 l S Q", // only bottom row
+    textAt(76, 686, "Header"),
+    textAt(76, 666, "A2"), textAt(176, 666, "B2"),
+  ].join("\n");
+  const blocks = walkContentStream(stream, new Map());
+  const geo = detectGeometricTable(blocks, stream);
+  assert.ok(geo && Array.isArray(geo.cells), "expected merged-cell shape");
+  const header = geo.cells.find(c => c.text === "Header");
+  assert.ok(header);
+  assert.strictEqual(header.colStart, 0);
+  assert.strictEqual(header.colEnd, 2);
+  assert.strictEqual(header.rowStart, 0);
+  assert.strictEqual(header.rowEnd, 1);
+});
+
+test("pdf_to_docx: irregular (L-shaped/non-rectangular) merge region falls back to null", () => {
+  const { detectGeometricTable } = require("../../lib/pdfRichExtractOps");
+  // 3x2 rect grid where a plus-shaped/mismatched pair of rects makes the
+  // merged region non-rectangular: top-left 2-col-wide rect combined with
+  // a normal single-col rect underneath only the left column creates a gap.
+  const stream = [
+    cellStream(72, 680, 200, 20, "TopWide", 76, 686), // cols 0-1, row 0
+    cellStream(72, 660, 100, 20, "BotLeft", 76, 666),  // col 0, row 1
+    // col 1, row 1 intentionally missing -> gap, not a clean rectangle
+  ].join("\n");
+  assert.strictEqual(detectGeometricTable(require("../../lib/pdfRichExtractOps").walkContentStream(stream, new Map()), stream), null);
+});
+
+test("pdf_to_docx: end-to-end colspan table produces w:gridSpan in document.xml", () => {
+  const stream = [
+    cellStream(72, 680, 200, 20, "Header", 76, 686),
+    cellStream(72, 660, 100, 20, "A2", 76, 666),
+    cellStream(172, 660, 100, 20, "B2", 176, 666),
+  ].join("\n");
+  const pdfBuf = buildRichTestPdf(stream, null);
+  const src = uq("ptd-merge1") + ".pdf";
+  fs.writeFileSync(path.join(TMP, src), pdfBuf);
+  const dest = uq("ptd-merge1-out") + ".docx";
+  const r = executeTool("pdf_to_docx", { path: src, destination: dest });
+  assert.strictEqual(r.tables, 1);
+  const extractDir = uq("ptd-merge1-extract");
+  executeTool("unzip_archive", { path: dest, destination: extractDir });
+  const xml = fs.readFileSync(path.join(TMP, extractDir, "word/document.xml"), "utf8");
+  assert.ok(xml.includes("w:gridSpan"), "expected w:gridSpan in document.xml");
+  assert.ok(xml.includes("Header"));
+});
+
+test("pdf_to_docx: end-to-end rowspan table produces w:vMerge in document.xml", () => {
+  const stream = [
+    cellStream(72, 660, 100, 40, "Side", 76, 676),
+    cellStream(172, 680, 100, 20, "B1", 176, 686),
+    cellStream(172, 660, 100, 20, "B2", 176, 666),
+  ].join("\n");
+  const pdfBuf = buildRichTestPdf(stream, null);
+  const src = uq("ptd-merge2") + ".pdf";
+  fs.writeFileSync(path.join(TMP, src), pdfBuf);
+  const dest = uq("ptd-merge2-out") + ".docx";
+  const r = executeTool("pdf_to_docx", { path: src, destination: dest });
+  assert.strictEqual(r.tables, 1);
+  const extractDir = uq("ptd-merge2-extract");
+  executeTool("unzip_archive", { path: dest, destination: extractDir });
+  const xml = fs.readFileSync(path.join(TMP, extractDir, "word/document.xml"), "utf8");
+  assert.ok(xml.includes("w:vMerge"), "expected w:vMerge in document.xml");
+  assert.ok(xml.includes("Side"));
+});
+
+test("pdf_to_docx: tableXmlFromCells unit — gridSpan + vMerge restart/continue emitted correctly", () => {
+  const { tableXmlFromCells } = require("../../lib/pdfToDocxOps");
+  const cells = [
+    { rowStart: 0, rowEnd: 1, colStart: 0, colEnd: 2, text: "Header" },
+    { rowStart: 1, rowEnd: 2, colStart: 0, colEnd: 1, text: "A2" },
+    { rowStart: 1, rowEnd: 2, colStart: 1, colEnd: 2, text: "B2" },
+  ];
+  const xml = tableXmlFromCells(cells, 2, 2, null);
+  assert.ok(xml.includes('<w:gridSpan w:val="2"/>'));
+  assert.ok(xml.includes("Header") && xml.includes("A2") && xml.includes("B2"));
+  const rowspanCells = [
+    { rowStart: 0, rowEnd: 2, colStart: 0, colEnd: 1, text: "Side" },
+    { rowStart: 0, rowEnd: 1, colStart: 1, colEnd: 2, text: "B1" },
+    { rowStart: 1, rowEnd: 2, colStart: 1, colEnd: 2, text: "B2" },
+  ];
+  const xml2 = tableXmlFromCells(rowspanCells, 2, 2, null);
+  assert.ok(xml2.includes('<w:vMerge w:val="restart"/>'));
+  assert.ok(xml2.includes("<w:vMerge/>"));
+});
+
+test("pdf_to_docx: merged-cell result remains JSON-serialisable (modulo internal Set)", () => {
+  const { walkContentStream, detectGeometricTable } = require("../../lib/pdfRichExtractOps");
+  const stream = [
+    cellStream(72, 680, 200, 20, "Header", 76, 686),
+    cellStream(72, 660, 100, 20, "A2", 76, 666),
+    cellStream(172, 660, 100, 20, "B2", 176, 666),
+  ].join("\n");
+  const blocks = walkContentStream(stream, new Map());
+  const geo = detectGeometricTable(blocks, stream);
+  assert.doesNotThrow(() => JSON.stringify({ cells: geo.cells, numRows: geo.numRows, numCols: geo.numCols, colWidths: geo.colWidths }));
+});
