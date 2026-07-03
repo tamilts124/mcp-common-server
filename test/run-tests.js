@@ -219,6 +219,7 @@ async function main() {
   require("./sections/85-find-dead-exports");
   require("./sections/86-find-unused-dependencies");
   require("./sections/87-find-console-logs");
+  require("./sections/88-find-todo-owners");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);
