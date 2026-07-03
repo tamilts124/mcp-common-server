@@ -208,6 +208,7 @@ async function main() {
   require("./sections/74-package-json-audit");
   require("./sections/75-readme-link-check");
   await require("./sections/76-pipeline-op-coverage");
+  require("./sections/77-find-stale-branches");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);

@@ -368,6 +368,7 @@ The server logic is split into small, single-purpose modules under `lib/`:
 | `lib/pdfConvertOps.js` | Markdown ↔ PDF converter: `md_to_pdf` (hand-built multi-page PDF, base-14 Helvetica/Helvetica-Bold, word-wrap + page breaks, GFM tables, hr rules), `pdf_to_md` (regex stream scan, zlib-inflate FlateDecode, Tj/TJ text extraction, zero-dep) |
 | `lib/gitOwnershipOps.js` | Read-only git metadata helper: `git_ownership` (blame-aggregate line counts by author for a file or directory tree, jail-bounded repo-root discovery) |
 | `lib/readmeLinkCheckOps.js` | Markdown link checker: `readme_link_check` (classifies links as external/anchor/local, verifies local/relative targets resolve on disk) |
+| `lib/gitStaleBranchesOps.js` | Read-only git metadata helper: `find_stale_branches` (branches whose last commit is older than a day threshold, sorted oldest-first) |
 
 Isolated functional tests (no live server/inspector) live in `test/run-tests.js`, split into per-feature files under `test/sections/` sharing `test/test-harness.js` — run with `node test/run-tests.js`.
 
