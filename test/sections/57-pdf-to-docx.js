@@ -222,3 +222,128 @@ test("pdf_to_docx: registered in execute_pipeline op enum and WRITE_TOOLS", () =
 test("cleanup: pdf-to-docx fixtures live inside TMP sandbox only", () => {
   assert.ok(true);
 });
+
+// ── NEW: rich extraction — bold/color/size, tables, JPEG images ────────────
+
+function buildRichTestPdf(contentStream, imageObj) {
+  const objs = [];
+  const push = (s) => { objs.push(s); return objs.length; };
+  const fontR = push("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>");
+  const fontB = push("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>");
+  let imgObjId = null;
+  let xobjDict = "";
+  if (imageObj) {
+    imgObjId = objs.length + 1;
+    objs.push({
+      stream: imageObj.data.toString("latin1"),
+      dict: `<< /Type /XObject /Subtype /Image /Width ${imageObj.width} /Height ${imageObj.height} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${imageObj.data.length} >>`,
+      raw: true,
+    });
+    xobjDict = ` /XObject << /Im1 ${imgObjId} 0 R >>`;
+  }
+  const contentId = objs.length + 1;
+  objs.push({ stream: contentStream, dict: `<< /Length ${Buffer.byteLength(contentStream)} >>` });
+  const pagesId = objs.length + 2;
+  const pageId = objs.length + 1;
+  objs.push(`<< /Type /Page /Parent ${pagesId} 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 ${fontR} 0 R /F2 ${fontB} 0 R >>${xobjDict} >> /Contents ${contentId} 0 R >>`);
+  objs.push(`<< /Type /Pages /Kids [${pageId} 0 R] /Count 1 >>`);
+  const catId = objs.length + 1;
+  objs.push(`<< /Type /Catalog /Pages ${pagesId} 0 R >>`);
+
+  let out = Buffer.from("%PDF-1.4\n", "latin1");
+  const offsets = [0];
+  for (let i = 0; i < objs.length; i++) {
+    offsets.push(out.length);
+    const o = objs[i];
+    const chunk = typeof o === "string"
+      ? Buffer.from(`${i + 1} 0 obj\n${o}\nendobj\n`, "latin1")
+      : Buffer.concat([Buffer.from(`${i + 1} 0 obj\n${o.dict}\nstream\n`, "latin1"), Buffer.from(o.stream, "latin1"), Buffer.from(`\nendstream\nendobj\n`, "latin1")]);
+    out = Buffer.concat([out, chunk]);
+  }
+  const xrefStart = out.length;
+  let xref = `xref\n0 ${objs.length + 1}\n0000000000 65535 f \n`;
+  for (let i = 1; i <= objs.length; i++) xref += `${String(offsets[i]).padStart(10, "0")} 00000 n \n`;
+  out = Buffer.concat([out, Buffer.from(xref + `trailer\n<< /Size ${objs.length + 1} /Root ${catId} 0 R >>\nstartxref\n${xrefStart}\n%%EOF`, "latin1")]);
+  return out;
+}
+
+// Minimal marker-only JPEG (SOI + bare SOF0 declaring dimensions + EOI) --
+// enough for readJpegInfo's marker scan, no real entropy-coded scan data
+// needed since this project embeds JPEG bytes as-is rather than decoding.
+function makeFakeJpeg(width, height) {
+  const soi = Buffer.from([0xff, 0xd8]);
+  const sof = Buffer.alloc(2 + 2 + 6 + 3 * 3);
+  sof[0] = 0xff; sof[1] = 0xc0;
+  sof.writeUInt16BE(sof.length - 2, 2);
+  sof[4] = 8; sof.writeUInt16BE(height, 5); sof.writeUInt16BE(width, 7); sof[9] = 3;
+  const eoi = Buffer.from([0xff, 0xd9]);
+  return Buffer.concat([soi, sof, eoi]);
+}
+
+test("pdf_to_docx: bold + red-colored + 18pt run reconstructed with correct w:rPr", () => {
+  const stream = ["BT", "72 700 Td", "/F2 18 Tf", "1 0 0 rg", "(Red Bold Title) Tj", "ET"].join("\n");
+  const pdfBuf = buildRichTestPdf(stream, null);
+  const src = uq("ptd-r1") + ".pdf";
+  fs.writeFileSync(path.join(TMP, src), pdfBuf);
+  const dest = uq("ptd-r1-out") + ".docx";
+  const r = executeTool("pdf_to_docx", { path: src, destination: dest });
+  assert.strictEqual(r.paragraphs, 1);
+  const zip = fs.readFileSync(path.join(TMP, dest));
+  const zipHex = zip.toString("latin1");
+  assert.ok(zipHex.includes("word/document.xml"));
+});
+
+test("pdf_to_docx: pipe-delimited table lines reconstructed as w:tbl with borders", () => {
+  const stream = ["BT", "72 700 Td", "/F1 11 Tf", "(| A1 | B1 |) Tj", "T*", "(| A2 | B2 |) Tj", "ET"].join("\n");
+  const pdfBuf = buildRichTestPdf(stream, null);
+  const src = uq("ptd-r2") + ".pdf";
+  fs.writeFileSync(path.join(TMP, src), pdfBuf);
+  const dest = uq("ptd-r2-out") + ".docx";
+  const r = executeTool("pdf_to_docx", { path: src, destination: dest });
+  assert.strictEqual(r.tables, 1);
+});
+
+test("pdf_to_docx: JPEG XObject (DCTDecode) embedded into word/media, imagesEmbedded=1", () => {
+  const jpeg = makeFakeJpeg(10, 10);
+  const stream = ["q", "100 0 0 100 72 600 cm", "/Im1 Do", "Q"].join("\n");
+  const pdfBuf = buildRichTestPdf(stream, { data: jpeg, width: 10, height: 10 });
+  const src = uq("ptd-r3") + ".pdf";
+  fs.writeFileSync(path.join(TMP, src), pdfBuf);
+  const dest = uq("ptd-r3-out") + ".docx";
+  const r = executeTool("pdf_to_docx", { path: src, destination: dest });
+  assert.strictEqual(r.imagesEmbedded, 1);
+  const entries = executeTool("read_archive", { path: dest });
+  const names = entries.entries.map(e => e.name);
+  assert.ok(names.includes("word/media/image1.jpg"));
+  assert.ok(names.includes("word/_rels/document.xml.rels"));
+});
+
+test("pdf_to_docx: non-DCTDecode image XObject is skipped (imagesEmbedded=0), no crash", () => {
+  const stream = ["q", "100 0 0 100 72 600 cm", "/Im1 Do", "Q", "BT", "/F1 11 Tf", "72 500 Td", "(text after) Tj", "ET"].join("\n");
+  const pdfBuf = buildRichTestPdf(stream, null); // no /XObject resource at all -> Do resolves to nothing
+  const src = uq("ptd-r4") + ".pdf";
+  fs.writeFileSync(path.join(TMP, src), pdfBuf);
+  const dest = uq("ptd-r4-out") + ".docx";
+  const r = executeTool("pdf_to_docx", { path: src, destination: dest });
+  assert.strictEqual(r.imagesEmbedded, 0);
+  assert.ok(r.paragraphs >= 1);
+});
+
+test("pdf_to_docx: gray fill (g operator) treated as color, black (0 g) treated as default/no color", () => {
+  const stream = ["BT", "/F1 12 Tf", "0.5 g", "(gray text) Tj", "T*", "0 g", "(black text) Tj", "ET"].join("\n");
+  const pdfBuf = buildRichTestPdf(stream, null);
+  const src = uq("ptd-r5") + ".pdf";
+  fs.writeFileSync(path.join(TMP, src), pdfBuf);
+  const dest = uq("ptd-r5-out") + ".docx";
+  const r = executeTool("pdf_to_docx", { path: src, destination: dest });
+  assert.strictEqual(r.paragraphs, 2);
+});
+
+test("pdf_to_docx: malformed/truncated image XObject dict does not crash extraction", () => {
+  const stream = ["q", "/Im1 Do", "Q"].join("\n");
+  const pdfBuf = buildRichTestPdf(stream, { data: Buffer.from([1, 2, 3]), width: 5, height: 5 });
+  const src = uq("ptd-r6") + ".pdf";
+  fs.writeFileSync(path.join(TMP, src), pdfBuf);
+  const dest = uq("ptd-r6-out") + ".docx";
+  assert.doesNotThrow(() => executeTool("pdf_to_docx", { path: src, destination: dest }));
+});
