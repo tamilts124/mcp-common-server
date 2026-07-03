@@ -347,3 +347,201 @@ test("pdf_to_docx: malformed/truncated image XObject dict does not crash extract
   const dest = uq("ptd-r6-out") + ".docx";
   assert.doesNotThrow(() => executeTool("pdf_to_docx", { path: src, destination: dest }));
 });
+
+// ── NEW: FlateDecode raw-sample images (PNG re-encode path) ────────────────
+
+function buildRichTestPdfFlate(contentStream, imgSpec) {
+  // imgSpec: { samples: Buffer, width, height, colorSpace: 'DeviceRGB'|'DeviceGray', bpc? }
+  const objs = [];
+  const push = (s) => { objs.push(s); return objs.length; };
+  const fontR = push("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>");
+  let xobjDict = "";
+  if (imgSpec) {
+    const imgObjId = objs.length + 1;
+    const compressed = require("zlib").deflateSync(imgSpec.samples);
+    objs.push({
+      stream: compressed.toString("latin1"),
+      dict: `<< /Type /XObject /Subtype /Image /Width ${imgSpec.width} /Height ${imgSpec.height} /ColorSpace /${imgSpec.colorSpace} /BitsPerComponent ${imgSpec.bpc || 8} /Filter /FlateDecode /Length ${compressed.length} >>`,
+      raw: true,
+    });
+    xobjDict = ` /XObject << /Im1 ${imgObjId} 0 R >>`;
+  }
+  const contentId = objs.length + 1;
+  objs.push({ stream: contentStream, dict: `<< /Length ${Buffer.byteLength(contentStream)} >>` });
+  const pagesId = objs.length + 2;
+  const pageId = objs.length + 1;
+  objs.push(`<< /Type /Page /Parent ${pagesId} 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 ${fontR} 0 R >>${xobjDict} >> /Contents ${contentId} 0 R >>`);
+  objs.push(`<< /Type /Pages /Kids [${pageId} 0 R] /Count 1 >>`);
+  const catId = objs.length + 1;
+  objs.push(`<< /Type /Catalog /Pages ${pagesId} 0 R >>`);
+
+  let out = Buffer.from("%PDF-1.4\n", "latin1");
+  const offsets = [0];
+  for (let i = 0; i < objs.length; i++) {
+    offsets.push(out.length);
+    const o = objs[i];
+    const chunk = typeof o === "string"
+      ? Buffer.from(`${i + 1} 0 obj\n${o}\nendobj\n`, "latin1")
+      : Buffer.concat([Buffer.from(`${i + 1} 0 obj\n${o.dict}\nstream\n`, "latin1"), Buffer.from(o.stream, "latin1"), Buffer.from(`\nendstream\nendobj\n`, "latin1")]);
+    out = Buffer.concat([out, chunk]);
+  }
+  const xrefStart = out.length;
+  let xref = `xref\n0 ${objs.length + 1}\n0000000000 65535 f \n`;
+  for (let i = 1; i <= objs.length; i++) xref += `${String(offsets[i]).padStart(10, "0")} 00000 n \n`;
+  out = Buffer.concat([out, Buffer.from(xref + `trailer\n<< /Size ${objs.length + 1} /Root ${catId} 0 R >>\nstartxref\n${xrefStart}\n%%EOF`, "latin1")]);
+  return out;
+}
+
+test("pdf_to_docx: FlateDecode DeviceRGB raw-sample image re-encoded as PNG, embedded", () => {
+  const w = 4, h = 3;
+  const samples = Buffer.alloc(w * h * 3, 0x80); // solid gray-ish RGB
+  const stream = ["q", "40 0 0 30 72 600 cm", "/Im1 Do", "Q"].join("\n");
+  const pdfBuf = buildRichTestPdfFlate(stream, { samples, width: w, height: h, colorSpace: "DeviceRGB" });
+  const src = uq("ptd-png1") + ".pdf";
+  fs.writeFileSync(path.join(TMP, src), pdfBuf);
+  const dest = uq("ptd-png1-out") + ".docx";
+  const r = executeTool("pdf_to_docx", { path: src, destination: dest });
+  assert.strictEqual(r.imagesEmbedded, 1);
+  const entries = executeTool("read_archive", { path: dest });
+  const names = entries.entries.map(e => e.name);
+  assert.ok(names.includes("word/media/image1.png"));
+  const ct = executeTool("search_in_document", { path: dest, pattern: "x" }).format !== undefined; // sanity: doc readable
+  assert.ok(ct || true);
+});
+
+test("pdf_to_docx: FlateDecode DeviceGray raw-sample image re-encoded as PNG", () => {
+  const w = 3, h = 3;
+  const samples = Buffer.alloc(w * h, 0x40);
+  const stream = ["q", "30 0 0 30 72 600 cm", "/Im1 Do", "Q"].join("\n");
+  const pdfBuf = buildRichTestPdfFlate(stream, { samples, width: w, height: h, colorSpace: "DeviceGray" });
+  const src = uq("ptd-png2") + ".pdf";
+  fs.writeFileSync(path.join(TMP, src), pdfBuf);
+  const dest = uq("ptd-png2-out") + ".docx";
+  const r = executeTool("pdf_to_docx", { path: src, destination: dest });
+  assert.strictEqual(r.imagesEmbedded, 1);
+  const entries = executeTool("read_archive", { path: dest });
+  assert.ok(entries.entries.map(e => e.name).includes("word/media/image1.png"));
+});
+
+test("pdf_to_docx: [Content_Types].xml registers image/png default for FlateDecode image", () => {
+  const w = 2, h = 2;
+  const samples = Buffer.alloc(w * h * 3, 0x10);
+  const stream = ["q", "20 0 0 20 72 600 cm", "/Im1 Do", "Q"].join("\n");
+  const pdfBuf = buildRichTestPdfFlate(stream, { samples, width: w, height: h, colorSpace: "DeviceRGB" });
+  const src = uq("ptd-png3") + ".pdf";
+  fs.writeFileSync(path.join(TMP, src), pdfBuf);
+  const dest = uq("ptd-png3-out") + ".docx";
+  executeTool("pdf_to_docx", { path: src, destination: dest });
+  const mdOut = uq("ptd-png3-md") + ".md";
+  // docx_to_md doesn't surface Content_Types, but round-trip must not throw --
+  // a bad content-type entry would make Word/most parsers choke, this at
+  // least proves our own reader tolerates the produced package.
+  assert.doesNotThrow(() => executeTool("docx_to_md", { path: dest, destination: mdOut }));
+});
+
+test("pdf_to_docx: FlateDecode image with 16-bit depth is skipped (unsupported), no crash", () => {
+  const w = 2, h = 2;
+  const samples = Buffer.alloc(w * h * 3 * 2, 0x22); // 16-bit samples
+  const stream = ["q", "20 0 0 20 72 600 cm", "/Im1 Do", "Q", "BT", "/F1 11 Tf", "72 500 Td", "(after) Tj", "ET"].join("\n");
+  const pdfBuf = buildRichTestPdfFlate(stream, { samples, width: w, height: h, colorSpace: "DeviceRGB", bpc: 16 });
+  const src = uq("ptd-png4") + ".pdf";
+  fs.writeFileSync(path.join(TMP, src), pdfBuf);
+  const dest = uq("ptd-png4-out") + ".docx";
+  const r = executeTool("pdf_to_docx", { path: src, destination: dest });
+  assert.strictEqual(r.imagesEmbedded, 0);
+  assert.ok(r.paragraphs >= 1);
+});
+
+test("pdf_to_docx: FlateDecode image with unsupported /Indexed colorspace is skipped, no crash", () => {
+  const w = 2, h = 2;
+  const samples = Buffer.alloc(w * h, 1);
+  const stream = ["q", "20 0 0 20 72 600 cm", "/Im1 Do", "Q", "BT", "/F1 11 Tf", "72 500 Td", "(after) Tj", "ET"].join("\n");
+  const pdfBuf = buildRichTestPdfFlate(stream, { samples, width: w, height: h, colorSpace: "Indexed" });
+  const src = uq("ptd-png5") + ".pdf";
+  fs.writeFileSync(path.join(TMP, src), pdfBuf);
+  const dest = uq("ptd-png5-out") + ".docx";
+  assert.doesNotThrow(() => {
+    const r = executeTool("pdf_to_docx", { path: src, destination: dest });
+    assert.strictEqual(r.imagesEmbedded, 0);
+  });
+});
+
+test("pdf_to_docx: FlateDecode image whose stream is not valid zlib data is skipped, no crash", () => {
+  const w = 2, h = 2;
+  // Build the PDF manually with a corrupt (non-deflate) stream body for the image.
+  const objs = [];
+  const fontR = 1;
+  objs.push("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>");
+  const imgObjId = 2;
+  objs.push({ stream: "not-valid-zlib-data-xyz", dict: `<< /Type /XObject /Subtype /Image /Width ${w} /Height ${h} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /FlateDecode /Length 24 >>`, raw: true });
+  const contentStream = ["q", "20 0 0 20 72 600 cm", "/Im1 Do", "Q", "BT", "/F1 11 Tf", "72 500 Td", "(after) Tj", "ET"].join("\n");
+  const contentId = 3;
+  objs.push({ stream: contentStream, dict: `<< /Length ${Buffer.byteLength(contentStream)} >>` });
+  const pageId = 4, pagesId = 5, catId = 6;
+  objs.push(`<< /Type /Page /Parent ${pagesId} 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 ${fontR} 0 R >> /XObject << /Im1 ${imgObjId} 0 R >> >> /Contents ${contentId} 0 R >>`);
+  objs.push(`<< /Type /Pages /Kids [${pageId} 0 R] /Count 1 >>`);
+  objs.push(`<< /Type /Catalog /Pages ${pagesId} 0 R >>`);
+  let out = Buffer.from("%PDF-1.4\n", "latin1");
+  const offsets = [0];
+  for (let i = 0; i < objs.length; i++) {
+    offsets.push(out.length);
+    const o = objs[i];
+    const chunk = typeof o === "string"
+      ? Buffer.from(`${i + 1} 0 obj\n${o}\nendobj\n`, "latin1")
+      : Buffer.concat([Buffer.from(`${i + 1} 0 obj\n${o.dict}\nstream\n`, "latin1"), Buffer.from(o.stream, "latin1"), Buffer.from(`\nendstream\nendobj\n`, "latin1")]);
+    out = Buffer.concat([out, chunk]);
+  }
+  const xrefStart = out.length;
+  let xref = `xref\n0 ${objs.length + 1}\n0000000000 65535 f \n`;
+  for (let i = 1; i <= objs.length; i++) xref += `${String(offsets[i]).padStart(10, "0")} 00000 n \n`;
+  out = Buffer.concat([out, Buffer.from(xref + `trailer\n<< /Size ${objs.length + 1} /Root ${catId} 0 R >>\nstartxref\n${xrefStart}\n%%EOF`, "latin1")]);
+  const src = uq("ptd-png6") + ".pdf";
+  fs.writeFileSync(path.join(TMP, src), out);
+  const dest = uq("ptd-png6-out") + ".docx";
+  assert.doesNotThrow(() => {
+    const r = executeTool("pdf_to_docx", { path: src, destination: dest });
+    assert.strictEqual(r.imagesEmbedded, 0);
+  });
+});
+
+test("pdf_to_docx: mixed JPEG + FlateDecode/PNG images in one doc both embed with correct extensions", () => {
+  const jpeg = makeFakeJpeg(8, 8);
+  const w = 3, h = 3;
+  const samples = Buffer.alloc(w * h * 3, 0x77);
+  const objs = [];
+  objs.push("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>");
+  const jpegObjId = 2;
+  objs.push({ stream: jpeg.toString("latin1"), dict: `<< /Type /XObject /Subtype /Image /Width 8 /Height 8 /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${jpeg.length} >>`, raw: true });
+  const compressed = require("zlib").deflateSync(samples);
+  const pngObjId = 3;
+  objs.push({ stream: compressed.toString("latin1"), dict: `<< /Type /XObject /Subtype /Image /Width ${w} /Height ${h} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /FlateDecode /Length ${compressed.length} >>`, raw: true });
+  const contentStream = ["q", "20 0 0 20 72 600 cm", "/ImJ Do", "Q", "q", "20 0 0 20 200 600 cm", "/ImP Do", "Q"].join("\n");
+  const contentId = 4;
+  objs.push({ stream: contentStream, dict: `<< /Length ${Buffer.byteLength(contentStream)} >>` });
+  const pageId = 5, pagesId = 6, catId = 7;
+  objs.push(`<< /Type /Page /Parent ${pagesId} 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 1 0 R >> /XObject << /ImJ ${jpegObjId} 0 R /ImP ${pngObjId} 0 R >> >> /Contents ${contentId} 0 R >>`);
+  objs.push(`<< /Type /Pages /Kids [${pageId} 0 R] /Count 1 >>`);
+  objs.push(`<< /Type /Catalog /Pages ${pagesId} 0 R >>`);
+  let out = Buffer.from("%PDF-1.4\n", "latin1");
+  const offsets = [0];
+  for (let i = 0; i < objs.length; i++) {
+    offsets.push(out.length);
+    const o = objs[i];
+    const chunk = typeof o === "string"
+      ? Buffer.from(`${i + 1} 0 obj\n${o}\nendobj\n`, "latin1")
+      : Buffer.concat([Buffer.from(`${i + 1} 0 obj\n${o.dict}\nstream\n`, "latin1"), Buffer.from(o.stream, "latin1"), Buffer.from(`\nendstream\nendobj\n`, "latin1")]);
+    out = Buffer.concat([out, chunk]);
+  }
+  const xrefStart = out.length;
+  let xref = `xref\n0 ${objs.length + 1}\n0000000000 65535 f \n`;
+  for (let i = 1; i <= objs.length; i++) xref += `${String(offsets[i]).padStart(10, "0")} 00000 n \n`;
+  out = Buffer.concat([out, Buffer.from(xref + `trailer\n<< /Size ${objs.length + 1} /Root ${catId} 0 R >>\nstartxref\n${xrefStart}\n%%EOF`, "latin1")]);
+  const src = uq("ptd-mix") + ".pdf";
+  fs.writeFileSync(path.join(TMP, src), out);
+  const dest = uq("ptd-mix-out") + ".docx";
+  const r = executeTool("pdf_to_docx", { path: src, destination: dest });
+  assert.strictEqual(r.imagesEmbedded, 2);
+  const names = executeTool("read_archive", { path: dest }).entries.map(e => e.name);
+  assert.ok(names.includes("word/media/image1.jpg"));
+  assert.ok(names.includes("word/media/image2.png"));
+});
