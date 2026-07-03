@@ -205,6 +205,7 @@ async function main() {
   require("./sections/71-find-empty-dirs");
   require("./sections/72-git-untracked-size");
   require("./sections/73-json-flatten");
+  require("./sections/74-package-json-audit");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);
