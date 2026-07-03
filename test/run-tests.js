@@ -220,6 +220,7 @@ async function main() {
   require("./sections/86-find-unused-dependencies");
   require("./sections/87-find-console-logs");
   require("./sections/88-find-todo-owners");
+  require("./sections/89-generate-pr-description");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);
