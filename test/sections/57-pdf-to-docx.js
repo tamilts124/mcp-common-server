@@ -665,3 +665,93 @@ test("pdf_to_docx: detectGeometricTable unit — result is JSON-serialisable mod
   const geo = detectGeometricTable(blocks, stream);
   assert.doesNotThrow(() => JSON.stringify({ rows: geo.rows, colWidths: geo.colWidths }));
 });
+
+// ── NEW: geometric table detection via raw `m`/`l`/`S` line-segment grids ──
+// Some PDF generators draw table borders as individual stroked line segments
+// instead of per-cell `re` rects. detectGeometricTable falls back to this
+// when the rect-grid pass finds nothing.
+
+function gridLineSegs(xs, ys) {
+  let s = "";
+  for (const y of ys) s += `q 0 0 0 RG 0.75 w ${xs[0]} ${y} m ${xs[xs.length - 1]} ${y} l S Q\n`;
+  for (const x of xs) s += `q 0 0 0 RG 0.75 w ${x} ${ys[0]} m ${x} ${ys[ys.length - 1]} l S Q\n`;
+  return s;
+}
+function textAt(tx, ty, text) {
+  return `BT ${tx} ${ty} Td /F1 11 Tf (${text}) Tj ET`;
+}
+
+test("pdf_to_docx: line-segment (m/l/S) 2x2 grid reconstructed as w:tbl", () => {
+  const xs = [72, 172, 272], ys = [700, 680, 660];
+  const stream = gridLineSegs(xs, ys) + [
+    textAt(76, 686, "A1"), textAt(176, 686, "B1"),
+    textAt(76, 666, "A2"), textAt(176, 666, "B2"),
+  ].join("\n");
+  const pdfBuf = buildRichTestPdf(stream, null);
+  const src = uq("ptd-line1") + ".pdf";
+  fs.writeFileSync(path.join(TMP, src), pdfBuf);
+  const dest = uq("ptd-line1-out") + ".docx";
+  const r = executeTool("pdf_to_docx", { path: src, destination: dest });
+  assert.strictEqual(r.tables, 1);
+});
+
+test("pdf_to_docx: line-segment grid cell text lands in correct row/col", () => {
+  const xs = [72, 172, 272], ys = [700, 680, 660];
+  const stream = gridLineSegs(xs, ys) + [
+    textAt(76, 686, "A1"), textAt(176, 686, "B1"),
+    textAt(76, 666, "A2"), textAt(176, 666, "B2"),
+  ].join("\n");
+  const { walkContentStream, detectGeometricTable } = require("../../lib/pdfRichExtractOps");
+  const blocks = walkContentStream(stream, new Map());
+  const geo = detectGeometricTable(blocks, stream);
+  assert.ok(geo);
+  assert.deepStrictEqual(geo.rows, [["A1", "B1"], ["A2", "B2"]]);
+});
+
+test("pdf_to_docx: line-segment 3x2 grid gets proportional column widths", () => {
+  const xs = [72, 222, 272, 322], ys = [700, 680, 660];
+  const stream = gridLineSegs(xs, ys) + [
+    textAt(76, 686, "Wide"), textAt(226, 686, "Mid"), textAt(276, 686, "Narrow"),
+    textAt(76, 666, "a"), textAt(226, 666, "b"), textAt(276, 666, "c"),
+  ].join("\n");
+  const pdfBuf = buildRichTestPdf(stream, null);
+  const src = uq("ptd-line2") + ".pdf";
+  fs.writeFileSync(path.join(TMP, src), pdfBuf);
+  const dest = uq("ptd-line2-out") + ".docx";
+  const r = executeTool("pdf_to_docx", { path: src, destination: dest });
+  assert.strictEqual(r.tables, 1);
+});
+
+test("pdf_to_docx: single stray line segment (no grid) doesn't crash or false-positive", () => {
+  const stream = "q 0 0 0 RG 0.75 w 72 700 m 272 700 l S Q\n" + textAt(76, 686, "Solo");
+  const pdfBuf = buildRichTestPdf(stream, null);
+  const src = uq("ptd-line3") + ".pdf";
+  fs.writeFileSync(path.join(TMP, src), pdfBuf);
+  const dest = uq("ptd-line3-out") + ".docx";
+  const r = executeTool("pdf_to_docx", { path: src, destination: dest });
+  assert.strictEqual(r.tables, 0);
+});
+
+test("pdf_to_docx: partial ruling (lines don't span full grid) falls back, no crash", () => {
+  const stream = [
+    "q 0 0 0 RG 0.75 w 72 700 m 272 700 l S Q",
+    "q 0 0 0 RG 0.75 w 72 680 m 272 680 l S Q",
+    "q 0 0 0 RG 0.75 w 72 660 m 200 660 l S Q",
+    "q 0 0 0 RG 0.75 w 72 700 m 72 660 l S Q",
+    "q 0 0 0 RG 0.75 w 172 700 m 172 660 l S Q",
+    "q 0 0 0 RG 0.75 w 272 700 m 272 660 l S Q",
+    textAt(76, 686, "A1"),
+  ].join("\n");
+  const pdfBuf = buildRichTestPdf(stream, null);
+  const src = uq("ptd-line4") + ".pdf";
+  fs.writeFileSync(path.join(TMP, src), pdfBuf);
+  const dest = uq("ptd-line4-out") + ".docx";
+  assert.doesNotThrow(() => executeTool("pdf_to_docx", { path: src, destination: dest }));
+});
+
+test("pdf_to_docx: detectGeometricTable unit — fewer than 3 horizontal/vertical lines returns null", () => {
+  const { walkContentStream, detectGeometricTable } = require("../../lib/pdfRichExtractOps");
+  const stream = "q 0 0 0 RG 0.75 w 72 700 m 272 700 l S Q\nq 0 0 0 RG 0.75 w 72 680 m 272 680 l S Q";
+  const blocks = walkContentStream(stream, new Map());
+  assert.strictEqual(detectGeometricTable(blocks, stream), null);
+});
