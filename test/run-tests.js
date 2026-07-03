@@ -229,6 +229,7 @@ async function main() {
   require("./sections/95-git-contributors-summary");
   require("./sections/96-regex-test");
   require("./sections/97-json-merge");
+  await require("./sections/98-http-download");
 
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
