@@ -233,6 +233,7 @@ async function main() {
   require("./sections/99-json-path-set");
   require("./sections/100-jwt-decode");
   require("./sections/101-url-parse");
+  require("./sections/102-semver-compare");
 
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
