@@ -209,6 +209,7 @@ async function main() {
   require("./sections/75-readme-link-check");
   await require("./sections/76-pipeline-op-coverage");
   require("./sections/77-find-stale-branches");
+  await require("./sections/78-port-scan-range");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);
