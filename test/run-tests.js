@@ -232,6 +232,7 @@ async function main() {
   await require("./sections/98-http-download");
   require("./sections/99-json-path-set");
   require("./sections/100-jwt-decode");
+  require("./sections/101-url-parse");
 
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
