@@ -230,6 +230,7 @@ async function main() {
   require("./sections/96-regex-test");
   require("./sections/97-json-merge");
   await require("./sections/98-http-download");
+  require("./sections/99-json-path-set");
 
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
