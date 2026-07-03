@@ -227,6 +227,7 @@ async function main() {
   require("./sections/93-check-binary-file");
   require("./sections/94-find-duplicate-dependencies");
   require("./sections/95-git-contributors-summary");
+  require("./sections/96-regex-test");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);
