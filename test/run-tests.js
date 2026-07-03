@@ -202,6 +202,7 @@ async function main() {
   require("./sections/68-json-schema-validate");
   require("./sections/69-check-line-endings");
   require("./sections/70-find-large-files");
+  require("./sections/71-find-empty-dirs");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);

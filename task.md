@@ -378,4 +378,7 @@ All three proactive split tasks from this batch are now done. No outstanding tas
 - [x] Proactive: add `find_large_files` tool — recursively scan a directory and return files above a size threshold, sorted descending, with human-readable sizes — status: tested
   - notes: lib/largeFilesOps.js (fileStats-style walk, honours MCP_IGNORE), wired into dispatchRead.js + utilSchemas.js. test/sections/70-find-large-files.js: 7/7 pass (normal sorted-desc + humanSize, medium threshold-exclusion + non-directory throw, high top_n cap/truncated + extension filter, critical no-traversal-in-output-paths, extreme 50-file fan-out). Linked into run-tests.js.
 
-- [ ] Proactive: add `find_empty_dirs` tool — recursively find empty directories (useful cleanup before packaging/zipping) — status: todo
+- [x] Proactive: add `find_empty_dirs` tool — recursively find empty directories (useful cleanup before packaging/zipping) — status: tested
+  - notes: lib/emptyDirsOps.js, post-order walk (dir empty iff no direct files AND all child dirs empty), honours MCP_IGNORE. Wired into dispatchRead.js + utilSchemas.js. test/sections/71-find-empty-dirs.js: 9/9 pass (normal empty-dir detection + file-containing dir excluded, medium nested-bubble-up + non-directory throw, high mixed-tree accurate counts, critical no-traversal in output paths, extreme max_results cap/truncated + 10-level deep nesting no stack overflow). Linked into run-tests.js.
+
+- [ ] Proactive: add `git_untracked_size` tool — sum the on-disk size of untracked (non-.gitignored) files in a repo, to catch accidental large-file additions before `git add` — status: todo
