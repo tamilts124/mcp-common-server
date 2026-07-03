@@ -43,8 +43,8 @@ module.exports = (async () => {
     const r = executeTool("find_files", { pattern: "*.test.js" });
     assert.strictEqual(r.matchedFiles, 1);
   });
-  await test("run_command echoes output", () => {
-    const r = executeTool("run_command", { command: process.platform === "win32" ? "echo hi" : "echo hi" });
+  await test("run_command echoes output", async () => {
+    const r = await executeTool("run_command", { command: process.platform === "win32" ? "echo hi" : "echo hi" });
     assert.strictEqual(r.exitCode, 0);
     assert.ok(r.stdout.includes("hi"));
   });
@@ -82,14 +82,14 @@ module.exports = (async () => {
   });
 
   console.log(`\n[3] HIGH — dependency / failure handling`);
-  await test("run_command with failing exit code returns structured error, doesn't throw", () => {
+  await test("run_command with failing exit code returns structured error, doesn't throw", async () => {
     const cmd = process.platform === "win32" ? "exit 7" : "exit 7";
-    const r = executeTool("run_command", { command: cmd });
+    const r = await executeTool("run_command", { command: cmd });
     assert.strictEqual(r.exitCode, 7);
   });
-  await test("run_command timeout is bounded by CMD_TIMEOUT (doesn't hang forever)", () => {
+  await test("run_command timeout is bounded by CMD_TIMEOUT (doesn't hang forever)", async () => {
     const cmd = process.platform === "win32" ? "ping -n 20 127.0.0.1 >NUL" : "sleep 20";
-    const r = executeTool("run_command", { command: cmd, timeout: 1 });
+    const r = await executeTool("run_command", { command: cmd, timeout: 1 });
     assert.notStrictEqual(r.exitCode, 0);
   });
   await test("get_process_output on unknown id throws cleanly (simulated dependency failure)", () => {
