@@ -213,6 +213,7 @@ async function main() {
   await require("./sections/79-dns-lookup");
   await require("./sections/80-commit-message-lint");
   require("./sections/81-find-circular-deps");
+  require("./sections/82-git-diff-summary");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);
