@@ -211,6 +211,7 @@ async function main() {
   require("./sections/77-find-stale-branches");
   await require("./sections/78-port-scan-range");
   await require("./sections/79-dns-lookup");
+  await require("./sections/80-commit-message-lint");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);
