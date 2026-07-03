@@ -223,6 +223,7 @@ async function main() {
   require("./sections/89-generate-pr-description");
   require("./sections/90-find-large-git-objects");
   require("./sections/91-check-lfs-coverage");
+  require("./sections/92-merge-conflict-risk");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);
