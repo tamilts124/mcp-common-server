@@ -203,6 +203,7 @@ async function main() {
   require("./sections/69-check-line-endings");
   require("./sections/70-find-large-files");
   require("./sections/71-find-empty-dirs");
+  require("./sections/72-git-untracked-size");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);
