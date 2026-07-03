@@ -375,4 +375,7 @@ All three proactive split tasks from this batch are now done. No outstanding tas
 - [x] Proactive: add `check_line_endings` tool — recursively scan files/dirs and classify each as LF/CRLF/mixed/none, surfacing mixed-line-ending files that commonly cause noisy git diffs on cross-platform teams — status: tested
   - notes: lib/lineEndingsOps.js (same MCP_IGNORE-aware walk pattern as scan_todos/scan_conflict_markers/scan_secrets), wired into dispatchRead.js + utilSchemas.js. test/sections/69-check-line-endings.js: 9/9 pass (normal LF/CRLF, medium none-classification + ENOENT -32602, high dir-mode aggregation + extension filter, critical mixed-file lf/crlf counts + binary-skip, extreme max_mixed_files cap + mixedTruncated flag). Linked into run-tests.js.
 
-- [ ] Proactive: add `find_large_files` tool — recursively scan a directory and return files above a size threshold, sorted descending, with human-readable sizes — status: todo
+- [x] Proactive: add `find_large_files` tool — recursively scan a directory and return files above a size threshold, sorted descending, with human-readable sizes — status: tested
+  - notes: lib/largeFilesOps.js (fileStats-style walk, honours MCP_IGNORE), wired into dispatchRead.js + utilSchemas.js. test/sections/70-find-large-files.js: 7/7 pass (normal sorted-desc + humanSize, medium threshold-exclusion + non-directory throw, high top_n cap/truncated + extension filter, critical no-traversal-in-output-paths, extreme 50-file fan-out). Linked into run-tests.js.
+
+- [ ] Proactive: add `find_empty_dirs` tool — recursively find empty directories (useful cleanup before packaging/zipping) — status: todo

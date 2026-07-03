@@ -201,6 +201,7 @@ async function main() {
   require("./sections/67-scan-secrets");
   require("./sections/68-json-schema-validate");
   require("./sections/69-check-line-endings");
+  require("./sections/70-find-large-files");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);
