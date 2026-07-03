@@ -212,6 +212,7 @@ async function main() {
   await require("./sections/78-port-scan-range");
   await require("./sections/79-dns-lookup");
   await require("./sections/80-commit-message-lint");
+  require("./sections/81-find-circular-deps");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);
