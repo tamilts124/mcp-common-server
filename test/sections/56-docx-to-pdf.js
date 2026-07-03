@@ -425,3 +425,93 @@ test("docx_to_pdf: empty table (no rows) does not crash, tables count still accu
   assert.strictEqual(r.tables, 1);
   assert.ok(r.bytes > 0);
 });
+
+// ── NEW: real column widths from <w:tblGrid> ────────────────────────────────
+
+function tableXmlWithGrid(rowsCells, colWidthsTwips) {
+  const grid = colWidthsTwips ? `<w:tblGrid>${colWidthsTwips.map(w => `<w:gridCol w:w="${w}"/>`).join("")}</w:tblGrid>` : "";
+  const rows = rowsCells.map(cells => `<w:tr>${cells.map(t => `<w:tc><w:p>${textRunXml(t)}</w:p></w:tc>`).join("")}</w:tr>`).join("");
+  return `<w:tbl>${grid}${rows}</w:tbl>`;
+}
+
+function firstTwoStrokeRectWidths(raw) {
+  const m = [...raw.matchAll(/([\d.]+) ([\d.]+) ([\d.]+) ([\d.]+) re S/g)];
+  return m.slice(0, 2).map(g => Number(g[3]));
+}
+
+test("docx_to_pdf: <w:tblGrid> 80/20 column split renders proportionally, not equal-width", () => {
+  const src = buildDocxFixture(uq("dtp-w1") + ".docx", {
+    bodyXml: tableXmlWithGrid([["Wide", "Narrow"]], [8000, 2000]),
+  });
+  const dest = uq("dtp-w1-out") + ".pdf";
+  const r = executeTool("docx_to_pdf", { path: src, destination: dest });
+  assert.strictEqual(r.tables, 1);
+  const raw = fs.readFileSync(path.join(TMP, dest)).toString("latin1");
+  const [w0, w1] = firstTwoStrokeRectWidths(raw);
+  assert.ok(w0 > w1 * 3, `expected col0 (${w0}) to be ~4x col1 (${w1})`);
+  assert.ok(Math.abs((w0 + w1) - (612 - 2 * 72)) < 1, `columns should sum to usable width, got ${w0 + w1}`);
+});
+
+test("docx_to_pdf: <w:tblGrid> col count mismatched with actual cell count falls back to equal-width, no crash", () => {
+  const src = buildDocxFixture(uq("dtp-w2") + ".docx", {
+    // grid declares 3 cols, row only has 2 cells
+    bodyXml: tableXmlWithGrid([["A", "B"]], [3000, 3000, 3000]),
+  });
+  const dest = uq("dtp-w2-out") + ".pdf";
+  const r = executeTool("docx_to_pdf", { path: src, destination: dest });
+  assert.strictEqual(r.tables, 1);
+  const raw = fs.readFileSync(path.join(TMP, dest)).toString("latin1");
+  const [w0, w1] = firstTwoStrokeRectWidths(raw);
+  assert.ok(Math.abs(w0 - w1) < 1); // equal-width fallback
+});
+
+test("docx_to_pdf: <w:tblGrid> with a zero-width gridCol falls back to equal-width, no crash", () => {
+  const src = buildDocxFixture(uq("dtp-w3") + ".docx", {
+    bodyXml: tableXmlWithGrid([["A", "B"]], [0, 5000]),
+  });
+  const dest = uq("dtp-w3-out") + ".pdf";
+  assert.doesNotThrow(() => {
+    const r = executeTool("docx_to_pdf", { path: src, destination: dest });
+    assert.strictEqual(r.tables, 1);
+  });
+  const raw = fs.readFileSync(path.join(TMP, dest)).toString("latin1");
+  const [w0, w1] = firstTwoStrokeRectWidths(raw);
+  assert.ok(Math.abs(w0 - w1) < 1);
+});
+
+test("docx_to_pdf: extremely large gridCol width values don't crash, still proportional and bounded to page", () => {
+  const src = buildDocxFixture(uq("dtp-w4") + ".docx", {
+    bodyXml: tableXmlWithGrid([["A", "B"]], [999999999, 1]),
+  });
+  const dest = uq("dtp-w4-out") + ".pdf";
+  const r = executeTool("docx_to_pdf", { path: src, destination: dest });
+  assert.strictEqual(r.tables, 1);
+  const raw = fs.readFileSync(path.join(TMP, dest)).toString("latin1");
+  const [w0, w1] = firstTwoStrokeRectWidths(raw);
+  assert.ok(w0 + w1 <= (612 - 2 * 72) + 1);
+  assert.ok(w0 > w1);
+});
+
+test("docx_to_pdf: negative/malformed gridCol width (unparseable) falls back to equal-width, no crash", () => {
+  const src = buildDocxFixture(uq("dtp-w5") + ".docx", {
+    bodyXml: `<w:tbl><w:tblGrid><w:gridCol w:w="-100"/><w:gridCol w:w="abc"/></w:tblGrid>` +
+      `<w:tr><w:tc><w:p>${textRunXml("A")}</w:p></w:tc><w:tc><w:p>${textRunXml("B")}</w:p></w:tc></w:tr></w:tbl>`,
+  });
+  const dest = uq("dtp-w5-out") + ".pdf";
+  assert.doesNotThrow(() => executeTool("docx_to_pdf", { path: src, destination: dest }));
+});
+
+test("docx_to_pdf: 10-column real-width table renders without crash, widths sum to usable width", () => {
+  const widths = Array.from({ length: 10 }, (_, i) => 500 + i * 100);
+  const cells = widths.map((_, i) => `C${i}`);
+  const src = buildDocxFixture(uq("dtp-w6") + ".docx", {
+    bodyXml: tableXmlWithGrid([cells], widths),
+  });
+  const dest = uq("dtp-w6-out") + ".pdf";
+  const r = executeTool("docx_to_pdf", { path: src, destination: dest });
+  assert.strictEqual(r.tables, 1);
+  const raw = fs.readFileSync(path.join(TMP, dest)).toString("latin1");
+  const all = [...raw.matchAll(/([\d.]+) ([\d.]+) ([\d.]+) ([\d.]+) re S/g)].slice(0, 10).map(g => Number(g[3]));
+  const sum = all.reduce((a, b) => a + b, 0);
+  assert.ok(Math.abs(sum - (612 - 2 * 72)) < 1, `sum=${sum}`);
+});
