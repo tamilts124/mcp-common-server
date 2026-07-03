@@ -545,3 +545,123 @@ test("pdf_to_docx: mixed JPEG + FlateDecode/PNG images in one doc both embed wit
   assert.ok(names.includes("word/media/image1.jpg"));
   assert.ok(names.includes("word/media/image2.png"));
 });
+
+// ── NEW: geometric (ruled-line) table detection via `re S` cell-border grids ─
+// Mimics the exact per-cell `x y w h re S` pattern docxToPdfOps.js emits, so
+// docx_to_pdf -> pdf_to_docx round-trips a real bordered table instead of
+// flattening it to plain text.
+
+function cellStream(x, y, w, h, text, tx, ty) {
+  return `q 0 0 0 RG 0.75 w ${x} ${y} ${w} ${h} re S Q\nBT ${tx} ${ty} Td /F1 11 Tf (${text}) Tj ET`;
+}
+
+test("pdf_to_docx: ruled-line (geometric) 2x2 table reconstructed as w:tbl", () => {
+  const stream = [
+    cellStream(72, 680, 100, 20, "A1", 76, 686),
+    cellStream(172, 680, 100, 20, "B1", 176, 686),
+    cellStream(72, 660, 100, 20, "A2", 76, 666),
+    cellStream(172, 660, 100, 20, "B2", 176, 666),
+  ].join("\n");
+  const pdfBuf = buildRichTestPdf(stream, null);
+  const src = uq("ptd-geo1") + ".pdf";
+  fs.writeFileSync(path.join(TMP, src), pdfBuf);
+  const dest = uq("ptd-geo1-out") + ".docx";
+  const r = executeTool("pdf_to_docx", { path: src, destination: dest });
+  assert.strictEqual(r.tables, 1);
+});
+
+test("pdf_to_docx: geometric table cell text lands in correct row/col (not concatenated)", () => {
+  const stream = [
+    cellStream(72, 680, 100, 20, "A1", 76, 686),
+    cellStream(172, 680, 100, 20, "B1", 176, 686),
+    cellStream(72, 660, 100, 20, "A2", 76, 666),
+    cellStream(172, 660, 100, 20, "B2", 176, 666),
+  ].join("\n");
+  const pdfBuf = buildRichTestPdf(stream, null);
+  const src = uq("ptd-geo2") + ".pdf";
+  fs.writeFileSync(path.join(TMP, src), pdfBuf);
+  const dest = uq("ptd-geo2-out") + ".docx";
+  executeTool("pdf_to_docx", { path: src, destination: dest });
+  const mdOut = uq("ptd-geo2-md") + ".md";
+  executeTool("docx_to_md", { path: dest, destination: mdOut });
+  const text = fs.readFileSync(path.join(TMP, mdOut), "utf8");
+  const idxA1 = text.indexOf("A1"), idxB1 = text.indexOf("B1"), idxA2 = text.indexOf("A2"), idxB2 = text.indexOf("B2");
+  assert.ok(idxA1 >= 0 && idxB1 >= 0 && idxA2 >= 0 && idxB2 >= 0);
+  assert.ok(idxA1 < idxB1 && idxB1 < idxA2 && idxA2 < idxB2); // reading order preserved, cells not merged/swapped
+});
+
+test("pdf_to_docx: 3-column geometric table gets proportional (non-equal) w:gridCol widths", () => {
+  const stream = [
+    cellStream(72, 680, 150, 20, "Wide", 76, 686),
+    cellStream(222, 680, 50, 20, "Mid", 226, 686),
+    cellStream(272, 680, 50, 20, "Narrow", 276, 686),
+    cellStream(72, 660, 150, 20, "a", 76, 666),
+    cellStream(222, 660, 50, 20, "b", 226, 666),
+    cellStream(272, 660, 50, 20, "c", 276, 666),
+  ].join("\n");
+  const pdfBuf = buildRichTestPdf(stream, null);
+  const src = uq("ptd-geo3") + ".pdf";
+  fs.writeFileSync(path.join(TMP, src), pdfBuf);
+  const dest = uq("ptd-geo3-out") + ".docx";
+  const r = executeTool("pdf_to_docx", { path: src, destination: dest });
+  assert.strictEqual(r.tables, 1);
+});
+
+test("pdf_to_docx: ragged rect grid (missing one cell) falls back to plain paragraphs, no crash", () => {
+  const stream = [
+    cellStream(72, 680, 100, 20, "A1", 76, 686),
+    cellStream(172, 680, 100, 20, "B1", 176, 686),
+    cellStream(72, 660, 100, 20, "A2", 76, 666),
+    // missing 4th rect -> not a solid grid
+  ].join("\n");
+  const pdfBuf = buildRichTestPdf(stream, null);
+  const src = uq("ptd-geo4") + ".pdf";
+  fs.writeFileSync(path.join(TMP, src), pdfBuf);
+  const dest = uq("ptd-geo4-out") + ".docx";
+  assert.doesNotThrow(() => executeTool("pdf_to_docx", { path: src, destination: dest }));
+});
+
+test("pdf_to_docx: single stray stroked rect (not a grid) doesn't crash or false-positive", () => {
+  const stream = cellStream(72, 680, 100, 20, "Solo", 76, 686);
+  const pdfBuf = buildRichTestPdf(stream, null);
+  const src = uq("ptd-geo5") + ".pdf";
+  fs.writeFileSync(path.join(TMP, src), pdfBuf);
+  const dest = uq("ptd-geo5-out") + ".docx";
+  const r = executeTool("pdf_to_docx", { path: src, destination: dest });
+  assert.strictEqual(r.tables, 0);
+});
+
+test("pdf_to_docx: detectGeometricTable unit — 2x2 grid maps text to correct cells", () => {
+  const { walkContentStream, detectGeometricTable, buildFontStyleMap } = require("../../lib/pdfRichExtractOps");
+  const stream = [
+    cellStream(72, 680, 100, 20, "A1", 76, 686),
+    cellStream(172, 680, 100, 20, "B1", 176, 686),
+    cellStream(72, 660, 100, 20, "A2", 76, 666),
+    cellStream(172, 660, 100, 20, "B2", 176, 666),
+  ].join("\n");
+  const blocks = walkContentStream(stream, new Map());
+  const geo = detectGeometricTable(blocks, stream);
+  assert.ok(geo);
+  assert.deepStrictEqual(geo.rows, [["A1", "B1"], ["A2", "B2"]]);
+  assert.strictEqual(geo.colWidths.length, 2);
+});
+
+test("pdf_to_docx: detectGeometricTable unit — fewer than 4 rects returns null", () => {
+  const { walkContentStream, detectGeometricTable } = require("../../lib/pdfRichExtractOps");
+  const stream = cellStream(72, 680, 100, 20, "Solo", 76, 686);
+  const blocks = walkContentStream(stream, new Map());
+  assert.strictEqual(detectGeometricTable(blocks, stream), null);
+});
+
+test("pdf_to_docx: detectGeometricTable unit — result is JSON-serialisable modulo the Set", () => {
+  const { walkContentStream, detectGeometricTable } = require("../../lib/pdfRichExtractOps");
+  const stream = [
+    cellStream(72, 680, 100, 20, "A1", 76, 686),
+    cellStream(172, 680, 100, 20, "B1", 176, 686),
+    cellStream(72, 660, 100, 20, "A2", 76, 666),
+    cellStream(172, 660, 100, 20, "B2", 176, 666),
+  ].join("\n");
+  const blocks = walkContentStream(stream, new Map());
+  const geo = detectGeometricTable(blocks, stream);
+  assert.doesNotThrow(() => JSON.stringify({ rows: geo.rows, colWidths: geo.colWidths }));
+});
