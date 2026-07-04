@@ -234,6 +234,7 @@ async function main() {
   require("./sections/100-jwt-decode");
   require("./sections/101-url-parse");
   require("./sections/102-semver-compare");
+  require("./sections/103-json-patch-generate");
 
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
