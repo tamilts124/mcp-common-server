@@ -236,6 +236,7 @@ async function main() {
   require("./sections/102-semver-compare");
   require("./sections/103-json-patch-generate");
   require("./sections/104-csv-diff");
+  require("./sections/105-dir-diff-summary");
 
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
