@@ -46,7 +46,8 @@
     "test:unbounded-object-growth": "node test/find-unbounded-object-growth-tests.js",
     "test:missing-null-checks-regex-exec": "node test/find-missing-null-checks-after-regex-exec-tests.js",
     "test:regex-dos-route-params": "node test/find-regex-dos-route-params-tests.js",
-    "test:test-flakiness-risk": "node test/check-test-flakiness-risk-tests.js"
+    "test:test-flakiness-risk": "node test/check-test-flakiness-risk-tests.js",
+    "test:missing-csp-header": "node test/check-missing-csp-header-tests.js"
   },
   "engines": {
     "node": ">=18"
@@ -56,5 +57,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.72.0"
+  "version": "4.73.0"
 }
