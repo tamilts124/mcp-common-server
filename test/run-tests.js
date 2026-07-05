@@ -261,6 +261,7 @@ async function main() {
   require("./sections/127-find-missing-await");
   require("./sections/128-find-async-callback-in-foreach");
   require("./sections/129-find-missing-img-alt-text");
+  require("./sections/130-find-missing-form-label");
 
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
