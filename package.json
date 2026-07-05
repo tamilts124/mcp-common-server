@@ -39,7 +39,8 @@
     "test:insecure-random": "node test/find-insecure-random-usage-tests.js",
     "test:unbounded-recursion": "node test/find-unbounded-recursion-tests.js",
     "test:open-redirect": "node test/find-open-redirect-risks-tests.js",
-    "test:blocking-child-process": "node test/find-blocking-child-process-calls-tests.js"
+    "test:blocking-child-process": "node test/find-blocking-child-process-calls-tests.js",
+    "test:missing-json-content-type": "node test/find-missing-json-response-content-type-tests.js"
   },
   "engines": {
     "node": ">=18"
@@ -49,5 +50,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.65.0"
+  "version": "4.66.0"
 }
