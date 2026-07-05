@@ -73,7 +73,8 @@
     "test:inconsistent-error-shape": "node test/find-inconsistent-error-response-shape-tests.js",
     "test:hardcoded-jwt-secret": "node test/find-hardcoded-jwt-secret-tests.js",
     "test:insecure-cookie-flags": "node test/check-insecure-cookie-flags-tests.js",
-    "test:summarize-package-scripts": "node test/summarize-package-scripts-tests.js"
+    "test:summarize-package-scripts": "node test/summarize-package-scripts-tests.js",
+    "test:missing-engines-field": "node test/check-missing-engines-field-tests.js"
   },
   "engines": {
     "node": ">=18"
@@ -83,5 +84,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.99.0"
+  "version": "4.100.0"
 }
