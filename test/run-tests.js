@@ -247,6 +247,7 @@ async function main() {
   require("./sections/113-git-tag-annotate-audit");
   require("./sections/114-check-commit-signatures");
   require("./sections/115-git-commit-frequency");
+  require("./sections/116-git-orphaned-branches");
 
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
