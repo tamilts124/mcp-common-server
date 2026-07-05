@@ -1,4 +1,4 @@
-# 🚀 MCP Common Server (HTTP + SSE) — v3.155.0
+# 🚀 MCP Common Server (HTTP + SSE) — v3.156.0
 
 
 
@@ -425,7 +425,8 @@ The server logic is split into small, single-purpose modules under `lib/`:
 | `lib/executeTool.js` | Tool dispatch coordinator: validates args, enforces policy, delegates to dispatch modules |
 | `lib/dispatchRead.js` | Handler functions for all read/utility tools (spreads `GIT_DISPATCH` from `lib/dispatchGit.js` and `SCAN_DISPATCH` from `lib/dispatchScan.js`) |
 | `lib/dispatchGit.js` | Handler functions for all `git_*` tools + shared jail-bounded `resolveRepoDir()` helper (extracted from `lib/dispatchRead.js`) |
-| `lib/dispatchScan.js` | Handler functions for the scan/static-analysis tool family (scan_todos/scan_secrets/scan_conflict_markers/check_line_endings, find_large_files/find_empty_dirs/find_duplicates/compare_directories/file_diff_dir, find_circular_deps/find_dead_exports/find_unused_dependencies/find_unreachable_modules/find_orphaned_test_files/find_missing_await/check_test_coverage_gaps/find_duplicate_json_keys/check_dockerignore_coverage, package_json_audit/readme_link_check/check_branch_protection_hints/find_hardcoded_ips/find_env_var_usage/git_hooks_audit/check_npm_audit_cache/check_package_lock_sync/scan_dockerfile_issues) — extracted from `lib/dispatchRead.js` |
+| `lib/dispatchScan.js` | Handler functions for the first half of the scan/static-analysis tool family (scan_todos/scan_secrets/scan_conflict_markers/check_line_endings, find_large_files/find_empty_dirs/find_duplicates/compare_directories/file_diff_dir, package_json_audit/readme_link_check/check_branch_protection_hints/find_hardcoded_ips/find_env_var_usage/git_hooks_audit/check_npm_audit_cache/check_package_lock_sync/scan_dockerfile_issues) — extracted from `lib/dispatchRead.js`; merges in `SCAN_DISPATCH_2` from `lib/dispatchScan2.js` |
+| `lib/dispatchScan2.js` | Second half of the scan/static-analysis tool family (find_circular_deps/find_dead_exports/find_unused_dependencies/find_unreachable_modules/find_orphaned_test_files/find_missing_await/check_test_coverage_gaps/find_duplicate_json_keys/check_dockerignore_coverage plus the rest of the find_*/check_* rule tools) — split from `lib/dispatchScan.js` once it crossed 500 lines |
 | `lib/duplicateJsonKeysOps.js` | `find_duplicate_json_keys` (raw-text recursive-descent JSON duplicate-key scanner) |
 | `lib/dockerignoreCoverageOps.js` | `check_dockerignore_coverage` (simplified .dockerignore pattern matcher, no docker CLI dependency) |
 | `lib/dispatchWrite.js` | Handler functions for all write/exec tools |
