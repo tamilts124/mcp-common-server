@@ -258,6 +258,7 @@ async function main() {
   require("./sections/124-find-unreachable-modules");
   require("./sections/125-find-stale-todos");
   require("./sections/126-find-orphaned-test-files");
+  require("./sections/127-find-missing-await");
 
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
