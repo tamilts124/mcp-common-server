@@ -253,6 +253,7 @@ async function main() {
   require("./sections/119-git-submodule-status");
   require("./sections/120-find-hardcoded-ips");
   require("./sections/121-find-env-var-usage");
+  require("./sections/122-git-hooks-audit");
 
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
