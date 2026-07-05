@@ -35,7 +35,8 @@
     "test:sync-fs-in-async": "node test/find-sync-fs-in-async-context-tests.js",
     "test:hardcoded-credentials-config": "node test/find-hardcoded-credentials-in-config-tests.js",
     "test:hardcoded-ports": "node test/find-hardcoded-ports-tests.js",
-    "test:dangling-promises": "node test/find-dangling-promises-tests.js"
+    "test:dangling-promises": "node test/find-dangling-promises-tests.js",
+    "test:insecure-random": "node test/find-insecure-random-usage-tests.js"
   },
   "engines": {
     "node": ">=18"
@@ -45,5 +46,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.61.0"
+  "version": "4.62.0"
 }
