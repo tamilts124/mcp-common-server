@@ -26,7 +26,8 @@
     "test:case-sensitive-imports": "node test/find-case-sensitive-import-mismatches-tests.js",
     "test:cors-misconfig": "node test/scan-cors-misconfig-tests.js",
     "test:dangerous-patterns": "node test/scan-dangerous-code-patterns-tests.js",
-    "test:find-duplicate-yaml-keys": "node test/find-duplicate-yaml-keys-tests.js"
+    "test:find-duplicate-yaml-keys": "node test/find-duplicate-yaml-keys-tests.js",
+    "test:find-unsafe-regex": "node test/find-unsafe-regex-tests.js"
   },
   "engines": {
     "node": ">=18"
@@ -36,5 +37,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.52.0"
+  "version": "4.53.0"
 }
