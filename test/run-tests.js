@@ -255,6 +255,7 @@ async function main() {
   require("./sections/121-find-env-var-usage");
   require("./sections/122-git-hooks-audit");
   require("./sections/123-check-npm-audit-cache");
+  require("./sections/124-find-unreachable-modules");
 
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
