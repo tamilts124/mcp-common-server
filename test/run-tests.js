@@ -238,6 +238,7 @@ async function main() {
   require("./sections/104-csv-diff");
   require("./sections/105-dir-diff-summary");
   require("./sections/106-json-schema-generate");
+  require("./sections/107-find-binary-diffs");
 
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
