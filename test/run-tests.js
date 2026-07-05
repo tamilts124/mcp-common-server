@@ -263,6 +263,7 @@ async function main() {
   require("./sections/129-find-missing-img-alt-text");
   require("./sections/130-find-missing-form-label");
 require("./sections/131-find-missing-button-accessible-name");
+require("./sections/132-find-duplicate-html-id");
 
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
