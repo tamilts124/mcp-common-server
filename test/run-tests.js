@@ -252,6 +252,7 @@ async function main() {
   require("./sections/118-git-worktree-prune-candidates");
   require("./sections/119-git-submodule-status");
   require("./sections/120-find-hardcoded-ips");
+  require("./sections/121-find-env-var-usage");
 
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
