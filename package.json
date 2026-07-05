@@ -67,7 +67,8 @@
     "test:hardcoded-localhost-urls": "node test/find-hardcoded-localhost-urls-tests.js",
     "test:dotenv-not-gitignored": "node test/check-dotenv-files-not-gitignored-tests.js",
     "test:json-parse-try-catch": "node test/find-json-parse-without-try-catch-tests.js",
-    "test:findindex-guard": "node test/find-missing-findindex-check-tests.js"
+    "test:findindex-guard": "node test/find-missing-findindex-check-tests.js",
+    "test:shared-default-mutation": "node test/find-shared-default-mutation-tests.js"
   },
   "engines": {
     "node": ">=18"
@@ -77,5 +78,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.93.0"
+  "version": "4.94.0"
 }
