@@ -259,6 +259,7 @@ async function main() {
   require("./sections/125-find-stale-todos");
   require("./sections/126-find-orphaned-test-files");
   require("./sections/127-find-missing-await");
+  require("./sections/128-find-async-callback-in-foreach");
 
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
