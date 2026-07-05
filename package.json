@@ -51,7 +51,8 @@
     "test:missing-sort-comparator": "node test/find-missing-sort-comparator-tests.js",
     "test:req-body-mass-assignment": "node test/find-req-body-mass-assignment-tests.js",
     "test:prototype-pollution-risk": "node test/find-prototype-pollution-risk-tests.js",
-    "test:missing-rate-limit": "node test/check-missing-rate-limit-tests.js"
+    "test:missing-rate-limit": "node test/check-missing-rate-limit-tests.js",
+    "test:dependency-confusion-risk": "node test/check-dependency-confusion-risk-tests.js"
   },
   "engines": {
     "node": ">=18"
@@ -61,5 +62,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.77.0"
+  "version": "4.78.0"
 }
