@@ -250,6 +250,7 @@ async function main() {
   require("./sections/116-git-orphaned-branches");
   require("./sections/117-check-branch-protection-hints");
   require("./sections/118-git-worktree-prune-candidates");
+  require("./sections/119-git-submodule-status");
 
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
