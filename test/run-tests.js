@@ -239,6 +239,7 @@ async function main() {
   require("./sections/105-dir-diff-summary");
   require("./sections/106-json-schema-generate");
   require("./sections/107-find-binary-diffs");
+  require("./sections/108-git-dangling-commits");
 
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
