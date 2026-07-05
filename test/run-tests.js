@@ -242,6 +242,7 @@ async function main() {
   require("./sections/108-git-dangling-commits");
   require("./sections/109-git-object-count");
   require("./sections/110-find-recent-force-pushes");
+  require("./sections/111-check-stash-apply-risk");
 
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
