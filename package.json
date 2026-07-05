@@ -61,7 +61,8 @@
     "test:duplicate-route-registrations": "node test/find-duplicate-route-registrations-tests.js",
     "test:pagination-limit": "node test/find-missing-pagination-limit-tests.js",
     "test:async-error-boundary": "node test/find-missing-error-boundary-tests.js",
-    "test:websocket-error-handler": "node test/find-missing-websocket-error-handler-tests.js"
+    "test:websocket-error-handler": "node test/find-missing-websocket-error-handler-tests.js",
+    "test:array-push-loop": "node test/find-unbounded-array-push-in-loop-tests.js"
   },
   "engines": {
     "node": ">=18"
@@ -71,5 +72,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.87.0"
+  "version": "4.88.0"
 }
