@@ -1,4 +1,4 @@
-# 🚀 MCP Common Server (HTTP + SSE) — v3.156.0
+# 🚀 MCP Common Server (HTTP + SSE) — v3.157.0
 
 
 
@@ -419,7 +419,9 @@ The server logic is split into small, single-purpose modules under `lib/`:
 | `lib/toolsSchema.js` | Thin aggregator: concatenates schema groups from `lib/schemas/` |
 | `lib/schemas/coreSchemas.js` | JSON-RPC input schemas for core read tools |
 | `lib/schemas/gitSchemas.js` | JSON-RPC input schemas for git metadata tools |
-| `lib/schemas/utilSchemas.js` | JSON-RPC input schemas for utility tools (checksums, archive, encoding, transforms, etc.) |
+| `lib/schemas/utilSchemas.js` | JSON-RPC input schemas for utility tools, part 1 of 3 (checksums, archive, encoding, transforms, etc.) — concatenates in `UTIL_SCHEMAS_2`/`UTIL_SCHEMAS_3` from `utilSchemas2.js`/`utilSchemas3.js` |
+| `lib/schemas/utilSchemas2.js` | JSON-RPC input schemas for utility tools, part 2 of 3 |
+| `lib/schemas/utilSchemas3.js` | JSON-RPC input schemas for utility tools, part 3 of 3 |
 | `lib/schemas/writeSchemas.js` | JSON-RPC input schemas for write tools |
 | `lib/schemas/execSchemas.js` | JSON-RPC input schemas for exec tools + `execute_pipeline` enum |
 | `lib/executeTool.js` | Tool dispatch coordinator: validates args, enforces policy, delegates to dispatch modules |
