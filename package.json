@@ -79,7 +79,8 @@
     "test:missing-shebang-bin-scripts": "node test/find-missing-shebang-in-bin-scripts-tests.js",
     "test:missing-return-after-res-send": "node test/find-missing-return-after-res-send-tests.js",
     "test:docker-compose-issues": "node test/check-docker-compose-issues-tests.js",
-    "test:stream-error-handler": "node test/find-missing-stream-error-handler-tests.js"
+    "test:stream-error-handler": "node test/find-missing-stream-error-handler-tests.js",
+    "test:setinterval-leak": "node test/find-setinterval-without-clear-tests.js"
   },
   "engines": {
     "node": ">=18"
@@ -89,5 +90,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.108.0"
+  "version": "4.109.0"
 }
