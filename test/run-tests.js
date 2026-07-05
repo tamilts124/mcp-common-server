@@ -237,6 +237,7 @@ async function main() {
   require("./sections/103-json-patch-generate");
   require("./sections/104-csv-diff");
   require("./sections/105-dir-diff-summary");
+  require("./sections/106-json-schema-generate");
 
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
