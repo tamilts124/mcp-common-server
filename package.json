@@ -65,7 +65,8 @@
     "test:array-push-loop": "node test/find-unbounded-array-push-in-loop-tests.js",
     "test:env-fallback-secret": "node test/find-env-var-fallback-tests.js",
     "test:hardcoded-localhost-urls": "node test/find-hardcoded-localhost-urls-tests.js",
-    "test:dotenv-not-gitignored": "node test/check-dotenv-files-not-gitignored-tests.js"
+    "test:dotenv-not-gitignored": "node test/check-dotenv-files-not-gitignored-tests.js",
+    "test:json-parse-try-catch": "node test/find-json-parse-without-try-catch-tests.js"
   },
   "engines": {
     "node": ">=18"
@@ -75,5 +76,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.91.0"
+  "version": "4.92.0"
 }
