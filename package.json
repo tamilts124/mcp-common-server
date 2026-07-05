@@ -55,7 +55,8 @@
     "test:dependency-confusion-risk": "node test/check-dependency-confusion-risk-tests.js",
     "test:error-message-leak": "node test/find-error-message-leaking-internals-tests.js",
     "test:tls-verification": "node test/find-disabled-tls-verification-tests.js",
-    "test:docker-base-image-pinning": "node test/find-unpinned-docker-base-image-tests.js"
+    "test:docker-base-image-pinning": "node test/find-unpinned-docker-base-image-tests.js",
+    "test:helmet-security-headers": "node test/check-missing-helmet-security-headers-tests.js"
   },
   "engines": {
     "node": ">=18"
@@ -65,5 +66,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.81.0"
+  "version": "4.82.0"
 }
