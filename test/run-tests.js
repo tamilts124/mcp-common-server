@@ -244,6 +244,7 @@ async function main() {
   require("./sections/110-find-recent-force-pushes");
   require("./sections/111-check-stash-apply-risk");
   require("./sections/112-git-blame-ownership-diff");
+  require("./sections/113-git-tag-annotate-audit");
 
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
