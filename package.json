@@ -50,7 +50,8 @@
     "test:missing-csp-header": "node test/check-missing-csp-header-tests.js",
     "test:missing-sort-comparator": "node test/find-missing-sort-comparator-tests.js",
     "test:req-body-mass-assignment": "node test/find-req-body-mass-assignment-tests.js",
-    "test:prototype-pollution-risk": "node test/find-prototype-pollution-risk-tests.js"
+    "test:prototype-pollution-risk": "node test/find-prototype-pollution-risk-tests.js",
+    "test:missing-rate-limit": "node test/check-missing-rate-limit-tests.js"
   },
   "engines": {
     "node": ">=18"
@@ -60,5 +61,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.76.0"
+  "version": "4.77.0"
 }
