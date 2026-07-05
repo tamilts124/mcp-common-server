@@ -249,6 +249,7 @@ async function main() {
   require("./sections/115-git-commit-frequency");
   require("./sections/116-git-orphaned-branches");
   require("./sections/117-check-branch-protection-hints");
+  require("./sections/118-git-worktree-prune-candidates");
 
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
