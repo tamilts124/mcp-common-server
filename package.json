@@ -37,7 +37,8 @@
     "test:hardcoded-ports": "node test/find-hardcoded-ports-tests.js",
     "test:dangling-promises": "node test/find-dangling-promises-tests.js",
     "test:insecure-random": "node test/find-insecure-random-usage-tests.js",
-    "test:unbounded-recursion": "node test/find-unbounded-recursion-tests.js"
+    "test:unbounded-recursion": "node test/find-unbounded-recursion-tests.js",
+    "test:open-redirect": "node test/find-open-redirect-risks-tests.js"
   },
   "engines": {
     "node": ">=18"
@@ -47,5 +48,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.63.0"
+  "version": "4.64.0"
 }
