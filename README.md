@@ -1,4 +1,4 @@
-# 🚀 MCP Common Server (HTTP + SSE) — v3.160.0
+# 🚀 MCP Common Server (HTTP + SSE) — v3.161.0
 
 
 
@@ -431,7 +431,8 @@ The server logic is split into small, single-purpose modules under `lib/`:
 | `lib/dispatchRead.js` | Handler functions for all read/utility tools (spreads `GIT_DISPATCH` from `lib/dispatchGit.js` and `SCAN_DISPATCH` from `lib/dispatchScan.js`) |
 | `lib/dispatchGit.js` | Handler functions for all `git_*` tools + shared jail-bounded `resolveRepoDir()` helper (extracted from `lib/dispatchRead.js`) |
 | `lib/dispatchScan.js` | Handler functions for the first half of the scan/static-analysis tool family (scan_todos/scan_secrets/scan_conflict_markers/check_line_endings, find_large_files/find_empty_dirs/find_duplicates/compare_directories/file_diff_dir, package_json_audit/readme_link_check/check_branch_protection_hints/find_hardcoded_ips/find_env_var_usage/git_hooks_audit/check_npm_audit_cache/check_package_lock_sync/scan_dockerfile_issues) — extracted from `lib/dispatchRead.js`; merges in `SCAN_DISPATCH_2` from `lib/dispatchScan2.js` |
-| `lib/dispatchScan2.js` | Second half of the scan/static-analysis tool family (find_circular_deps/find_dead_exports/find_unused_dependencies/find_unreachable_modules/find_orphaned_test_files/find_missing_await/check_test_coverage_gaps/find_duplicate_json_keys/check_dockerignore_coverage plus the rest of the find_*/check_* rule tools, `check_docker_compose_issues`, `find_missing_stream_error_handler`, and `find_setinterval_without_clear`) — split from `lib/dispatchScan.js` once it crossed 500 lines |
+| `lib/dispatchScan2.js` | First half of the former `lib/dispatchScan2.js` (find_circular_deps/find_dead_exports/find_unused_dependencies/find_console_logs/find_duplicate_dependencies/find_orphaned_test_files/check_test_coverage_gaps plus find_*/check_* rule tools through `find_disabled_tls_verification`) — split from `lib/dispatchScan.js` once it crossed 500 lines; merges in `SCAN_DISPATCH_3` from `lib/dispatchScan3.js` |
+| `lib/dispatchScan3.js` | Second half of the former `lib/dispatchScan2.js` (`find_unpinned_docker_base_image` through `check_docker_compose_issues`, `find_missing_stream_error_handler`, and `find_setinterval_without_clear`) — split further once `dispatchScan2.js` itself crossed the 500-line convention |
 | `lib/dockerComposeAuditOps.js` | `check_docker_compose_issues` — docker-compose.yml service-level hygiene/security audit (image tag pinning, privileged mode, host networking, restart policy, port bind addresses, inline secret-shaped env values) |
 | `lib/streamErrorHandlerOps.js` | `find_missing_stream_error_handler` — fs/http(s) stream and request creation calls missing a sibling `.on('error', ...)` listener |
 | `lib/setIntervalLeakOps.js` | `find_setinterval_without_clear` — setInterval() handles never passed to clearInterval (zombie-timer leak scan) |
