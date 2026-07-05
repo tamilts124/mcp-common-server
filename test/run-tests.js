@@ -241,7 +241,7 @@ async function main() {
   require("./sections/107-find-binary-diffs");
   require("./sections/108-git-dangling-commits");
   require("./sections/109-git-object-count");
-
+  require("./sections/110-find-recent-force-pushes");
 
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
