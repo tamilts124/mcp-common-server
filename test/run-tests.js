@@ -246,6 +246,7 @@ async function main() {
   require("./sections/112-git-blame-ownership-diff");
   require("./sections/113-git-tag-annotate-audit");
   require("./sections/114-check-commit-signatures");
+  require("./sections/115-git-commit-frequency");
 
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
