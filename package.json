@@ -58,7 +58,8 @@
     "test:docker-base-image-pinning": "node test/find-unpinned-docker-base-image-tests.js",
     "test:helmet-security-headers": "node test/check-missing-helmet-security-headers-tests.js",
     "test:rate-limit-headers": "node test/check-missing-rate-limit-headers-tests.js",
-    "test:duplicate-route-registrations": "node test/find-duplicate-route-registrations-tests.js"
+    "test:duplicate-route-registrations": "node test/find-duplicate-route-registrations-tests.js",
+    "test:pagination-limit": "node test/find-missing-pagination-limit-tests.js"
   },
   "engines": {
     "node": ">=18"
@@ -68,5 +69,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.84.0"
+  "version": "4.85.0"
 }
