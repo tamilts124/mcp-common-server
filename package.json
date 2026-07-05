@@ -63,7 +63,8 @@
     "test:async-error-boundary": "node test/find-missing-error-boundary-tests.js",
     "test:websocket-error-handler": "node test/find-missing-websocket-error-handler-tests.js",
     "test:array-push-loop": "node test/find-unbounded-array-push-in-loop-tests.js",
-    "test:env-fallback-secret": "node test/find-env-var-fallback-tests.js"
+    "test:env-fallback-secret": "node test/find-env-var-fallback-tests.js",
+    "test:hardcoded-localhost-urls": "node test/find-hardcoded-localhost-urls-tests.js"
   },
   "engines": {
     "node": ">=18"
@@ -73,5 +74,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.89.0"
+  "version": "4.90.0"
 }
