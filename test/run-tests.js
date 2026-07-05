@@ -264,6 +264,7 @@ async function main() {
   require("./sections/130-find-missing-form-label");
 require("./sections/131-find-missing-button-accessible-name");
 require("./sections/132-find-duplicate-html-id");
+require("./sections/133-find-positive-tabindex");
 
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
