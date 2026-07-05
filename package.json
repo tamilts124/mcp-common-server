@@ -30,7 +30,8 @@
     "test:find-unsafe-regex": "node test/find-unsafe-regex-tests.js",
     "test:find-unpinned-actions": "node test/find-unpinned-github-actions-tests.js",
     "test:npm-lifecycle-scripts": "node test/scan-npm-lifecycle-scripts-tests.js",
-    "test:semver-range-strictness": "node test/check-semver-range-strictness-tests.js"
+    "test:semver-range-strictness": "node test/check-semver-range-strictness-tests.js",
+    "test:empty-catch-blocks": "node test/find-empty-catch-blocks-tests.js"
   },
   "engines": {
     "node": ">=18"
@@ -40,5 +41,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.56.0"
+  "version": "4.57.0"
 }
