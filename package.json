@@ -70,7 +70,8 @@
     "test:findindex-guard": "node test/find-missing-findindex-check-tests.js",
     "test:shared-default-mutation": "node test/find-shared-default-mutation-tests.js",
     "test:cleanup-early-return": "node test/find-missing-cleanup-on-early-return-tests.js",
-    "test:inconsistent-error-shape": "node test/find-inconsistent-error-response-shape-tests.js"
+    "test:inconsistent-error-shape": "node test/find-inconsistent-error-response-shape-tests.js",
+    "test:hardcoded-jwt-secret": "node test/find-hardcoded-jwt-secret-tests.js"
   },
   "engines": {
     "node": ">=18"
@@ -80,5 +81,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.96.0"
+  "version": "4.97.0"
 }
