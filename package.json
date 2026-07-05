@@ -22,7 +22,8 @@
     "test:stress": "node test/stress-tests.js",
     "test:disk-usage": "node test/disk-usage-tests.js",
     "test:scan-dependency-licenses": "node test/scan-dependency-licenses-tests.js",
-    "test:browser-replay-actions": "node test/browser-replay-actions-tests.js"
+    "test:browser-replay-actions": "node test/browser-replay-actions-tests.js",
+    "test:case-sensitive-imports": "node test/find-case-sensitive-import-mismatches-tests.js"
   },
   "engines": {
     "node": ">=18"
@@ -32,5 +33,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.45.0"
+  "version": "4.46.0"
 }
