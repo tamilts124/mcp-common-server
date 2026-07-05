@@ -1,4 +1,4 @@
-# 🚀 MCP Common Server (HTTP + SSE) — v3.154.0
+# 🚀 MCP Common Server (HTTP + SSE) — v3.155.0
 
 
 
@@ -358,6 +358,7 @@ All fourteen tools resolve the true repository root via a jail-bounded upward `.
 - **`get_process_output`**: Read buffered output from a background process and optionally clear the buffer.
 - **`kill_process`**: Send termination signals (e.g. `SIGTERM`, `SIGKILL`) to a running background process.
 - **`list_processes`**: Track, monitor, and list all active background processes.
+- **`run_npm_script`**: Execute a package.json script (e.g. `test`, `build`) via `npm run <script>` and capture stdout, stderr, exit code, and timing — the actual-execution complement to the many static-scan tools in this server. Validates the script exists in package.json's `scripts` map before spawning anything (typo'd name gets a clear -32602 error listing available scripts). Runs via `spawn` with an argv array — `extra_args` are passed as literal arguments after `--`, never concatenated into a shell string, so they can't be used for command injection. Async, non-blocking. Returns `{ path, script, command, exitCode, signal, success, timedOut, durationMs, stdout, stderr, stdoutTruncated, stderrTruncated, error }`.
 - **`execute_pipeline`**: Chained execution of sequential operations (e.g. write file, run build command, clean up temp files) in a single request.
 
 ### 4. Browser Automation Tools (Enabled when `MCP_ALLOW_EXEC=true`)
@@ -434,6 +435,7 @@ The server logic is split into small, single-purpose modules under `lib/`:
 | `lib/stdioProtocol.js` | Pure (no I/O) stdio message-framing/dispatch logic shared by `server-stdio.js` |
 | `lib/fileOps.js` | File/directory read, write, search, glob-find, replace, truncate, append helpers |
 | `lib/processOps.js` | `run_command` and background process management |
+| `lib/runNpmScriptOps.js` | `run_npm_script` — spawn an npm script (async, argv-based, timeout-killed) and capture stdout/stderr/exitCode |
 | `lib/checksumOps.js` | `file_checksum` / `checksum_verify` — MD5/SHA-1/SHA-256/SHA-512 digest of a file, plus one-call expected-hash comparison |
 | `lib/zipDirOps.js` | `zip_directory` — pure-Node ZIP writer (LFH + Central Directory + EOCD, DEFLATE via zlib), MCP_IGNORE-aware, companion to `lib/unzipOps.js` |
 | `lib/tarOps.js` | `create_tar`/`extract_tar` — pure-Node USTAR reader/writer (100-byte name + 155-byte prefix long-path support) with optional gzip via zlib, reuses `zipDirOps.js`'s `collectFiles`, same Zip-Slip-style entry validation as `lib/unzipOps.js` plus symlink/hardlink/device/fifo entry-type rejection |
