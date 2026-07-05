@@ -44,7 +44,8 @@
     "test:unhandled-express-error": "node test/find-unhandled-express-error-middleware-tests.js",
     "test:promise-all-without-catch": "node test/find-promise-all-without-catch-tests.js",
     "test:unbounded-object-growth": "node test/find-unbounded-object-growth-tests.js",
-    "test:missing-null-checks-regex-exec": "node test/find-missing-null-checks-after-regex-exec-tests.js"
+    "test:missing-null-checks-regex-exec": "node test/find-missing-null-checks-after-regex-exec-tests.js",
+    "test:regex-dos-route-params": "node test/find-regex-dos-route-params-tests.js"
   },
   "engines": {
     "node": ">=18"
@@ -54,5 +55,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.70.0"
+  "version": "4.71.0"
 }
