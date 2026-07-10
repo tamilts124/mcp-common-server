@@ -98,6 +98,8 @@
  *   140-find-missing-meta-charset.js          [140] find_missing_meta_charset (missing/non-UTF-8 charset meta)
  *   141-find-missing-doctype.js               [141] find_missing_doctype (missing/non-HTML5 doctype)
  *   142-find-unused-css-variables.js          [142] find_unused_css_variables (unused CSS custom properties)
+ *   143-find-missing-aria-role.js             [143] find_missing_aria_role (interactive div/span without role= attribute)
+ *   144-find-hardcoded-color-literals.js      [144] find_hardcoded_color_literals (hardcoded CSS color values outside :root)
  *
  * Run with: node test/run-tests.js
  */
@@ -282,6 +284,8 @@ require("./sections/139-find-missing-lang-attribute");
 require("./sections/140-find-missing-meta-charset");
 require("./sections/141-find-missing-doctype");
 require("./sections/142-find-unused-css-variables");
+require("./sections/143-find-missing-aria-role");
+require("./sections/144-find-hardcoded-color-literals");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);

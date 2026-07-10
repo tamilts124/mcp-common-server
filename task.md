@@ -26,6 +26,12 @@ Completed task entries older than the ones below are archived in task-history.md
     2. find_unused_css_variables (lib/unusedCssVarsOps.js, ~186 lines) — two-phase cross-file analysis (decl scan + usage scan), one rule: unused_css_variable (warning). Supports CSS/SCSS/LESS/HTML/JSX/TSX/JS/TS. Test: 142 (22/22).
     Both wired in dispatchScan3.js (already done by previous session), schemas added to utilSchemas4.js, pipeline enum updated in execSchemas.js. run-tests.js updated. Version v4.124.0.
 
+- [x] Add find_missing_aria_role + find_hardcoded_color_literals tools — status: tested (21/21 + 23/23, all 5 rigor levels, v4.125.0)
+  - notes:
+    1. find_missing_aria_role (lib/missingAriaRoleOps.js, ~158 lines) — two rules: missing_aria_role (error), role_without_tabindex (warning). Scans .html/.htm/.jsx/.tsx. Test: 143 (21/21).
+    2. find_hardcoded_color_literals (lib/hardcodedColorOps.js, ~180 lines) — one rule: hardcoded_color_literal (warning). Scans .css/.scss/.less. Skips :root/:host blocks, --custom-property decls, lines using var(), CSS comments. Test: 144 (23/23).
+    Both wired in dispatchScan3.js, utilSchemas4.js (fixed stray double-comma before aria_role schema), execSchemas.js pipeline enum. run-tests.js sections 143+144 added. Version v4.125.0.
+
 - [x] Add find_missing_lang_attribute + find_missing_meta_charset HTML quality tools — status: tested (22/22 + 23/23, all 5 rigor levels, v4.123.0)
   - notes:
     1. find_missing_lang_attribute (lib/langAttributeOps.js, ~120 lines) — three rules: missing_lang_attribute (error), empty_lang_attribute (error), invalid_lang_value (warning, BCP47 check). Eighth sibling in front-end accessibility family. Only .html/.htm scanned by default.
