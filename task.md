@@ -18,5 +18,5 @@ Completed task entries older than the ones below are archived in task-history.md
 - [x] Add find_insecure_deserialization + find_prototype_pollution_via_merge tools — status: tested (24/24, v4.135.0)
   - notes: insecureDeserializationOps.js + prototypePollutionMergeOps.js created; wired into dispatchScan4.js; schemas added to utilSchemas4.js; 24/24 tests pass.
 
-- [ ] Proactive: add find_race_condition_risk + find_unvalidated_redirect tools — status: todo
-  - notes: find_race_condition_risk: non-atomic read-then-write sequences on shared mutable state (module-scope vars written inside async handlers without locking/atomic ops); find_unvalidated_redirect: res.redirect() / location.href / window.location assignments with dynamic values from req.* without an allowlist or origin check (complements find_open_redirect_risks but focused on internal redirect patterns).
+- [ ] Add find_race_condition_risk + find_unvalidated_redirect tools — status: in-progress
+  - notes: find_race_condition_risk: detect non-atomic read-then-write on shared module-scope mutable state inside async handlers/callbacks without locking. find_unvalidated_redirect: detect res.redirect()/location.href/window.location assignments with ANY dynamic (non-literal) value without an allowlist check — broader than find_open_redirect_risks (which only flags direct req.* in redirect).
