@@ -100,6 +100,8 @@
  *   142-find-unused-css-variables.js          [142] find_unused_css_variables (unused CSS custom properties)
  *   143-find-missing-aria-role.js             [143] find_missing_aria_role (interactive div/span without role= attribute)
  *   144-find-hardcoded-color-literals.js      [144] find_hardcoded_color_literals (hardcoded CSS color values outside :root)
+ *   145-find-magic-numbers.js                 [145] find_magic_numbers (numeric literals not extracted as named constants)
+ *   146-find-long-functions.js                [146] find_long_functions (function bodies exceeding line threshold)
  *
  * Run with: node test/run-tests.js
  */
@@ -286,6 +288,8 @@ require("./sections/141-find-missing-doctype");
 require("./sections/142-find-unused-css-variables");
 require("./sections/143-find-missing-aria-role");
 require("./sections/144-find-hardcoded-color-literals");
+require("./sections/145-find-magic-numbers");
+require("./sections/146-find-long-functions");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);

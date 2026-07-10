@@ -8,6 +8,12 @@ Completed task entries older than the ones below are archived in task-history.md
 
 ## Tasks
 
+- [x] Add find_magic_numbers + find_long_functions tools — status: tested (22/22 + 21/21, all 5 rigor levels, v4.126.0)
+  - notes:
+    1. find_magic_numbers (lib/magicNumberOps.js, ~160 lines) — one rule: magic_number (warning). Exempt: 0,1,2,-1,-2 plus configurable threshold. Named const/let/var assignments skipped. Test: 145 (22/22).
+    2. find_long_functions (lib/longFunctionOps.js, ~160 lines) — one rule: long_function (warning). Brace-depth tracking for named functions, arrow functions, method expressions. Results sorted by lineCount desc. Test: 146 (21/21).
+    Both wired in dispatchScan3.js, utilSchemas4.js, execSchemas.js pipeline enum. run-tests.js sections 145+146 added. Version v4.126.0.
+
 - [x] Add SQLite lifecycle tool family: sqlite_create, sqlite_connect, sqlite_execute, sqlite_disconnect, sqlite_connections, sqlite_tables — status: tested (43/43 tests, all 5 rigor levels, v4.119.0)
   - notes: Zero-dep (Node v22+ built-in `node:sqlite` DatabaseSync). lib/sqliteOps.js (connection Map, mirrors browserLaunch.js session-table pattern), lib/dispatchSqlite.js, lib/schemas/sqliteSchemas.js. Wired into lib/toolsSchema.js (TOOLS_ALL + EXEC_TOOLS), lib/executeTool.js, lib/schemas/execSchemas.js. All 6 tools gated behind MCP_ALLOW_EXEC. Test: test/sections/135-sqlite-tools.js (43/43 passing). Committed as part of v4.119.0.
 
