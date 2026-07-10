@@ -91,6 +91,7 @@
  *   50-csv-convert.js              [50] csv_convert tool (CSV <-> JSON document conversion)
  *   51-zip-directory-hardening.js  [51] zip_directory hardening (WRITE_TOOLS + MCP_IGNORE bug fixes, extended coverage)
  *   135-sqlite-tools.js            [135] sqlite_create/connect/execute/disconnect/connections/tables (node:sqlite)
+ *   136-find-missing-remove-event-listener.js [136] find_missing_remove_event_listener (addEventListener cleanup scan)
  *
  * Run with: node test/run-tests.js
  */
@@ -267,8 +268,8 @@ require("./sections/131-find-missing-button-accessible-name");
 require("./sections/132-find-duplicate-html-id");
 require("./sections/133-find-positive-tabindex");
 require("./sections/134-find-missing-rel-noopener");
-  require("./sections/135-sqlite-tools");
-
+require("./sections/135-sqlite-tools");
+require("./sections/136-find-missing-remove-event-listener");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);
