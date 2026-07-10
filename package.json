@@ -92,7 +92,9 @@
     "test:memory-leak-patterns": "node test/sections/153-find-memory-leak-patterns.js",
     "test:circular-reference-risks": "node test/sections/154-find-circular-reference-risks.js",
     "test:promise-constructor-antipattern": "node test/sections/155-find-promise-constructor-antipattern.js",
-    "test:event-emitter-leak": "node test/sections/156-find-event-emitter-leak.js"
+    "test:event-emitter-leak": "node test/sections/156-find-event-emitter-leak.js",
+    "test:sql-injection-risk": "node test/sections/157-find-sql-injection-risk.js",
+    "test:command-injection-risk": "node test/sections/158-find-command-injection-risk.js"
   },
   "engines": {
     "node": ">=18"
@@ -102,5 +104,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.131.0"
+  "version": "4.132.0"
 }

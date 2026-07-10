@@ -8,21 +8,21 @@ Completed task entries older than the ones below are archived in task-history.md
 
 - [x] Add find_missing_try_catch_in_async + find_unhandled_rejection_patterns tools — status: tested (30/30 + 27/27, all 5 rigor levels, v4.129.0)
   - notes:
-    1. find_missing_try_catch_in_async (lib/missingTryCatchAsyncOps.js, ~225 lines) — one rule: async_await_no_try_catch (error), async functions that use `await` but have no try/catch block. Brace-depth extraction to find function body. Fixed JSDoc block-comment syntax error in unhandledRejectionOps.js (nested `*/` terminated the outer comment). Test: 151 (30/30).
-    2. find_unhandled_rejection_patterns (lib/unhandledRejectionOps.js, ~215 lines) — two rules: missing_global_rejection_handler (warning, entry-point files without process.on handler), noop_rejection_handler (error, empty arrow/function handler). Entry-point detection via basename regex (server, app, index, main, start, bootstrap, entry). Test: 152 (27/27).
-    Both wired in dispatchScan3.js, utilSchemas4.js, execSchemas.js pipeline enum. run-tests.js sections 151+152 added. Version v4.129.0.
+    1. find_missing_try_catch_in_async (lib/missingTryCatchAsyncOps.js) — async functions with await but no try/catch. Test: 151 (30/30).
+    2. find_unhandled_rejection_patterns (lib/unhandledRejectionOps.js) — missing global rejection handler + noop handlers. Test: 152 (27/27).
 
 - [x] Add find_memory_leak_patterns + find_circular_reference_risks tools — status: tested (31/31 + 28/28, all 5 rigor levels, v4.130.0)
   - notes:
-    1. find_memory_leak_patterns (lib/memoryLeakPatternsOps.js, ~230 lines) — three rules: module_scope_cache_no_eviction (warning, Map/Set at module scope with .set/.add but no .delete/.clear), dom_ref_in_module_scope (warning, document.querySelector* at module scope), accumulating_push_in_closure (warning, module-scope array with .push inside callback but no drain). Fixed two bugs: (a) resetRe incorrectly matched the array declaration itself (added declaration exclusion), (b) pushRe only matched indented lines (changed to line-number-based check covering inline callbacks). Also fixed `\w+` → `[\w$]+` in all 3 module-scope regexes to support `$` in JS identifiers. Test: 153 (31/31).
-    2. find_circular_reference_risks (lib/circularReferenceOps.js, ~280 lines) — three rules: self_reference_assignment (error, obj.prop = obj), mutual_module_scope_reference (warning, A.x = B + B.y = A in same file), circular_require_risk (warning, require result name matches export name). Test: 154 (28/28).
-    Both wired in dispatchScan3.js, utilSchemas4.js, execSchemas.js pipeline enum. run-tests.js sections 153+154 added. Version v4.130.0.
+    1. find_memory_leak_patterns (lib/memoryLeakPatternsOps.js) — module-scope caches, DOM refs, accumulating push. Test: 153 (31/31).
+    2. find_circular_reference_risks (lib/circularReferenceOps.js) — self-ref, mutual-ref, circular-require. Test: 154 (28/28).
 
 - [x] Add find_promise_constructor_antipattern + find_event_emitter_leak tools — status: tested (26/26 + 26/26, all 5 rigor levels, v4.131.0)
   - notes:
-    1. find_promise_constructor_antipattern (lib/promiseConstructorOps.js, ~199 lines) — two rules: async_executor_in_promise_constructor (error, new Promise(async ...) loses rejection forwarding for async throws), explicit_promise_wrap (warning, new Promise((res,rej) => p.then(res,rej)) or .then(res).catch(rej) wraps an already-thenable unnecessarily). Balanced-paren executor extraction + regex detection. Test: 155 (26/26).
-    2. find_event_emitter_leak (lib/eventEmitterLeakOps.js, ~195 lines) — two rules: process_listener_in_function_body (error, process.on() inside a function body — either indented line OR same-line as function opener), emitter_on_inside_loop (warning, .on()/.once() inside for/while/do loop body via 15-line lookback). Fixed bug: indentation heuristic was `^[ \t]` (leading whitespace only), missing single-line bodies like `function x() { process.on(...)  }` — added check for non-whitespace content before `process` on same line. Test: 156 (26/26).
-    Both wired in dispatchScan3.js, utilSchemas4.js, execSchemas.js pipeline enum. run-tests.js sections 155+156 added. Version v4.131.0.
+    1. find_promise_constructor_antipattern (lib/promiseConstructorOps.js) — async executor + explicit promise wrap. Test: 155 (26/26).
+    2. find_event_emitter_leak (lib/eventEmitterLeakOps.js) — process.on inside function body + emitter.on inside loop. Test: 156 (26/26).
 
-- [ ] Plan next tools — status: todo
-  - notes: Consider: find_unchecked_return_value (functions that return errors/status codes that callers ignore), find_missing_db_transaction (multiple DB writes without transaction wrapper), find_sql_injection_risk (string-concatenated queries), find_command_injection_risk (exec/spawn with unsanitized user input).
+- [x] Add find_sql_injection_risk + find_command_injection_risk tools — status: tested (26/26 + 21/21, all 5 rigor levels, v4.132.0)
+  - notes:
+    1. find_sql_injection_risk (lib/sqlInjectionOps.js, ~200 lines) — 3 rules: sql_string_concat (error, SQL string + concat with req.* or sensitive-name vars), sql_template_literal (error, template literal with SQL keyword + user-controlled interpolation; suppressed if next line has parameterised-query hint), sql_dynamic_query_variable (warning, *Sql/*Query/*Statement variable built by +=). Suppressions: // safe, // nosql, .query(sql,[), .prepare(), stmt.run(). Test: 157 (26/26).
+    2. find_command_injection_risk (lib/commandInjectionOps.js, ~265 lines) — 3 rules: exec_with_concat (error, exec/execSync/spawn/spawnSync/execFile called with template-literal or string-concat arg containing user taint), shell_true_spawn_with_input (error, spawn with {shell:true} + dynamic arg), unvalidated_path_exec (warning, exec with path-like variable and no path.resolve/normalize/allowlist validation). Suppressions: // safe, // noexec, // no-exec. Test: 158 (21/21).
+    Both wired in dispatchScan3.js, utilSchemas4.js, execSchemas.js pipeline enum. run-tests.js sections 157+158 added. Fixed previous-session corruption (backtick-r-backtick-n literal in dispatchScan3.js and run-tests.js). Version v4.132.0.
