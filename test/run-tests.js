@@ -299,7 +299,7 @@ require("./sections/146-find-long-functions");
   require("./sections/151-find-missing-try-catch-in-async");
   require("./sections/152-find-unhandled-rejection-patterns");
   require("./sections/153-find-memory-leak-patterns");
-  require("./sections/154-find-circular-reference-risks");
+  require("./sections/154-find-circular-reference-risks");`r`n  require("./sections/155-find-promise-constructor-antipattern");`r`n  require("./sections/156-find-event-emitter-leak");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);

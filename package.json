@@ -90,7 +90,9 @@
     "test:missing-try-catch-async": "node test/sections/151-find-missing-try-catch-in-async.js",
     "test:unhandled-rejection-patterns": "node test/sections/152-find-unhandled-rejection-patterns.js",
     "test:memory-leak-patterns": "node test/sections/153-find-memory-leak-patterns.js",
-    "test:circular-reference-risks": "node test/sections/154-find-circular-reference-risks.js"
+    "test:circular-reference-risks": "node test/sections/154-find-circular-reference-risks.js",
+    "test:promise-constructor-antipattern": "node test/sections/155-find-promise-constructor-antipattern.js",
+    "test:event-emitter-leak": "node test/sections/156-find-event-emitter-leak.js"
   },
   "engines": {
     "node": ">=18"
@@ -100,5 +102,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.130.0"
+  "version": "4.131.0"
 }

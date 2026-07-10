@@ -18,4 +18,11 @@ Completed task entries older than the ones below are archived in task-history.md
     2. find_circular_reference_risks (lib/circularReferenceOps.js, ~280 lines) — three rules: self_reference_assignment (error, obj.prop = obj), mutual_module_scope_reference (warning, A.x = B + B.y = A in same file), circular_require_risk (warning, require result name matches export name). Test: 154 (28/28).
     Both wired in dispatchScan3.js, utilSchemas4.js, execSchemas.js pipeline enum. run-tests.js sections 153+154 added. Version v4.130.0.
 
-- [ ] Next session: consider adding find_event_emitter_leak (EventEmitter with no .removeAllListeners / maxListeners check), or find_promise_constructor_antipattern (new Promise(resolve => resolve(asyncFn())) — unnecessary Promise wrapping). Both complement the memory/async leak family.
+- [x] Add find_promise_constructor_antipattern + find_event_emitter_leak tools — status: tested (26/26 + 26/26, all 5 rigor levels, v4.131.0)
+  - notes:
+    1. find_promise_constructor_antipattern (lib/promiseConstructorOps.js, ~199 lines) — two rules: async_executor_in_promise_constructor (error, new Promise(async ...) loses rejection forwarding for async throws), explicit_promise_wrap (warning, new Promise((res,rej) => p.then(res,rej)) or .then(res).catch(rej) wraps an already-thenable unnecessarily). Balanced-paren executor extraction + regex detection. Test: 155 (26/26).
+    2. find_event_emitter_leak (lib/eventEmitterLeakOps.js, ~195 lines) — two rules: process_listener_in_function_body (error, process.on() inside a function body — either indented line OR same-line as function opener), emitter_on_inside_loop (warning, .on()/.once() inside for/while/do loop body via 15-line lookback). Fixed bug: indentation heuristic was `^[ \t]` (leading whitespace only), missing single-line bodies like `function x() { process.on(...)  }` — added check for non-whitespace content before `process` on same line. Test: 156 (26/26).
+    Both wired in dispatchScan3.js, utilSchemas4.js, execSchemas.js pipeline enum. run-tests.js sections 155+156 added. Version v4.131.0.
+
+- [ ] Plan next tools — status: todo
+  - notes: Consider: find_unchecked_return_value (functions that return errors/status codes that callers ignore), find_missing_db_transaction (multiple DB writes without transaction wrapper), find_sql_injection_risk (string-concatenated queries), find_command_injection_risk (exec/spawn with unsanitized user input).
