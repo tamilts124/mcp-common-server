@@ -17,5 +17,12 @@ Completed task entries older than the ones below are archived in task-history.md
 - [x] Add find_inline_event_handlers tool (HTML inline event handler CSP violation scan) — status: tested (24/24 tests, all 5 rigor levels, v4.121.0)
   - notes: lib/inlineEventHandlerOps.js (~150 lines). Two rules: inline_event_handler (error) — literal on<event>="<JS>" attribute; javascript_href (error) — href="javascript:...". Empty handlers suppressed. JSX {expr} form not flagged. Security sibling of check_missing_csp_header and find_missing_rel_noopener. Wired in dispatchScan3.js, utilSchemas3.js (schema appended), execSchemas.js (pipeline enum). Test: test/sections/137-find-inline-event-handlers.js (24/24 passing). Version v4.121.0.
 
-- [ ] Proactive: next candidate — pick from: CSS/HTML audit tools (find_missing_viewport_meta for responsive design, find_disabled_input_label_mismatch), or split utilSchemas3.js (now ~480+ lines, approaching 500-line limit soon). — status: todo
-  - notes: utilSchemas3.js is now ~480+ lines with the new schema. Consider splitting into part 4 next session. Alternative new tool: `find_missing_viewport_meta` — scans HTML for absence of `<meta name="viewport">` tag, critical for mobile responsiveness and a sibling to the accessibility/HTML tools already in the server.
+- [x] Split utilSchemas3.js → utilSchemas3+4, add find_missing_viewport_meta tool — status: tested (25/25 tests, all 5 rigor levels, v4.122.0)
+  - notes: utilSchemas3.js was 86KB/52 schemas — split at schema #26 (find_unbounded_array_push_in_loop). Part 3 holds schemas 1-26 (26 schemas, 244 lines), Part 4 holds schemas 27-52 plus find_missing_viewport_meta (28 schemas total). Fixed aggregator: lib/schemas/utilSchemas.js now imports UTIL_SCHEMAS_4. Created lib/viewportMetaOps.js (~160 lines, two rules: missing_viewport_meta error, viewport_missing_width_device_width warning). Wired in dispatchScan3.js, execSchemas.js pipeline enum. Test: test/sections/138-find-missing-viewport-meta.js (25/25 passing). UTIL_SCHEMAS count: 137 total schemas. Version v4.122.0.
+
+- [ ] Proactive: next candidates — status: todo
+  - notes: Possible next tools:
+    1. find_missing_lang_attribute — scans HTML for <html> tags without lang= attribute (WCAG 3.1.1 accessibility, A-level). Seventh sibling in the front-end accessibility family.
+    2. find_missing_meta_charset — scans HTML for absence of <meta charset="UTF-8"> (common source of encoding bugs, pairs with find_missing_viewport_meta).
+    3. find_unused_css_variables — scans CSS/SCSS for --var: declarations never referenced with var(--var).
+    4. Refactor test/run-tests.js to add section 138 entry to the section list comment at the top.

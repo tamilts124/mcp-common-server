@@ -92,6 +92,8 @@
  *   51-zip-directory-hardening.js  [51] zip_directory hardening (WRITE_TOOLS + MCP_IGNORE bug fixes, extended coverage)
  *   135-sqlite-tools.js            [135] sqlite_create/connect/execute/disconnect/connections/tables (node:sqlite)
  *   136-find-missing-remove-event-listener.js [136] find_missing_remove_event_listener (addEventListener cleanup scan)
+ *   137-find-inline-event-handlers.js         [137] find_inline_event_handlers (HTML inline on* handlers + javascript: href)
+ *   138-find-missing-viewport-meta.js         [138] find_missing_viewport_meta (missing/incomplete viewport meta tag)
  *
  * Run with: node test/run-tests.js
  */
@@ -271,6 +273,7 @@ require("./sections/134-find-missing-rel-noopener");
 require("./sections/135-sqlite-tools");
 require("./sections/136-find-missing-remove-event-listener");
 require("./sections/137-find-inline-event-handlers");
+require("./sections/138-find-missing-viewport-meta");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);
