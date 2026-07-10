@@ -1,8 +1,3 @@
-require("./sections/146-find-long-functions");
-require("./sections/147-find-deprecated-html-elements");
- *   147-find-deprecated-html-elements.js      [147] find_deprecated_html_elements (deprecated/discouraged HTML tags)
- *   148-find-eval-usage.js                    [148] find_eval_usage (eval/new Function/setTimeout-string dangerous patterns)
-require("./sections/148-find-eval-usage");
 /**
  * Isolated functional test suite for mcp-common-server lib/ modules.
  * Does NOT start the HTTP server or any MCP client — imports logic directly.
@@ -294,6 +289,10 @@ require("./sections/143-find-missing-aria-role");
 require("./sections/144-find-hardcoded-color-literals");
 require("./sections/145-find-magic-numbers");
 require("./sections/146-find-long-functions");
+  require("./sections/147-find-deprecated-html-elements");
+  require("./sections/148-find-eval-usage");
+  require("./sections/149-find-missing-error-context");
+  require("./sections/150-find-promise-race-without-timeout");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);

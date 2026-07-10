@@ -1,5 +1,3 @@
-- [x] Add find_deprecated_html_elements + find_eval_usage tools — status: tested (35/35 + 33/33, all 5 rigor levels, v4.127.0)
-
 ## Status legend
 todo / in-progress / done / tested / blocked
 
@@ -8,44 +6,20 @@ Completed task entries older than the ones below are archived in task-history.md
 
 ## Tasks
 
-- [x] Add find_magic_numbers + find_long_functions tools — status: tested (22/22 + 21/21, all 5 rigor levels, v4.126.0)
+- [x] Add find_deprecated_html_elements + find_eval_usage tools — status: tested (35/35 + 33/33, all 5 rigor levels, v4.128.0)
   - notes:
-    1. find_magic_numbers (lib/magicNumberOps.js, ~160 lines) — one rule: magic_number (warning). Exempt: 0,1,2,-1,-2 plus configurable threshold. Named const/let/var assignments skipped. Test: 145 (22/22).
-    2. find_long_functions (lib/longFunctionOps.js, ~160 lines) — one rule: long_function (warning). Brace-depth tracking for named functions, arrow functions, method expressions. Results sorted by lineCount desc. Test: 146 (21/21).
-    Both wired in dispatchScan3.js, utilSchemas4.js, execSchemas.js pipeline enum. run-tests.js sections 145+146 added. Version v4.126.0.
+    1. find_deprecated_html_elements (lib/deprecatedHtmlOps.js, ~194 lines) — two rules: deprecated_html_element (error, 18 removed HTML5 tags), discouraged_html_element (warning, b/i/s/u). Test: 147 (35/35).
+    2. find_eval_usage (lib/evalUsageOps.js, ~206 lines) — three rules: direct_eval (error), new_function_constructor (error), settimeout_string_arg (warning). Test: 148 (33/33).
+    Both wired in dispatchScan3.js, utilSchemas4.js, execSchemas.js pipeline enum. run-tests.js sections 147+148 added. Fixed broken utilSchemas4.js (array was closed before find_missing_error_context + find_promise_race_without_timeout schemas). Fixed erroneous requires at top of run-tests.js. Version v4.128.0.
 
-- [x] Add SQLite lifecycle tool family: sqlite_create, sqlite_connect, sqlite_execute, sqlite_disconnect, sqlite_connections, sqlite_tables — status: tested (43/43 tests, all 5 rigor levels, v4.119.0)
-  - notes: Zero-dep (Node v22+ built-in `node:sqlite` DatabaseSync). lib/sqliteOps.js (connection Map, mirrors browserLaunch.js session-table pattern), lib/dispatchSqlite.js, lib/schemas/sqliteSchemas.js. Wired into lib/toolsSchema.js (TOOLS_ALL + EXEC_TOOLS), lib/executeTool.js, lib/schemas/execSchemas.js. All 6 tools gated behind MCP_ALLOW_EXEC. Test: test/sections/135-sqlite-tools.js (43/43 passing). Committed as part of v4.119.0.
-
-- [x] Add find_missing_remove_event_listener tool (addEventListener cleanup scan) — status: tested (23/23 sections tests, all 5 rigor levels, v4.120.0)
-  - notes: lib/eventListenerLeakOps.js (210 lines). Two rules: inline_handler_uncleanable (error), event_listener_never_removed (warning). once:true suppressed. Sibling to find_setinterval_without_clear. Wired in dispatchScan3.js, utilSchemas3.js, execSchemas.js. Test: test/sections/136-find-missing-remove-event-listener.js (23/23 passing). Committed v4.120.0 (also fixed .gitignore to exclude node_modules and .env).
-
-- [x] Add find_inline_event_handlers tool (HTML inline event handler CSP violation scan) — status: tested (24/24 tests, all 5 rigor levels, v4.121.0)
-  - notes: lib/inlineEventHandlerOps.js (~150 lines). Two rules: inline_event_handler (error) — literal on<event>="<JS>" attribute; javascript_href (error) — href="javascript:...". Empty handlers suppressed. JSX {expr} form not flagged. Security sibling of check_missing_csp_header and find_missing_rel_noopener. Wired in dispatchScan3.js, utilSchemas3.js (schema appended), execSchemas.js (pipeline enum). Test: test/sections/137-find-inline-event-handlers.js (24/24 passing). Version v4.121.0.
-
-- [x] Split utilSchemas3.js → utilSchemas3+4, add find_missing_viewport_meta tool — status: tested (25/25 tests, all 5 rigor levels, v4.122.0)
-  - notes: utilSchemas3.js was 86KB/52 schemas — split at schema #26 (find_unbounded_array_push_in_loop). Part 3 holds schemas 1-26 (26 schemas, 244 lines), Part 4 holds schemas 27-52 plus find_missing_viewport_meta (28 schemas total). Fixed aggregator: lib/schemas/utilSchemas.js now imports UTIL_SCHEMAS_4. Created lib/viewportMetaOps.js (~160 lines, two rules: missing_viewport_meta error, viewport_missing_width_device_width warning). Wired in dispatchScan3.js, execSchemas.js pipeline enum. Test: test/sections/138-find-missing-viewport-meta.js (25/25 passing). UTIL_SCHEMAS count: 137 total schemas. Version v4.122.0.
-
-- [x] Add find_missing_doctype + find_unused_css_variables tools — status: tested (22/22 + 22/22, all 5 rigor levels, v4.124.0)
+- [x] Add find_missing_error_context + find_promise_race_without_timeout tools — status: tested (28/28 + 32/32, all 5 rigor levels, v4.128.0)
   - notes:
-    1. find_missing_doctype (lib/doctypeOps.js, ~134 lines) — two rules: missing_doctype (error), non_html5_doctype (warning). Only .html/.htm by default. Test: 141 (22/22).
-    2. find_unused_css_variables (lib/unusedCssVarsOps.js, ~186 lines) — two-phase cross-file analysis (decl scan + usage scan), one rule: unused_css_variable (warning). Supports CSS/SCSS/LESS/HTML/JSX/TSX/JS/TS. Test: 142 (22/22).
-    Both wired in dispatchScan3.js (already done by previous session), schemas added to utilSchemas4.js, pipeline enum updated in execSchemas.js. run-tests.js updated. Version v4.124.0.
+    1. find_missing_error_context (lib/missingErrorContextOps.js, ~270 lines) — two rules: rethrow_without_cause (error, `throw new Error(msg)` without `{ cause: err }`), bare_rethrow (warning, `throw catchVar` unchanged). Fixed extractCatchBody() bug: was failing for single-line catch blocks and `} catch (err) {` patterns by not tracking column position. Test: 149 (28/28).
+    2. find_promise_race_without_timeout (lib/promiseRaceTimeoutOps.js, ~261 lines) — two rules: promise_race_no_timeout (error), promise_race_single_item (warning). Detects: setTimeout, AbortSignal.timeout, AbortController, withTimeout, deadline, raceTimeout, timeoutPromise. 15-line inspection window. Test: 150 (32/32).
+    Both wired in dispatchScan3.js, utilSchemas4.js, execSchemas.js pipeline enum. run-tests.js sections 149+150 added. Version v4.128.0.
 
-- [x] Add find_missing_aria_role + find_hardcoded_color_literals tools — status: tested (21/21 + 23/23, all 5 rigor levels, v4.125.0)
-  - notes:
-    1. find_missing_aria_role (lib/missingAriaRoleOps.js, ~158 lines) — two rules: missing_aria_role (error), role_without_tabindex (warning). Scans .html/.htm/.jsx/.tsx. Test: 143 (21/21).
-    2. find_hardcoded_color_literals (lib/hardcodedColorOps.js, ~180 lines) — one rule: hardcoded_color_literal (warning). Scans .css/.scss/.less. Skips :root/:host blocks, --custom-property decls, lines using var(), CSS comments. Test: 144 (23/23).
-    Both wired in dispatchScan3.js, utilSchemas4.js (fixed stray double-comma before aria_role schema), execSchemas.js pipeline enum. run-tests.js sections 143+144 added. Version v4.125.0.
+- [ ] Add find_memory_leak_patterns + find_circular_reference_risks tools — status: todo
+  - notes: 1) find_memory_leak_patterns scans JS/TS for common patterns: event listeners added in constructors/useEffect without cleanup, closures capturing large objects in module-scope, growing caches without eviction (Map/Set with .set() but no .delete()/.clear()), storing DOM references in module-scope variables. 2) find_circular_reference_risks scans for direct circular references in JS objects (obj.parent = obj, mutually-referencing singletons) that can cause JSON.stringify to throw and prevent GC in old engines. Both tools complement the existing find_setinterval_without_clear and find_missing_remove_event_listener tools.
 
-- [x] Add find_missing_lang_attribute + find_missing_meta_charset HTML quality tools — status: tested (22/22 + 23/23, all 5 rigor levels, v4.123.0)
-  - notes:
-    1. find_missing_lang_attribute (lib/langAttributeOps.js, ~120 lines) — three rules: missing_lang_attribute (error), empty_lang_attribute (error), invalid_lang_value (warning, BCP47 check). Eighth sibling in front-end accessibility family. Only .html/.htm scanned by default.
-    2. find_missing_meta_charset (lib/metaCharsetOps.js, ~130 lines) — two rules: missing_meta_charset (error), charset_not_utf8 (warning). Handles HTML5 short-form and legacy http-equiv Content-Type form. Only .html/.htm by default.
-    Wired in dispatchScan3.js, utilSchemas4.js (2 schemas appended), execSchemas.js (pipeline enum). Tests: 139 (22/22), 140 (23/23). run-tests.js sections list updated. Version v4.123.0.
-
-- [ ] Add find_deprecated_html_elements + find_eval_usage tools — status: in-progress [FIXING dispatchScan3.js + creating section 148]
-  - notes: Two new scan tools. 1) find_deprecated_html_elements scans .html/.htm/.jsx/.tsx for obsolete tags (<font>,<center>,<marquee>,<blink>,<frameset>,<frame>,<noframes>,<big>,<applet>,<basefont>,<dir>,<isindex>,<plaintext>,<xmp>,<listing>,<spacer>,<strike>,<tt>) and discouraged tags (<b>,<i>,<s>,<u>). 2) find_eval_usage scans .js/.ts/.jsx/.tsx/.mjs/.cjs for eval(), new Function(), setTimeout/setInterval with string arg — security & CSP violations.
-
-- [ ] Add find_promise_based_state_machines + find_missing_error_context tools — status: todo
-  - notes: 1) find_promise_based_state_machines scans JS/TS for async functions that recreate state machine logic via multiple awaits without explicit state tracking. 2) find_missing_error_context scans try/catch blocks where the error is re-thrown or returned without adding context (e.g. 'throw err' instead of 'throw new Error(message, { cause: err })'). High-value code quality tools for detecting error-handling gaps.
+- [ ] Add find_missing_try_catch_in_async + find_unhandled_rejection_patterns tools — status: todo
+  - notes: 1) find_missing_try_catch_in_async scans async functions that use await but have no try/catch wrapper — an uncaught rejection crashes Node.js or surfaces as an unhandledRejection event. Complement to find_dangling_promises (no-await) and find_missing_error_boundary_in_async_route (Express-specific). 2) find_unhandled_rejection_patterns scans for process.on('unhandledRejection') being set to a no-op or being completely absent in entry-point files (server.js, app.js, index.js). High-value reliability tools.

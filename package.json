@@ -82,7 +82,11 @@
     "test:stream-error-handler": "node test/find-missing-stream-error-handler-tests.js",
     "test:setinterval-leak": "node test/find-setinterval-without-clear-tests.js",
     "test:sqlite": "node test/sections/135-sqlite-tools.js",
-    "test:inline-event-handlers": "node test/sections/137-find-inline-event-handlers.js"
+    "test:inline-event-handlers": "node test/sections/137-find-inline-event-handlers.js",
+    "test:deprecated-html-elements": "node test/sections/147-find-deprecated-html-elements.js",
+    "test:eval-usage": "node test/sections/148-find-eval-usage.js",
+    "test:missing-error-context": "node test/sections/149-find-missing-error-context.js",
+    "test:promise-race-timeout": "node test/sections/150-find-promise-race-without-timeout.js"
   },
   "engines": {
     "node": ">=18"
@@ -92,5 +96,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.127.0"
+  "version": "4.128.0"
 }
