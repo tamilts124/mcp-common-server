@@ -102,6 +102,9 @@
  *   145-find-magic-numbers.js                 [145] find_magic_numbers (numeric literals not extracted as named constants)
  *   146-find-long-functions.js                [146] find_long_functions (function bodies exceeding line threshold)
  *
+ *   153-find-memory-leak-patterns.js           [153] find_memory_leak_patterns (unbounded Map/Set caches, DOM refs, accumulating arrays)
+ *   154-find-circular-reference-risks.js       [154] find_circular_reference_risks (self-ref, mutual-ref, circular-require)
+ *
  * Run with: node test/run-tests.js
  */
 const { fs, counters, TMP, cleanupDir } = require("./test-harness");
@@ -295,6 +298,8 @@ require("./sections/146-find-long-functions");
   require("./sections/150-find-promise-race-without-timeout");
   require("./sections/151-find-missing-try-catch-in-async");
   require("./sections/152-find-unhandled-rejection-patterns");
+  require("./sections/153-find-memory-leak-patterns");
+  require("./sections/154-find-circular-reference-risks");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);
