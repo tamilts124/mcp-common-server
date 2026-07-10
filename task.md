@@ -1,4 +1,4 @@
-# MCP Server Task List
+- [x] Add find_deprecated_html_elements + find_eval_usage tools — status: tested (35/35 + 33/33, all 5 rigor levels, v4.127.0)
 
 ## Status legend
 todo / in-progress / done / tested / blocked
@@ -43,3 +43,9 @@ Completed task entries older than the ones below are archived in task-history.md
     1. find_missing_lang_attribute (lib/langAttributeOps.js, ~120 lines) — three rules: missing_lang_attribute (error), empty_lang_attribute (error), invalid_lang_value (warning, BCP47 check). Eighth sibling in front-end accessibility family. Only .html/.htm scanned by default.
     2. find_missing_meta_charset (lib/metaCharsetOps.js, ~130 lines) — two rules: missing_meta_charset (error), charset_not_utf8 (warning). Handles HTML5 short-form and legacy http-equiv Content-Type form. Only .html/.htm by default.
     Wired in dispatchScan3.js, utilSchemas4.js (2 schemas appended), execSchemas.js (pipeline enum). Tests: 139 (22/22), 140 (23/23). run-tests.js sections list updated. Version v4.123.0.
+
+- [ ] Add find_deprecated_html_elements + find_eval_usage tools — status: in-progress [FIXING dispatchScan3.js + creating section 148]
+  - notes: Two new scan tools. 1) find_deprecated_html_elements scans .html/.htm/.jsx/.tsx for obsolete tags (<font>,<center>,<marquee>,<blink>,<frameset>,<frame>,<noframes>,<big>,<applet>,<basefont>,<dir>,<isindex>,<plaintext>,<xmp>,<listing>,<spacer>,<strike>,<tt>) and discouraged tags (<b>,<i>,<s>,<u>). 2) find_eval_usage scans .js/.ts/.jsx/.tsx/.mjs/.cjs for eval(), new Function(), setTimeout/setInterval with string arg — security & CSP violations.
+
+- [ ] Add find_promise_based_state_machines + find_missing_error_context tools — status: todo
+  - notes: 1) find_promise_based_state_machines scans JS/TS for async functions that recreate state machine logic via multiple awaits without explicit state tracking. 2) find_missing_error_context scans try/catch blocks where the error is re-thrown or returned without adding context (e.g. 'throw err' instead of 'throw new Error(message, { cause: err })'). High-value code quality tools for detecting error-handling gaps.

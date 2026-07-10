@@ -1,4 +1,4 @@
-# 🔧 MCP Common Server (HTTP + SSE) — v3.171.0
+# 🔧 MCP Common Server (HTTP + SSE) — v4.127.0
 
 
 
@@ -600,6 +600,8 @@ The server logic is split into small, single-purpose modules under `lib/`:
 | `lib/gitLargeObjectsOps.js` | `find_large_git_objects` — rev-list + cat-file --batch-check over full git history, finds largest blobs ever committed |
 | `lib/lfsCoverageOps.js` | `check_lfs_coverage` — git check-attr --stdin -z batch check of filter=lfs coverage for large tracked files |
 | `lib/mergeConflictRiskOps.js` | `merge_conflict_risk` — merge-base + two-sided diff, flags files changed on both branches since diverging as conflict candidates |
+| `lib/deprecatedHtmlOps.js` | `find_deprecated_html_elements` — scans HTML/HTM/JSX/TSX for deprecated tags (font, center, marquee, etc.) and discouraged tags (b, i, s, u) |
+| `lib/evalUsageOps.js` | `find_eval_usage` — scans JS/TS for direct eval(), new Function(), and setTimeout/setInterval with string-literal arg — CSP/XSS/RCE risk patterns | — merge-base + two-sided diff, flags files changed on both branches since diverging as conflict candidates |
 
 Isolated functional tests (no live server/inspector) live in `test/run-tests.js`, split into per-feature files under `test/sections/` sharing `test/test-harness.js` — run with `node test/run-tests.js`.
 
