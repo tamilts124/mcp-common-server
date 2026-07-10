@@ -1,3 +1,6 @@
+# Node modules (never commit)
+node_modules/
+
 # Temporary dev/patch helper scripts (not part of the server)
 _fix_exec.js
 _fix_schema.js
@@ -10,3 +13,6 @@ test/find-missing-remove-event-listener-tests.js
 
 # Backup files
 *.bak
+
+# Environment secrets
+.env
