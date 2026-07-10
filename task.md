@@ -20,9 +20,8 @@ Completed task entries older than the ones below are archived in task-history.md
 - [x] Split utilSchemas3.js → utilSchemas3+4, add find_missing_viewport_meta tool — status: tested (25/25 tests, all 5 rigor levels, v4.122.0)
   - notes: utilSchemas3.js was 86KB/52 schemas — split at schema #26 (find_unbounded_array_push_in_loop). Part 3 holds schemas 1-26 (26 schemas, 244 lines), Part 4 holds schemas 27-52 plus find_missing_viewport_meta (28 schemas total). Fixed aggregator: lib/schemas/utilSchemas.js now imports UTIL_SCHEMAS_4. Created lib/viewportMetaOps.js (~160 lines, two rules: missing_viewport_meta error, viewport_missing_width_device_width warning). Wired in dispatchScan3.js, execSchemas.js pipeline enum. Test: test/sections/138-find-missing-viewport-meta.js (25/25 passing). UTIL_SCHEMAS count: 137 total schemas. Version v4.122.0.
 
-- [ ] Proactive: next candidates — status: todo
-  - notes: Possible next tools:
-    1. find_missing_lang_attribute — scans HTML for <html> tags without lang= attribute (WCAG 3.1.1 accessibility, A-level). Seventh sibling in the front-end accessibility family.
-    2. find_missing_meta_charset — scans HTML for absence of <meta charset="UTF-8"> (common source of encoding bugs, pairs with find_missing_viewport_meta).
-    3. find_unused_css_variables — scans CSS/SCSS for --var: declarations never referenced with var(--var).
-    4. Refactor test/run-tests.js to add section 138 entry to the section list comment at the top.
+- [x] Add find_missing_lang_attribute + find_missing_meta_charset HTML quality tools — status: tested (22/22 + 23/23, all 5 rigor levels, v4.123.0)
+  - notes:
+    1. find_missing_lang_attribute (lib/langAttributeOps.js, ~120 lines) — three rules: missing_lang_attribute (error), empty_lang_attribute (error), invalid_lang_value (warning, BCP47 check). Eighth sibling in front-end accessibility family. Only .html/.htm scanned by default.
+    2. find_missing_meta_charset (lib/metaCharsetOps.js, ~130 lines) — two rules: missing_meta_charset (error), charset_not_utf8 (warning). Handles HTML5 short-form and legacy http-equiv Content-Type form. Only .html/.htm by default.
+    Wired in dispatchScan3.js, utilSchemas4.js (2 schemas appended), execSchemas.js (pipeline enum). Tests: 139 (22/22), 140 (23/23). run-tests.js sections list updated. Version v4.123.0.

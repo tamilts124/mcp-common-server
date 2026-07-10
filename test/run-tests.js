@@ -94,6 +94,8 @@
  *   136-find-missing-remove-event-listener.js [136] find_missing_remove_event_listener (addEventListener cleanup scan)
  *   137-find-inline-event-handlers.js         [137] find_inline_event_handlers (HTML inline on* handlers + javascript: href)
  *   138-find-missing-viewport-meta.js         [138] find_missing_viewport_meta (missing/incomplete viewport meta tag)
+ *   139-find-missing-lang-attribute.js        [139] find_missing_lang_attribute (WCAG 3.1.1 — missing lang= on <html>)
+ *   140-find-missing-meta-charset.js          [140] find_missing_meta_charset (missing/non-UTF-8 charset meta)
  *
  * Run with: node test/run-tests.js
  */
@@ -274,6 +276,8 @@ require("./sections/135-sqlite-tools");
 require("./sections/136-find-missing-remove-event-listener");
 require("./sections/137-find-inline-event-handlers");
 require("./sections/138-find-missing-viewport-meta");
+require("./sections/139-find-missing-lang-attribute");
+require("./sections/140-find-missing-meta-charset");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);
