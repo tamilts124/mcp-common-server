@@ -293,6 +293,8 @@ require("./sections/146-find-long-functions");
   require("./sections/148-find-eval-usage");
   require("./sections/149-find-missing-error-context");
   require("./sections/150-find-promise-race-without-timeout");
+  require("./sections/151-find-missing-try-catch-in-async");
+  require("./sections/152-find-unhandled-rejection-patterns");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);
