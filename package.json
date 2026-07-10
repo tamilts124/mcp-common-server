@@ -97,7 +97,8 @@
     "test:command-injection-risk": "node test/sections/158-find-command-injection-risk.js",
     "test:xss-risk": "node test/sections/159-find-xss-risk.js",
     "test:path-traversal-risk": "node test/sections/160-find-path-traversal-risk.js",
-    "test:timing-attack-risk": "node test/sections/161-find-timing-attack-risk.js"
+    "test:timing-attack-risk": "node test/sections/161-find-timing-attack-risk.js",
+    "test:insecure-deserialization": "node test/sections/162-find-insecure-deserialization.js"
   },
   "engines": {
     "node": ">=18"
@@ -107,5 +108,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.134.0"
+  "version": "4.135.0"
 }

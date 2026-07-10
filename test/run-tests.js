@@ -307,6 +307,7 @@ require("./sections/146-find-long-functions");
   require("./sections/159-find-xss-risk");
   require("./sections/160-find-path-traversal-risk");
   require("./sections/161-find-timing-attack-risk");
+  require("./sections/162-find-insecure-deserialization");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);
