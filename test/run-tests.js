@@ -96,6 +96,8 @@
  *   138-find-missing-viewport-meta.js         [138] find_missing_viewport_meta (missing/incomplete viewport meta tag)
  *   139-find-missing-lang-attribute.js        [139] find_missing_lang_attribute (WCAG 3.1.1 — missing lang= on <html>)
  *   140-find-missing-meta-charset.js          [140] find_missing_meta_charset (missing/non-UTF-8 charset meta)
+ *   141-find-missing-doctype.js               [141] find_missing_doctype (missing/non-HTML5 doctype)
+ *   142-find-unused-css-variables.js          [142] find_unused_css_variables (unused CSS custom properties)
  *
  * Run with: node test/run-tests.js
  */
@@ -278,6 +280,8 @@ require("./sections/137-find-inline-event-handlers");
 require("./sections/138-find-missing-viewport-meta");
 require("./sections/139-find-missing-lang-attribute");
 require("./sections/140-find-missing-meta-charset");
+require("./sections/141-find-missing-doctype");
+require("./sections/142-find-unused-css-variables");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);

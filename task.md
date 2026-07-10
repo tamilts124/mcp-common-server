@@ -20,6 +20,12 @@ Completed task entries older than the ones below are archived in task-history.md
 - [x] Split utilSchemas3.js → utilSchemas3+4, add find_missing_viewport_meta tool — status: tested (25/25 tests, all 5 rigor levels, v4.122.0)
   - notes: utilSchemas3.js was 86KB/52 schemas — split at schema #26 (find_unbounded_array_push_in_loop). Part 3 holds schemas 1-26 (26 schemas, 244 lines), Part 4 holds schemas 27-52 plus find_missing_viewport_meta (28 schemas total). Fixed aggregator: lib/schemas/utilSchemas.js now imports UTIL_SCHEMAS_4. Created lib/viewportMetaOps.js (~160 lines, two rules: missing_viewport_meta error, viewport_missing_width_device_width warning). Wired in dispatchScan3.js, execSchemas.js pipeline enum. Test: test/sections/138-find-missing-viewport-meta.js (25/25 passing). UTIL_SCHEMAS count: 137 total schemas. Version v4.122.0.
 
+- [x] Add find_missing_doctype + find_unused_css_variables tools — status: tested (22/22 + 22/22, all 5 rigor levels, v4.124.0)
+  - notes:
+    1. find_missing_doctype (lib/doctypeOps.js, ~134 lines) — two rules: missing_doctype (error), non_html5_doctype (warning). Only .html/.htm by default. Test: 141 (22/22).
+    2. find_unused_css_variables (lib/unusedCssVarsOps.js, ~186 lines) — two-phase cross-file analysis (decl scan + usage scan), one rule: unused_css_variable (warning). Supports CSS/SCSS/LESS/HTML/JSX/TSX/JS/TS. Test: 142 (22/22).
+    Both wired in dispatchScan3.js (already done by previous session), schemas added to utilSchemas4.js, pipeline enum updated in execSchemas.js. run-tests.js updated. Version v4.124.0.
+
 - [x] Add find_missing_lang_attribute + find_missing_meta_charset HTML quality tools — status: tested (22/22 + 23/23, all 5 rigor levels, v4.123.0)
   - notes:
     1. find_missing_lang_attribute (lib/langAttributeOps.js, ~120 lines) — three rules: missing_lang_attribute (error), empty_lang_attribute (error), invalid_lang_value (warning, BCP47 check). Eighth sibling in front-end accessibility family. Only .html/.htm scanned by default.
