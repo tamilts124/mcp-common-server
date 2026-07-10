@@ -270,6 +270,7 @@ require("./sections/133-find-positive-tabindex");
 require("./sections/134-find-missing-rel-noopener");
 require("./sections/135-sqlite-tools");
 require("./sections/136-find-missing-remove-event-listener");
+require("./sections/137-find-inline-event-handlers");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);

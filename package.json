@@ -81,7 +81,8 @@
     "test:docker-compose-issues": "node test/check-docker-compose-issues-tests.js",
     "test:stream-error-handler": "node test/find-missing-stream-error-handler-tests.js",
     "test:setinterval-leak": "node test/find-setinterval-without-clear-tests.js",
-    "test:sqlite": "node test/sections/135-sqlite-tools.js"
+    "test:sqlite": "node test/sections/135-sqlite-tools.js",
+    "test:inline-event-handlers": "node test/sections/137-find-inline-event-handlers.js"
   },
   "engines": {
     "node": ">=18"
@@ -91,5 +92,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.119.0"
+  "version": "4.121.0"
 }
