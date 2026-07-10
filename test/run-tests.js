@@ -304,6 +304,9 @@ require("./sections/146-find-long-functions");
   require("./sections/156-find-event-emitter-leak");
   require("./sections/157-find-sql-injection-risk");
   require("./sections/158-find-command-injection-risk");
+  require("./sections/159-find-xss-risk");
+  require("./sections/160-find-path-traversal-risk");
+  require("./sections/161-find-timing-attack-risk");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);
