@@ -311,6 +311,8 @@ require("./sections/146-find-long-functions");
   require("./sections/163-find-race-condition-risk");
   require("./sections/164-find-unvalidated-redirect");
   require("./sections/165-browser-cookies-file-storage-state-save");
+  require("./sections/166-jwt-sign-verify");
+  require("./sections/167-crypto-encrypt-decrypt");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);

@@ -99,9 +99,10 @@
     "test:path-traversal-risk": "node test/sections/160-find-path-traversal-risk.js",
     "test:timing-attack-risk": "node test/sections/161-find-timing-attack-risk.js",
     "test:unvalidated-redirect": "node test/sections/164-find-unvalidated-redirect.js",
-    "test:browser-cookies-file-storage-state-save": "node test/sections/165-browser-cookies-file-storage-state-save.js"
+    "test:browser-cookies-file-storage-state-save": "node test/sections/165-browser-cookies-file-storage-state-save.js",
     "test:race-condition-risk": "node test/sections/163-find-race-condition-risk.js",
-    "test:unvalidated-redirect": "node test/sections/164-find-unvalidated-redirect.js"
+    "test:jwt-sign-verify": "node test/sections/166-jwt-sign-verify.js",
+    "test:crypto-aes": "node test/sections/167-crypto-encrypt-decrypt.js"
   },
   "engines": {
     "node": ">=18"
@@ -111,5 +112,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.137.0"
+  "version": "4.139.0"
 }

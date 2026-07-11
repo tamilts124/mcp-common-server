@@ -1,4 +1,4 @@
-# 🔧 MCP Common Server (HTTP + SSE) — v4.137.0
+# 🔧 MCP Common Server (HTTP + SSE) — v4.139.0
 
 
 
@@ -606,6 +606,8 @@ The server logic is split into small, single-purpose modules under `lib/`:
 | `lib/mergeConflictRiskOps.js` | `merge_conflict_risk` — merge-base + two-sided diff, flags files changed on both branches since diverging as conflict candidates |
 | `lib/deprecatedHtmlOps.js` | `find_deprecated_html_elements` — scans HTML/HTM/JSX/TSX for deprecated tags (font, center, marquee, etc.) and discouraged tags (b, i, s, u) |
 | `lib/evalUsageOps.js` | `find_eval_usage` — scans JS/TS for direct eval(), new Function(), and setTimeout/setInterval with string-literal arg — CSP/XSS/RCE risk patterns | — merge-base + two-sided diff, flags files changed on both branches since diverging as conflict candidates |
+| `lib/jwtSignOps.js` | `jwt_sign` / `jwt_verify` — Node.js built-in crypto only (zero npm deps). Sign: HS256/384/512 HMAC or RS*/ES* asymmetric PEM; auto-sets iat; optional expires_in, not_before, issuer, subject, audience, jwt_id, extra_header. Verify: constant-time HMAC compare, time-claim checks, issuer/audience validation; returns `{valid, error}` (never throws). |
+| `lib/cryptoAesOps.js` | `crypto_encrypt` / `crypto_decrypt` — AES-256-GCM authenticated encryption, Node.js built-in crypto only. Password mode: PBKDF2-HMAC-SHA256, 600 000 iterations, random salt. Raw-key mode: 64-char hex AES-256 key. Fresh random 96-bit IV per call. Self-describing token format `v1:<kdf>:<iv_hex>:<auth_tag_hex>:<ciphertext_base64>`. Accepts string/file input; optionally writes output to disk. |
 
 Isolated functional tests (no live server/inspector) live in `test/run-tests.js`, split into per-feature files under `test/sections/` sharing `test/test-harness.js` — run with `node test/run-tests.js`.
 
