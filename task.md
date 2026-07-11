@@ -6,6 +6,9 @@ Completed task entries older than the ones below are archived in task-history.md
 
 ## Tasks
 
+- [x] Add table_ops + str_similarity tools — status: tested (76/76, v4.148.0)
+  - notes: strSimilarityOps.js (zero-dep; 5 metrics: levenshtein/jaro_winkler/dice/hamming/lcs; 5 ops: distance/search/cluster/dedupe/normalize; union-find clustering; ignore_case; strip_diacritics/punctuation normalize; 10 000 char/50 000 candidate/5 000 string limits). tableOps.js (zero-dep in-memory relational ops on JSON arrays; 12 ops: info/filter/sort/select/rename/derive/group_by/join/distinct/limit/pivot/unpivot; 14 filter ops; 10 agg ops; 13 derive ops; inner/left/right/full join; 100 000 row input cap; 10 000 row output truncation). Both wired in dispatchRead.js + utilSchemas12.js chained into utilSchemas.js. 76/76 tests across 10 sub-sections (A-J).
+
 - [x] Add date_calc + text_extract tools — status: tested (75/75, v4.147.0)
   - notes: dateCalcOps.js (zero-dep, pure Node Intl + Date; 10 ops: now/parse/format/add/subtract/diff/start_of/end_of/convert_tz/is_valid; Moment-style token formatter YYYY/MM/DD/HH/mm/ss/SSS/A/dddd/MMMM/Z/X/x; IANA tz via Intl.DateTimeFormat; month-boundary clamping on add/subtract; week start=Monday). textExtractOps.js (zero-dep regex; 11 ops: emails/urls/phones/ips/numbers/dates/json/lines/between/pattern/words; balanced-bracket JSON scanner; grep-like lines with context/invert; word-frequency with stop_words; custom regex with capture groups + named groups). Both wired in dispatchRead.js + utilSchemas11.js chained into utilSchemas.js. Fixed E2 test off-by-one (120 adds → Apr 30 not May 1). 75/75 tests pass across 10 sub-sections (A-J).
 

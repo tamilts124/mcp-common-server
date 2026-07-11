@@ -321,6 +321,7 @@ require("./sections/146-find-long-functions");
   require("./sections/173-string-transform-ip-cidr");
   require("./sections/174-color-convert-number-format");
   require("./sections/175-date-calc-text-extract");
+  require("./sections/176-str-similarity-table-ops");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);
