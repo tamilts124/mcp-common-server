@@ -326,6 +326,7 @@ require("./sections/146-find-long-functions");
   await require("./sections/178-tls-cert-http-multi");
   await require("./sections/179-key-generate-oauth2");
   await require("./sections/180-multipart-upload-http-serve");
+  await require("./sections/181-port-dns-tools");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);

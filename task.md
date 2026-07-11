@@ -6,6 +6,9 @@ Completed task entries older than the ones below are archived in task-history.md
 
 ## Tasks
 
+- [x] Add section-181 comprehensive tests for port_check + wait_for_port + port_scan_range + dns_lookup — status: tested (75/75, v4.153.0)
+  - notes: 181-port-dns-tools.js tests all 4 tools via direct imports across 10 sub-sections (A=port_check validation, B=port_check happy-path, C=wait_for_port validation, D=wait_for_port happy-path, E=port_scan_range validation, F=port_scan_range happy-path, G=dns_lookup validation, H=dns_lookup happy-path, I=security/injection, J=concurrency stress 20×portCheck+10×dns). Fixed test cleanup bug (srvJ.server.close→srvJ.close). Tools already had MCP schemas in utilSchemas2.js; no schema file needed.
+
 - [x] Add multipart_upload + http_serve tools — status: tested (90/90, v4.152.0)
   - notes: multipartUploadOps.js (zero-dep; pure Node http/https + crypto; builds multipart/form-data boundary manually; text fields + files pre-read as Buffer by dispatch layer + inline data/base64 parts; POST/PUT/PATCH; escapeDisposition for CRLF/quote safety; 100 KB response cap; 50 MB per-inline-file cap; 100 field limit; returns status/ok/headers/body/partCount/boundary/requestBodySize). httpServeOps.js (in-process Node http.Server sessions keyed by UUID Map; 7 operations: start/stop/status/requests/add_route/clear_requests/wait; OS-assigned random port; route matching: exact/prefix(*/any; 404 on no match; captures method/path/headers/body up to 1 MB per request / 1000 req per session; wait polls 50ms until path_match+method_match found or timeout; add_route prepends for priority; delay_ms 0–5000ms per route). Both wired in dispatchRead.js + utilSchemas16.js chained into utilSchemas.js. 90/90 tests across 10 sub-sections (A–J).
 
