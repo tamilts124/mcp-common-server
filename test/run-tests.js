@@ -319,6 +319,7 @@ require("./sections/146-find-long-functions");
   require("./sections/171-template-render-base62");
   require("./sections/172-markdown-html-xml-parse");
   require("./sections/173-string-transform-ip-cidr");
+  require("./sections/174-color-convert-number-format");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);
