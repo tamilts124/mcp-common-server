@@ -6,6 +6,9 @@ Completed task entries older than the ones below are archived in task-history.md
 
 ## Tasks
 
+- [x] Add graphql_query + jsonl_ops tools — status: tested (88/88, v4.149.0)
+  - notes: graphqlQueryOps.js (zero-dep http/https; POST to any GraphQL endpoint; variables/headers/operation_name/timeout; op-type detection; 10 MB response cap; 100 KB query cap). jsonlOps.js (11 ops: parse/count/head/tail/sample/validate/filter/transform/sort/merge/to_json; inline rows OR file path; 50 MB file cap; 100k line/10k output limits; reservoir sampling with seed; 14 filter ops; select/drop/rename transform; null-aware sort; multi-file merge up to 50 files). Both wired in dispatchRead.js + utilSchemas13.js chained into utilSchemas.js. Fixed 2 test assertion bugs (C4 case-sensitive contains, F4 regex match count). 88/88 tests pass across 10 sub-sections (A-J).
+
 - [x] Add table_ops + str_similarity tools — status: tested (76/76, v4.148.0)
   - notes: strSimilarityOps.js (zero-dep; 5 metrics: levenshtein/jaro_winkler/dice/hamming/lcs; 5 ops: distance/search/cluster/dedupe/normalize; union-find clustering; ignore_case; strip_diacritics/punctuation normalize; 10 000 char/50 000 candidate/5 000 string limits). tableOps.js (zero-dep in-memory relational ops on JSON arrays; 12 ops: info/filter/sort/select/rename/derive/group_by/join/distinct/limit/pivot/unpivot; 14 filter ops; 10 agg ops; 13 derive ops; inner/left/right/full join; 100 000 row input cap; 10 000 row output truncation). Both wired in dispatchRead.js + utilSchemas12.js chained into utilSchemas.js. 76/76 tests across 10 sub-sections (A-J).
 
