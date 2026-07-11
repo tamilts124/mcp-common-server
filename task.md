@@ -5,6 +5,9 @@ todo / in-progress / done / tested / blocked
 Completed task entries older than the ones below are archived in task-history.md to keep this file cheap to read each session.
 
 ## Tasks
+- [x] Add websocket_client + sse_client tools — status: tested (75/75, v4.154.0)
+  - notes: websocketClientOps.js (zero-dep; RFC 6455 WebSocket handshake + frame protocol over Node.js net/tls/crypto; ws:// and wss://; text/binary frames; masked client frames; fragmented messages; auto ping→pong; close frame echo; max_messages/timeout caps; CRLF/null-byte injection guards on URL/headers/subprotocol; up to 100 send messages with per-message delay_ms). sseClientOps.js (zero-dep; RFC 8895 SSE parser; LF/CRLF/CR line endings; multi-line data; id/event/retry fields; event_types filter; last_event_id resume; max_events/timeout caps; content-type validation; HTTP status guard; CRLF injection guards). Both wired in dispatchRead.js + utilSchemas17.js chained into utilSchemas.js. Fixed previous-session utilSchemas.js corruption (premature require+module.exports at top; duplicate export missing schema 17). 75/75 tests across 10 sub-sections (A=WS validation, B=frame unit, C=WS happy-path, D=ping/pong+close, E=SSE validation, F=SseParser unit, G=SSE happy-path, H=filters+truncation, I=security, J=concurrency+stress).
+
 
 - [x] Add section-181 comprehensive tests for port_check + wait_for_port + port_scan_range + dns_lookup — status: tested (75/75, v4.153.0)
   - notes: 181-port-dns-tools.js tests all 4 tools via direct imports across 10 sub-sections (A=port_check validation, B=port_check happy-path, C=wait_for_port validation, D=wait_for_port happy-path, E=port_scan_range validation, F=port_scan_range happy-path, G=dns_lookup validation, H=dns_lookup happy-path, I=security/injection, J=concurrency stress 20×portCheck+10×dns). Fixed test cleanup bug (srvJ.server.close→srvJ.close). Tools already had MCP schemas in utilSchemas2.js; no schema file needed.

@@ -115,7 +115,9 @@
     "test:graphql-jsonl": "node test/sections/177-graphql-jsonl.js",
     "test:tls-cert-http-multi": "node test/sections/178-tls-cert-http-multi.js",
     "test:key-generate-oauth2": "node test/sections/179-key-generate-oauth2.js",
-    "test:multipart-upload-http-serve": "node test/sections/180-multipart-upload-http-serve.js"
+    "test:multipart-upload-http-serve": "node test/sections/180-multipart-upload-http-serve.js",
+    "test:port-dns-tools": "node test/sections/181-port-dns-tools.js",
+    "test:websocket-sse": "node test/sections/182-websocket-sse.js"
   },
   "engines": {
     "node": ">=18"
@@ -125,5 +127,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.152.0"
+  "version": "4.154.0"
 }
