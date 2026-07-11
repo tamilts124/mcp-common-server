@@ -103,7 +103,8 @@
     "test:race-condition-risk": "node test/sections/163-find-race-condition-risk.js",
     "test:jwt-sign-verify": "node test/sections/166-jwt-sign-verify.js",
     "test:crypto-aes": "node test/sections/167-crypto-encrypt-decrypt.js",
-    "test:hmac-totp": "node test/sections/168-hmac-totp.js"
+    "test:hmac-totp": "node test/sections/168-hmac-totp.js",
+    "test:uuid-cron": "node test/sections/169-uuid-generate-cron-next.js"
   },
   "engines": {
     "node": ">=18"
@@ -113,5 +114,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.140.0"
+  "version": "4.141.0"
 }
