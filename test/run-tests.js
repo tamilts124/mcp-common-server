@@ -333,6 +333,8 @@ require("./sections/146-find-long-functions");
   await require("./sections/184-git-write-ops");
   // Section 184b: pdf_rich_extract — sync section, exports Promise.resolve()
   await require("./sections/184-pdf-rich-extract");
+  // Section 185: send_process_input — async (real process I/O via stdin pipe)
+  await require("./sections/185-send-process-input");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);

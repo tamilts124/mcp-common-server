@@ -2,7 +2,11 @@
 todo / in-progress / done / tested / blocked
 
 ## Current Task
-- [x] Wire pdf_rich_extract tool + fix README version sync + add test scripts — status: tested (77/77 git_write_ops, 44/44 pdf_rich_extract, v4.156.0)
+- [x] Add send_process_input tool — status: tested (43/43, v4.157.0)
+  - Sends stdin text to a running background process (started with start_process)
+  - Enables interactive process communication: REPLs, CLIs, databases, etc.
+  - Schema in execSchemas.js; handler in processOps.js + dispatchWrite.js; section 185 tests
+  - start_process now spawns with stdin as pipe (was 'ignore'); uncaughtException handler silences Windows EOF on cleanup
 
 ## History
 Completed task entries older than the ones below are archived in task-history.md to keep this file cheap to read each session.

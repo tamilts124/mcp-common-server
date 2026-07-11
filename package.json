@@ -120,7 +120,8 @@
     "test:websocket-sse": "node test/sections/182-websocket-sse.js",
     "test:image-ops": "node test/sections/183-image-ops.js",
     "test:git-write-ops": "node test/sections/184-git-write-ops.js",
-    "test:pdf-rich-extract": "node test/sections/184-pdf-rich-extract.js"
+    "test:pdf-rich-extract": "node test/sections/184-pdf-rich-extract.js",
+    "test:send-process-input": "node test/sections/185-send-process-input.js"
   },
   "engines": {
     "node": ">=18"
@@ -130,5 +131,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.156.0"
+  "version": "4.157.0"
 }
