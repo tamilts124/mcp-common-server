@@ -106,7 +106,8 @@
     "test:hmac-totp": "node test/sections/168-hmac-totp.js",
     "test:uuid-cron": "node test/sections/169-uuid-generate-cron-next.js",
     "test:diff-strings-password": "node test/sections/170-diff-strings-password-generate.js",
-    "test:template-render-base62": "node test/sections/171-template-render-base62.js"
+    "test:template-render-base62": "node test/sections/171-template-render-base62.js",
+    "test:markdown-xml": "node test/sections/172-markdown-html-xml-parse.js"
   },
   "engines": {
     "node": ">=18"
@@ -116,5 +117,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.143.0"
+  "version": "4.144.0"
 }
