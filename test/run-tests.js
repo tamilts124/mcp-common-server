@@ -315,6 +315,7 @@ require("./sections/146-find-long-functions");
   require("./sections/167-crypto-encrypt-decrypt");
   require("./sections/168-hmac-totp");
   require("./sections/169-uuid-generate-cron-next");
+  require("./sections/170-diff-strings-password-generate");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);
