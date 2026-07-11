@@ -6,6 +6,8 @@ Completed task entries older than the ones below are archived in task-history.md
 
 ## Tasks
 
+- [x] Add hmac_sign + hmac_verify + totp_generate + totp_verify tools — status: tested (57/57, v4.140.0)
+  - notes: hmacSignOps.js (HMAC-SHA1/224/256/384/512, hex/base64/base64url, constant-time timingSafeEqual), totpOps.js (RFC 4226 HOTP + RFC 6238 TOTP, inline Base32 decoder, SHA-1/256/512, 6/8 digits, window drift tolerance, RFC 4226 Appendix D test vectors). Both wired in dispatchRead.js + utilSchemas.js. 57/57 tests pass across all 5 rigor levels.
 - [x] Add find_missing_try_catch_in_async + find_unhandled_rejection_patterns tools — status: tested (v4.129.0)
 - [x] Add find_memory_leak_patterns + find_circular_reference_risks tools — status: tested (v4.130.0)
 - [x] Add find_promise_constructor_antipattern + find_event_emitter_leak tools — status: tested (v4.131.0)

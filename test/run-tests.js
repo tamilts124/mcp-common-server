@@ -313,6 +313,7 @@ require("./sections/146-find-long-functions");
   require("./sections/165-browser-cookies-file-storage-state-save");
   require("./sections/166-jwt-sign-verify");
   require("./sections/167-crypto-encrypt-decrypt");
+  require("./sections/168-hmac-totp");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);
