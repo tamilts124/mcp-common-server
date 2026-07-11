@@ -2,6 +2,12 @@
 todo / in-progress / done / tested / blocked
 
 ## Current Task
+- [x] Add tcp_client tool — status: tested (42/42, v4.158.0)
+  - Raw TCP/TLS socket client: connect, send messages, receive responses
+  - Useful for Redis, SMTP, custom daemons, protocol testing
+  - Zero deps (Node.js net/tls); tcpClientOps.js; utilSchemas20.js; section 186 tests
+  - A=validation, B=banner-grab, C=send+echo, D=recv_until pipelining, E=TLS (skip on bad cert), F=encodings, G=limits/truncation, H=security, I=error-paths, J=concurrency
+
 - [x] Add send_process_input tool — status: tested (43/43, v4.157.0)
   - Sends stdin text to a running background process (started with start_process)
   - Enables interactive process communication: REPLs, CLIs, databases, etc.
