@@ -308,6 +308,9 @@ require("./sections/146-find-long-functions");
   require("./sections/160-find-path-traversal-risk");
   require("./sections/161-find-timing-attack-risk");
   require("./sections/162-find-insecure-deserialization");
+  require("./sections/163-find-race-condition-risk");
+  require("./sections/164-find-unvalidated-redirect");
+  require("./sections/165-browser-cookies-file-storage-state-save");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);

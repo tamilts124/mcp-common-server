@@ -18,5 +18,8 @@ Completed task entries older than the ones below are archived in task-history.md
 - [x] Add find_insecure_deserialization + find_prototype_pollution_via_merge tools — status: tested (24/24, v4.135.0)
   - notes: insecureDeserializationOps.js + prototypePollutionMergeOps.js created; wired into dispatchScan4.js; schemas added to utilSchemas4.js; 24/24 tests pass.
 
-- [ ] Add find_race_condition_risk + find_unvalidated_redirect tools — status: in-progress
+- [x] Add find_race_condition_risk + find_unvalidated_redirect tools — status: tested (v4.136.0)
   - notes: find_race_condition_risk: detect non-atomic read-then-write on shared module-scope mutable state inside async handlers/callbacks without locking. find_unvalidated_redirect: detect res.redirect()/location.href/window.location assignments with ANY dynamic (non-literal) value without an allowlist check — broader than find_open_redirect_risks (which only flags direct req.* in redirect).
+
+- [x] Add browser_storage_state_save + browser_set_cookies cookies_file param — status: tested (28/28, v4.137.0)
+  - notes: browser_storage_state_save writes context.storageState() (cookies + per-origin localStorage) to a JSON file on disk for cross-run session persistence. browser_set_cookies gains a cookies_file param: accepts a bare JSON cookie array or a Playwright storageState file (object with a cookies key). Section 165 tests cover 5 rigor levels: offline JSON-parse logic, ToolError validation paths (empty/whitespace path, nonexistent file, invalid JSON, wrong shape), Unicode, large array perf, sequential stress, plus async no-session-guard paths for both tools. 28/28 pass.

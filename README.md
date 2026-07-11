@@ -1,4 +1,4 @@
-# 🔧 MCP Common Server (HTTP + SSE) — v4.136.0
+# 🔧 MCP Common Server (HTTP + SSE) — v4.137.0
 
 
 
@@ -415,6 +415,8 @@ Stealth Playwright (Chromium) sessions — `playwright-extra` + `puppeteer-extra
 - **`browser_expose_function`**/**`browser_get_exposed_calls`**: bind a Node-reachable callback on `window`, read recorded calls (no live channel back to the caller).
 - **`browser_wait_for_response`**: block until a matching network response (by URL substring, optional status) arrives or times out.
 - **`browser_get_storage_state`**: snapshot cookies + per-origin localStorage as a portable object; pass to `browser_launch`'s `storage_state` to resume a logged-in session in a fresh browser.
+- **`browser_storage_state_save`**: save the browser context's full storage state (cookies + per-origin localStorage) as a JSON file on disk (`path`, `pretty` defaults true). Enables cross-run session persistence — pass the file back to `browser_launch`'s `storage_state` or `browser_set_cookies`' `cookies_file` to resume without re-authenticating.
+- **`browser_set_cookies`** (extended): now accepts a `cookies_file` path in addition to an inline `cookies` array — the file may be a bare JSON array of cookie objects or a Playwright storageState file (an object with a `cookies` key, as produced by `browser_storage_state_save`). If both are given, `cookies_file` takes precedence.
 - **`browser_accessibility_snapshot`**: YAML-style accessibility tree of the page or a selector subtree (via Playwright's `ariaSnapshot`; the older `page.accessibility` API is gone from this Playwright version).
 - **`browser_find_by_role`**: locate elements by ARIA role + optional accessible name (`page.getByRole`), returning bounding box/text/visibility per match.
 - **`browser_handle_next_dialog`**/**`browser_get_dialog_log`**/**`browser_wait_for_dialog`**: arm a one-shot accept/dismiss (with optional `prompt_text`) for the next alert/confirm/prompt/beforeunload dialog — pass `queue: true` to pre-arm a FIFO sequence of N actions instead of just one; read the per-session dialog log (auto-dismissed and logged by default when unarmed); or block until the next dialog fires with `browser_wait_for_dialog` (`timeout_ms`, default 5000, max 30000).
