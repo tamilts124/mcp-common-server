@@ -16,3 +16,6 @@ test/find-missing-remove-event-listener-tests.js
 
 # Environment secrets
 .env
+
+# temp scratch files from sessions
+tmp/

@@ -329,6 +329,10 @@ require("./sections/146-find-long-functions");
   await require("./sections/181-port-dns-tools");
   await require("./sections/182-websocket-sse");
   await require("./sections/183-image-ops");
+  // Section 184a: git_write_ops — async (spawns git via spawnSync, uses isolated temp repos)
+  await require("./sections/184-git-write-ops");
+  // Section 184b: pdf_rich_extract — sync section, exports Promise.resolve()
+  await require("./sections/184-pdf-rich-extract");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);
