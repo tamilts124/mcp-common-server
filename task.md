@@ -6,6 +6,9 @@ Completed task entries older than the ones below are archived in task-history.md
 
 ## Tasks
 
+- [x] Add multipart_upload + http_serve tools — status: tested (90/90, v4.152.0)
+  - notes: multipartUploadOps.js (zero-dep; pure Node http/https + crypto; builds multipart/form-data boundary manually; text fields + files pre-read as Buffer by dispatch layer + inline data/base64 parts; POST/PUT/PATCH; escapeDisposition for CRLF/quote safety; 100 KB response cap; 50 MB per-inline-file cap; 100 field limit; returns status/ok/headers/body/partCount/boundary/requestBodySize). httpServeOps.js (in-process Node http.Server sessions keyed by UUID Map; 7 operations: start/stop/status/requests/add_route/clear_requests/wait; OS-assigned random port; route matching: exact/prefix(*/any; 404 on no match; captures method/path/headers/body up to 1 MB per request / 1000 req per session; wait polls 50ms until path_match+method_match found or timeout; add_route prepends for priority; delay_ms 0–5000ms per route). Both wired in dispatchRead.js + utilSchemas16.js chained into utilSchemas.js. 90/90 tests across 10 sub-sections (A–J).
+
 - [x] Add key_generate + oauth2_token tools — status: tested (100/100, v4.151.0)
   - notes: key_generate (RSA 1024-4096 bits, EC P-256/P-384/P-521/secp256k1, Ed25519/Ed448, symmetric AES-256/HMAC, via crypto.generateKeyPairSync + crypto.randomBytes; PEM output; fingerprint; zero deps). oauth2_token (client_credentials/password/refresh_token grants + token_introspect + jwt_decode; POST to any token endpoint; zero deps reuses httpFetch; scope/audience/extra params; bearer token parse helper).
 
