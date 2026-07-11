@@ -324,6 +324,7 @@ require("./sections/146-find-long-functions");
   require("./sections/176-str-similarity-table-ops");
   require("./sections/177-graphql-jsonl");
   await require("./sections/178-tls-cert-http-multi");
+  await require("./sections/179-key-generate-oauth2");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);

@@ -6,6 +6,9 @@ Completed task entries older than the ones below are archived in task-history.md
 
 ## Tasks
 
+- [x] Add key_generate + oauth2_token tools — status: tested (100/100, v4.151.0)
+  - notes: key_generate (RSA 1024-4096 bits, EC P-256/P-384/P-521/secp256k1, Ed25519/Ed448, symmetric AES-256/HMAC, via crypto.generateKeyPairSync + crypto.randomBytes; PEM output; fingerprint; zero deps). oauth2_token (client_credentials/password/refresh_token grants + token_introspect + jwt_decode; POST to any token endpoint; zero deps reuses httpFetch; scope/audience/extra params; bearer token parse helper).
+
 - [x] Add tls_cert_inspect + http_multi_fetch tools — status: tested (92/92, v4.150.0)
   - notes: tlsCertInspectOps.js (zero-dep Node tls module; ops: inspect/chain; returns subject/issuer/SANs/daysUntilExpiry/isExpired/isSelfSigned/isCA/fingerprint256/protocol/cipher; rejectUnauthorized:false to inspect any cert; expiryWarning EXPIRED/EXPIRES_IN_N_DAYS/null; warn_days configurable). httpMultiFetchOps.js (zero-dep; reuses httpFetch; concurrency pool pMap; up to 100 requests/call; max concurrency 20; per-request url/method/headers/body/timeout; aggregate stats: total/succeeded/failed/errors; fail_fast mode; HTTP 4xx/5xx counted as failed not errors; network failures captured per-result). Both wired in dispatchRead.js + utilSchemas14.js chained into utilSchemas.js. 92/92 tests pass across 10 sub-sections (A-J).
 
