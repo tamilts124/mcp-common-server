@@ -6,6 +6,9 @@ Completed task entries older than the ones below are archived in task-history.md
 
 ## Tasks
 
+- [x] Add tls_cert_inspect + http_multi_fetch tools — status: tested (92/92, v4.150.0)
+  - notes: tlsCertInspectOps.js (zero-dep Node tls module; ops: inspect/chain; returns subject/issuer/SANs/daysUntilExpiry/isExpired/isSelfSigned/isCA/fingerprint256/protocol/cipher; rejectUnauthorized:false to inspect any cert; expiryWarning EXPIRED/EXPIRES_IN_N_DAYS/null; warn_days configurable). httpMultiFetchOps.js (zero-dep; reuses httpFetch; concurrency pool pMap; up to 100 requests/call; max concurrency 20; per-request url/method/headers/body/timeout; aggregate stats: total/succeeded/failed/errors; fail_fast mode; HTTP 4xx/5xx counted as failed not errors; network failures captured per-result). Both wired in dispatchRead.js + utilSchemas14.js chained into utilSchemas.js. 92/92 tests pass across 10 sub-sections (A-J).
+
 - [x] Add graphql_query + jsonl_ops tools — status: tested (88/88, v4.149.0)
   - notes: graphqlQueryOps.js (zero-dep http/https; POST to any GraphQL endpoint; variables/headers/operation_name/timeout; op-type detection; 10 MB response cap; 100 KB query cap). jsonlOps.js (11 ops: parse/count/head/tail/sample/validate/filter/transform/sort/merge/to_json; inline rows OR file path; 50 MB file cap; 100k line/10k output limits; reservoir sampling with seed; 14 filter ops; select/drop/rename transform; null-aware sort; multi-file merge up to 50 files). Both wired in dispatchRead.js + utilSchemas13.js chained into utilSchemas.js. Fixed 2 test assertion bugs (C4 case-sensitive contains, F4 regex match count). 88/88 tests pass across 10 sub-sections (A-J).
 

@@ -323,6 +323,7 @@ require("./sections/146-find-long-functions");
   require("./sections/175-date-calc-text-extract");
   require("./sections/176-str-similarity-table-ops");
   require("./sections/177-graphql-jsonl");
+  await require("./sections/178-tls-cert-http-multi");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);
