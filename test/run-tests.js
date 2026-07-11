@@ -320,6 +320,7 @@ require("./sections/146-find-long-functions");
   require("./sections/172-markdown-html-xml-parse");
   require("./sections/173-string-transform-ip-cidr");
   require("./sections/174-color-convert-number-format");
+  require("./sections/175-date-calc-text-extract");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);

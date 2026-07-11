@@ -109,7 +109,8 @@
     "test:template-render-base62": "node test/sections/171-template-render-base62.js",
     "test:markdown-xml": "node test/sections/172-markdown-html-xml-parse.js",
     "test:string-transform-ip-cidr": "node test/sections/173-string-transform-ip-cidr.js",
-    "test:color-convert-number-format": "node test/sections/174-color-convert-number-format.js"
+    "test:color-convert-number-format": "node test/sections/174-color-convert-number-format.js",
+    "test:date-calc-text-extract": "node test/sections/175-date-calc-text-extract.js"
   },
   "engines": {
     "node": ">=18"
@@ -119,5 +120,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.146.0"
+  "version": "4.147.0"
 }

@@ -6,6 +6,9 @@ Completed task entries older than the ones below are archived in task-history.md
 
 ## Tasks
 
+- [x] Add date_calc + text_extract tools — status: tested (75/75, v4.147.0)
+  - notes: dateCalcOps.js (zero-dep, pure Node Intl + Date; 10 ops: now/parse/format/add/subtract/diff/start_of/end_of/convert_tz/is_valid; Moment-style token formatter YYYY/MM/DD/HH/mm/ss/SSS/A/dddd/MMMM/Z/X/x; IANA tz via Intl.DateTimeFormat; month-boundary clamping on add/subtract; week start=Monday). textExtractOps.js (zero-dep regex; 11 ops: emails/urls/phones/ips/numbers/dates/json/lines/between/pattern/words; balanced-bracket JSON scanner; grep-like lines with context/invert; word-frequency with stop_words; custom regex with capture groups + named groups). Both wired in dispatchRead.js + utilSchemas11.js chained into utilSchemas.js. Fixed E2 test off-by-one (120 adds → Apr 30 not May 1). 75/75 tests pass across 10 sub-sections (A-J).
+
 - [x] Add color_convert + number_format tools — status: tested (67/67, v4.146.0)
   - notes: colorConvertOps.js (hex/rgb/hsl/hsv/cmyk/named, WCAG contrast, blend, palette — all 6 palette types, all input formats). numberFormatOps.js (decimal/currency/percent/bytes IEC+SI/SI-prefix/ordinal/roman/words/compact). Both wired in dispatchRead.js + utilSchemas10.js chained into utilSchemas.js. Fixed previous-session file corruption (dispatchRead.js header + premature handlers, utilSchemas.js duplicate module.exports). 67/67 tests pass across 10 sub-sections (A-J).
 
