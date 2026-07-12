@@ -2,6 +2,26 @@
 todo / in-progress / done / tested / blocked
 
 ## Done
+- [tested] Add thrift_client tool (v4.195.0)
+  - Zero-dep Apache Thrift binary + compact protocol encoder/decoder (pure Node.js; no npm deps)
+  - Operations: encode, decode, encode_file, decode_file, inspect
+  - Binary protocol: fixed-width int16/32/64 (big-endian), big-endian double, 4-byte string length prefix
+  - Compact protocol: zigzag VarInt for i16/i32/i64, delta field IDs, bool embedded in type nibble, little-endian double
+  - Full type system: BOOL(2), BYTE(3), DOUBLE(4), I16(6), I32(8), I64(10), STRING/BINARY(11), STRUCT(12), MAP(13), SET(14), LIST(15), UUID(16)
+  - Schema resolver: string shorthands (bool/byte/i8/i16/i32/i64/double/string/binary/uuid) + object form (struct/list/set/map)
+  - Schema-less inspect: binary protocol wire-level field layout (typeId, fieldId, value) with sub-struct recursion
+  - BigInt support for I64 (encode from number/BigInt/string; decode to number or {__i64:string})
+  - UUID encode/decode: 8-4-4-4-12 hex format <-> 16-byte binary
+  - STRING/BINARY: UTF-8 auto-detection; raw binary returned as {__binary,length}
+  - Security: 50 MB file cap; 64-level nesting depth limit; 1,000,000 element limit; NUL-byte path guard; directory path rejected
+  - lib/thriftClientOps.js (1067 lines); lib/schemas/utilSchemas56.js
+  - Wired into lib/dispatchRead.js + lib/schemas/utilSchemas.js
+  - package.json: version 4.195.0; added test:thrift-client script
+  - README.md: 299 tools total (Read & File System: 50)
+  - section 223 tests: A=validation x10, B=unit x20, C=happy-path x20,
+    D=security x10, E=error-paths x10, F=concurrency x6 -- 76/76
+
+## Done
 - [tested] Add avro_client tool (v4.194.0)
   - Zero-dep Apache Avro binary encoder/decoder (pure Node.js; no npm deps)
   - Operations: encode, decode, encode_file, decode_file, inspect, schema_fingerprint
