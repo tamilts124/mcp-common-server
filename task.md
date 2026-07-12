@@ -2,6 +2,26 @@
 todo / in-progress / done / tested / blocked
 
 ## Done
+- [tested] Add jsonrpc_client tool (v4.193.0)
+  - Zero-dep JSON-RPC 2.0 client (HTTP + TCP + Unix socket transports)
+  - Operations: call, notify, batch, call_tcp, call_unix
+  - HTTP/HTTPS POST transport with Content-Type: application/json
+  - TCP socket transport with newline-delimited JSON framing
+  - Unix domain socket transport (same framing as TCP)
+  - Full JSON-RPC 2.0 spec: single calls, fire-and-forget notifications, batch requests
+  - Batch: aligned responses by id; notification entries marked notify:true
+  - Auto-incrementing id generator; explicit id override supported
+  - Response validation: RPC-level errors surfaced as ToolError with error code
+  - Security: 10 MB response cap; 100-call batch limit; NUL-byte path guard for Unix sockets
+  - Timeouts: default 30s for HTTP, 30s for sockets; configurable
+  - lib/jsonrpcClientOps.js (468 lines); lib/schemas/utilSchemas54.js (140 lines)
+  - Wired into lib/dispatchRead.js + lib/schemas/utilSchemas.js
+  - package.json: version 4.193.0; added test:jsonrpc-client script
+  - README.md: 297 tools total (Read & File System: 48)
+  - section 221 tests: A=validation x10, B=unit x20, C=happy-path x20,
+    D=security x10, E=error-paths x10, F=concurrency x6 -- 76/76
+
+## Done
 - [tested] Add protobuf_client tool (v4.192.0)
   - Zero-dep Protocol Buffers (proto3) binary encoder/decoder (pure Node.js; no npm deps)
   - Operations: encode, decode, encode_file, decode_file, inspect
