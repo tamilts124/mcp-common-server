@@ -2,6 +2,14 @@
 todo / in-progress / done / tested / blocked
 
 ## Current Task
+- [tested] Add http_client tool (v4.183.0)
+  - Stateful HTTP session client: cookie jar, redirect following, auth (Basic/Bearer/Digest), retry with backoff, timeout, proxy, form/multipart/JSON bodies, streaming download, response compression (gzip/br), TLS options
+  - Operations: request, get, post, put, patch, delete, head, options, download, session_new, session_clear
+  - Security: URL validation, SSRF guard (block private IPs optionally), header injection prevention, redirect limit
+  - lib/httpClientOps.js; lib/schemas/utilSchemas44.js; wired into dispatchRead.js + utilSchemas.js
+  - section 211 tests: A=input-validation x10, B=unit x20, C=integration x10, D=happy-path x20, E=security x10, F=concurrency x5 -- 136/136
+
+## Done
 - [tested] Add jsonl_client tool (v4.182.0)
   - Zero-dep JSONL/NDJSON file reader/writer/editor (pure Node.js fs; no npm deps)
   - Operations: read, write, append, get_line, set_line, delete_line, filter, map, aggregate, validate, stringify
