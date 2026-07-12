@@ -136,7 +136,8 @@
     "test:ldap-client": "node test/sections/197-ldap-client.js",
     "test:ftp-client": "node test/sections/198-ftp-client.js",
     "test:snmp-client": "node test/sections/199-snmp-client.js",
-    "test:kafka-client": "node test/sections/200-kafka-client.js"
+    "test:kafka-client": "node test/sections/200-kafka-client.js",
+    "test:memcached-client": "node test/sections/201-memcached-client.js"
   },
   "engines": {
     "node": ">=18"
@@ -146,5 +147,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.172.0"
+  "version": "4.173.0"
 }

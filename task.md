@@ -2,6 +2,15 @@
 todo / in-progress / done / tested / blocked
 
 ## Current Task
+- [tested] Add memcached_client tool (v4.173.0)
+  - Zero-dep Memcached ASCII protocol client (Node.js net; no npm deps)
+  - Operations: get (single/multi-get), set, add, replace, append, prepend, delete, increment, decrement, flush_all (optional delay), stats (optional subcommand), version
+  - Security: key validation (no whitespace/control chars, max 250 bytes); host NUL/CRLF guards; 1 MB value cap; 32 MB response cap; 100-key multi-get limit
+  - Wall-clock timeout (default 30s), connect_timeout (default min(timeout,10s))
+  - lib/memcachedClientOps.js; lib/schemas/utilSchemas34.js; wired into dispatchRead.js + utilSchemas.js
+  - section 201 tests: A=input-validation x10, B=protocol-unit x10, C=security-guards x10, D=happy-path-mock x30, E=error-paths x5, F=concurrency x5 -- 70/70
+
+## Done
 - [tested] Add kafka_client tool (v4.172.0)
   - Zero-dep Apache Kafka client (Node.js net; no npm deps)
   - Kafka binary protocol (KIP-compatible, API versions for Kafka 0.10+)

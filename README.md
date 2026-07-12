@@ -1,6 +1,6 @@
 # MCP Common Server
 
-Zero-dependency Node.js MCP server with **275 tools** across 10 categories.
+Zero-dependency Node.js MCP server with **276 tools** across 10 categories.
 
 | # | Category | Tools |
 |---|---|---|
@@ -10,11 +10,11 @@ Zero-dependency Node.js MCP server with **275 tools** across 10 categories.
 | 4 | Code Analysis & Audit | 51 |
 | 5 | Security Scanning | 44 |
 | 6 | Browser Automation | 36 |
-| 7 | Network & Messaging | 19 |
+| 7 | Network & Messaging | 20 |
 | 8 | Data & Format Utilities | 27 |
 | 9 | Execution & Process | 7 |
 | 10 | Email & Database | 9 |
-| | **Total** | **275** |
+| | **Total** | **276** |
 
 ## Read & File System (31)
 
@@ -40,9 +40,9 @@ Zero-dependency Node.js MCP server with **275 tools** across 10 categories.
 
 `browser_launch`, `browser_navigate`, `browser_get_content`, `browser_get_title`, `browser_evaluate`, `browser_click`, `browser_type`, `browser_screenshot`, `browser_get_console_logs`, `browser_list_sessions`, `browser_close`, `browser_wait_for_navigation`, `browser_hover`, `browser_upload_file`, `browser_drag_and_drop`, `browser_download`, `browser_get_attribute`, `browser_is_checked`, `browser_uncheck`, `browser_get_element_info`, `browser_close_page`, `browser_emulate`, `browser_set_viewport`, `browser_set_extra_headers`, `browser_set_local_storage`, `browser_add_init_script`, `browser_get_page_metrics`, `browser_get_exposed_calls`, `browser_wait_for_response`, `browser_get_storage_state`, `browser_storage_state_save`, `browser_accessibility_snapshot`, `browser_find_by_role`, `browser_wait_for_dialog`, `browser_frame_evaluate`, `browser_replay_actions`
 
-## Network & Messaging (19)
+## Network & Messaging (20)
 
-`http_fetch`, `http_download`, `port_check`, `wait_for_port`, `port_scan_range`, `dns_lookup`, `websocket_client`, `sse_client`, `smtp_client`, `redis_client`, `mqtt_client`, `imap_client`, `snmp_client`, `ftp_client`, `kafka_client`, `amqp_client`, `stomp_client`, `ldap_client`, `nats_client`
+`http_fetch`, `http_download`, `port_check`, `wait_for_port`, `port_scan_range`, `dns_lookup`, `websocket_client`, `sse_client`, `smtp_client`, `redis_client`, `mqtt_client`, `imap_client`, `snmp_client`, `ftp_client`, `kafka_client`, `amqp_client`, `stomp_client`, `ldap_client`, `nats_client`, `memcached_client`
 
 ## Data & Format Utilities (27)
 
