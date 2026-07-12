@@ -1,0 +1,85 @@
+
+A. Input validation
+  ✓ A01 — missing host throws ToolError
+  ✓ A02 — invalid operation throws ToolError
+  ✓ A03 — publish without subject throws
+  ✓ A04 — request without subject throws
+  ✓ A05 — subscribe without subject throws
+  ✓ A06 — max_messages < 1 throws
+  ✓ A07 — max_messages > 1000 throws
+  ✓ A08 — oversized utf8 payload throws
+  ✓ A09 — valid operations listed in error message
+  ✓ A10 — small base64 payload not rejected on size
+
+B. Codec unit tests
+  ✓ B01 — NatsParser parses INFO frame
+  ✓ B02 — NatsParser parses PING and PONG
+  ✓ B03 — NatsParser parses +OK and -ERR
+  ✓ B04 — NatsParser parses MSG without reply-to
+  ✓ B05 — NatsParser parses MSG with reply-to
+  ✓ B06 — NatsParser handles fragmented chunks
+  ✓ B07 — NatsParser handles multiple events in one chunk
+  ✓ B08 — encodeConnect includes user/pass and protocol=1
+  ✓ B09 — encodePub builds correct frame without reply-to
+  ✓ B10 — encodePub with reply-to
+
+C. Security guards
+  ✓ C01 — CR in subject rejected
+  ✓ C02 — LF in subject rejected
+  ✓ C03 — NUL byte in subject rejected
+  ✓ C04 — empty subject rejected
+  ✓ C05 — subject exceeding 4096 chars rejected
+  ✓ C06 — CR in token rejected
+  ✓ C07 — LF in user rejected
+  ✓ C08 — NUL in subscribe_subject rejected
+  ✓ C09 — oversized base64 payload rejected
+  ✓ C10 — CR in queue_group rejected
+
+D. Happy-path mock
+  ✓ D01 — connect: handshake succeeds, returns serverId/version
+  ✓ D02 — ping: returns pong=true and latencyMs
+  ✓ D03 — publish: returns published=true and payloadBytes
+  ✓ D04 — publish base64 payload decoded correctly
+  ✓ D05 — publish with reply_to sets replyTo in result
+  ✓ D06 — subscribe: collects 3 messages from server
+  ✓ D07 — subscribe_subject overrides subject
+  ✓ D08 — queue_group included in SUB frame
+  ✓ D09 — subscribe returns 0 messages when none sent
+  ✓ D10 — subscribe stops at max_messages cap
+  ✓ D11 — request: reply received on inbox
+  ✓ D12 — request: timedOut=true when no reply
+  ✓ D13 — request: custom reply_to used as inbox subject
+  ✓ D14 — connect result has host, port, operation
+  ✓ D15 — elapsedMs is positive number < 5000
+  ✓ D16 — subscribe: message shape correct
+  ✓ D17 — subscribe: message replyTo field set
+  ✓ D18 — subscribe: UNSUB sent with max_messages limit
+  ✓ D19 — publish: empty payload is valid (0 bytes)
+  ✓ D20 — NatsParser: unknown lines silently skipped
+  ✓ D21 — subscribe SIDs are unique across calls
+  ✓ D22 — encodeSub without queue group
+  ✓ D23 — encodeSub with queue group
+  ✓ D24 — NatsParser INFO with empty JSON
+  ✓ D25 — encodeConnect: protocol=1 and lang=node
+  ✓ D26 — connect: maxPayload from server INFO
+  ✓ D27 — ping latency < 500ms on loopback
+  ✓ D28 — subscribe result has subscription and subject
+  ✓ D29 — subscribe result has queueGroup when set
+  ✓ D30 — request timedOut result includes replySubject
+
+E. Error paths
+  ✓ E01 — connection refused throws socket error
+  ✓ E02 — server -ERR during handshake throws
+  ✓ E03 — server closes before INFO throws
+  ✓ E04 — subscribe -ERR from server throws
+  ✓ E05 — global timeout fires when server hangs
+
+F. Concurrency
+  ✓ F01 — 5 concurrent connects succeed
+  ✓ F02 — 5 concurrent pings succeed
+  ✓ F03 — 5 concurrent publishes succeed
+  ✓ F04 — 5 concurrent subscribes timeout cleanly
+  ✓ F05 — 10 concurrent requests timeout cleanly
+
+============================================================
+Section 196 — nats_client: 70/70 tests passed

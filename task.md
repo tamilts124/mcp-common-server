@@ -2,7 +2,18 @@
 todo / in-progress / done / tested / blocked
 
 ## Current Task
-- [ ] (next task — to be defined)
+- [x] (tested) Add nats_client tool (v4.168.0)
+  - Zero-dep NATS protocol client (Node.js net/tls; no npm deps)
+  - Operations: connect (probe INFO+CONNECT), publish (PUB to subject), subscribe (SUB + collect messages), request (request-reply), ping (PING/PONG latency)
+  - Auth: basic user/pass or single token auth_token; credentials never echoed in results
+  - TLS: tls:true (default port 4443); reject_unauthorized configurable
+  - Security: CR/LF/NUL injection guards on all subject names and auth credentials; 8 MB payload cap
+  - NatsParser: streaming, fragmented chunks, multi-line MSG frames, auto-responds to server PING keepalives
+  - All internal timers use .unref() so process exits cleanly after operations complete
+  - lib/natsClientOps.js (595 lines); lib/schemas/utilSchemas29.js; wired into dispatchRead.js + utilSchemas.js
+  - section 196 tests (A=input-validation x10, B=codec x10, C=security x10, D=happy-path x30, E=errors x5, F=concurrency x5) — 70/70
+  - E05 fix: track server-side sockets and destroy them before hangSrv.close() to prevent close() from hanging
+  - package.json: test:nats-client script added, version 4.168.0
 
 ## Done
 - [x] Add stomp_client tool — status: tested (70/70, v4.167.0)

@@ -131,7 +131,8 @@
     "test:redis-client": "node test/sections/192-redis-client.js",
     "test:mqtt-client": "node test/sections/193-mqtt-client.js",
     "test:amqp-client": "node test/sections/194-amqp-client.js",
-    "test:stomp-client": "node test/sections/195-stomp-client.js"
+    "test:stomp-client": "node test/sections/195-stomp-client.js",
+    "test:nats-client": "node test/sections/196-nats-client.js"
   },
   "engines": {
     "node": ">=18"
@@ -141,5 +142,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.167.0"
+  "version": "4.168.0"
 }
