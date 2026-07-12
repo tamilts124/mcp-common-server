@@ -1,10 +1,10 @@
 # MCP Common Server
 
-Zero-dependency Node.js MCP server with **279 tools** across 10 categories.
+Zero-dependency Node.js MCP server with **280 tools** across 10 categories.
 
 | # | Category | Tools |
 |---|---|---|
-| 1 | Read & File System | 32 |
+| 1 | Read & File System | 33 |
 | 2 | Write & Edit | 8 |
 | 3 | Git | 42 |
 | 4 | Code Analysis & Audit | 51 |
@@ -14,11 +14,11 @@ Zero-dependency Node.js MCP server with **279 tools** across 10 categories.
 | 8 | Data & Format Utilities | 27 |
 | 9 | Execution & Process | 7 |
 | 10 | Email & Database | 9 |
-| | **Total** | **278** |
+| | **Total** | **279** |
 
-## Read & File System (32)
+## Read & File System (33)
 
-`read_directory`, `read_file`, `read_files`, `read_allfiles`, `file_info`, `search_files`, `search_lines`, `search_in_document`, `file_checksum`, `checksum_verify`, `hash_string`, `regex_test`, `env_info`, `system_resources`, `which_command`, `compare_directories`, `file_diff_dir`, `count_lines`, `file_tree`, `hash_directory`, `base64_encode`, `text_transform`, `file_stats`, `dir_size_stats`, `disk_usage_summary`, `dir_diff_summary`, `image_ops`, `pdf_rich_extract`, `pdf_to_md`, `docx_to_md`, `docx_to_pdf`, `dotenv_client`, `toml_client`
+`read_directory`, `read_file`, `read_files`, `read_allfiles`, `file_info`, `search_files`, `search_lines`, `search_in_document`, `file_checksum`, `checksum_verify`, `hash_string`, `regex_test`, `env_info`, `system_resources`, `which_command`, `compare_directories`, `file_diff_dir`, `count_lines`, `file_tree`, `hash_directory`, `base64_encode`, `text_transform`, `file_stats`, `dir_size_stats`, `disk_usage_summary`, `dir_diff_summary`, `image_ops`, `pdf_rich_extract`, `pdf_to_md`, `docx_to_md`, `docx_to_pdf`, `dotenv_client`, `toml_client`, `yaml_client`
 
 ## Write & Edit (8)
 
@@ -40,7 +40,7 @@ Zero-dependency Node.js MCP server with **279 tools** across 10 categories.
 
 `browser_launch`, `browser_navigate`, `browser_get_content`, `browser_get_title`, `browser_evaluate`, `browser_click`, `browser_type`, `browser_screenshot`, `browser_get_console_logs`, `browser_list_sessions`, `browser_close`, `browser_wait_for_navigation`, `browser_hover`, `browser_upload_file`, `browser_drag_and_drop`, `browser_download`, `browser_get_attribute`, `browser_is_checked`, `browser_uncheck`, `browser_get_element_info`, `browser_close_page`, `browser_emulate`, `browser_set_viewport`, `browser_set_extra_headers`, `browser_set_local_storage`, `browser_add_init_script`, `browser_get_page_metrics`, `browser_get_exposed_calls`, `browser_wait_for_response`, `browser_get_storage_state`, `browser_storage_state_save`, `browser_accessibility_snapshot`, `browser_find_by_role`, `browser_wait_for_dialog`, `browser_frame_evaluate`, `browser_replay_actions`
 
-## Network & Messaging (20)
+## Network & Messaging (21)
 
 `http_fetch`, `http_download`, `port_check`, `wait_for_port`, `port_scan_range`, `dns_lookup`, `websocket_client`, `sse_client`, `smtp_client`, `redis_client`, `mqtt_client`, `imap_client`, `snmp_client`, `ftp_client`, `kafka_client`, `amqp_client`, `stomp_client`, `ldap_client`, `nats_client`, `memcached_client`, `grpc_client`
 

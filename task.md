@@ -2,6 +2,14 @@
 todo / in-progress / done / tested / blocked
 
 ## Current Task
+- [tested] Add yaml_client tool (v4.177.0)
+  - Zero-dep YAML 1.2 subset parser/writer (pure Node.js fs; no npm deps)
+  - Operations: read, get, set, delete, list_keys, list_sections, merge, stringify
+  - Security: path NUL guard; 4 MB file cap; key nesting depth limit (max 20); 50,000 key limit
+  - lib/yamlClientOps.js; lib/schemas/utilSchemas38.js; wired into dispatchRead.js + utilSchemas.js
+  - section 205 tests: A=input-validation x10, B=parser-unit x20, C=writer-unit x10, D=happy-path x20, E=security x10, F=concurrency x5 -- 80/80
+
+## Done
 - [tested] Add toml_client tool (v4.176.0)
   - Zero-dep TOML v1.0 parser/writer (pure Node.js fs; no npm deps)
   - Operations: read, get, set, delete, list_keys, list_sections, merge, stringify
