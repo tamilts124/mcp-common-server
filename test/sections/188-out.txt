@@ -1,0 +1,76 @@
+
+=== Section 188: safeSerialize ===
+
+--- A: Basic serialization ---
+  PASS  A1: serializes plain object
+  PASS  A2: serializes array
+  PASS  A3: serializes null
+  PASS  A4: serializes string
+  PASS  A5: pretty-prints with indent=2 by default
+  PASS  A6: serializeResult returns object with expected fields
+
+--- B: Circular references ---
+  PASS  B1: circular object replaced with [Circular]
+  PASS  B2: deep circular chain handled
+  PASS  B3: circular in array handled
+  PASS  B4: non-circular objects are NOT replaced
+
+--- C: Size cap / truncation ---
+  PASS  C1: small response not truncated
+  PASS  C2: oversized response is truncated
+  PASS  C3: truncated text is valid parseable JSON up to cut point
+  PASS  C4: MAX_RESPONSE_BYTES is 3.5 MB
+  PASS  C5: result at exactly the limit is NOT truncated
+
+--- D: formatError richness ---
+  PASS  D1: formatError includes tool name
+  PASS  D2: formatError includes error message
+  PASS  D3: formatError includes error code when present
+  PASS  D4: formatError uses -32603 as default code for untagged errors
+  PASS  D5: formatError includes stack trace
+  PASS  D6: formatError handles null error gracefully
+  PASS  D7: formatError handles string thrown as error
+  PASS  D8: formatError includes custom error name (e.g. ToolError)
+  PASS  D9: formatError never returns generic 'Error occurred during tool execution'
+
+--- E: Special values ---
+  PASS  E1: BigInt serialized as string (not throws)
+  PASS  E2: undefined values in object omitted (JSON standard)
+  PASS  E3: NaN serialized as null (JSON standard)
+  PASS  E4: Infinity serialized as null (JSON standard)
+  PASS  E5: deeply nested object serializes without stack overflow
+
+--- F: Pipeline integration ---
+[PIPELINE ERROR] step 0: Error (code -32603) [TypeError] in 'read_file': undefined is not iterable (cannot read property Symbol(Symbol.iterator))
+Stack: TypeError: undefined is not iterable (cannot read property Symbol(Symbol.iterator))
+    at resolveClientPath (D:\ClaudeDir\mcp-common-server\lib\roots.js:67:34)
+    at read_file (D:\ClaudeDir\mcp-common-server\lib\dispatchRead.js:119:26)
+    at executeTool (D:\ClaudeDir\mcp-common-server\lib\executeTool.js:85:10)
+    at executePipeline (D:\ClaudeDir\mcp-common-server\lib\executeTool.js:115:47)
+    at D:\ClaudeDir\mcp-common-server\test\sections\188-safe-serialize.js:255:26
+    at test (D:\ClaudeDir\mcp-common-server\test\sections\188-safe-serialize.js:19:15)
+    at run (D:\ClaudeDir\mcp-common-server\test\sections\188-safe-serialize.js:254:9)
+  PASS  F1: pipeline error step has errorDetail field
+[PIPELINE ERROR] step 0: Error (code -32603) [TypeError] in 'read_file': undefined is not iterable (cannot read property Symbol(Symbol.iterator))
+Stack: TypeError: undefined is not iterable (cannot read property Symbol(Symbol.iterator))
+    at resolveClientPath (D:\ClaudeDir\mcp-common-server\lib\roots.js:67:34)
+    at read_file (D:\ClaudeDir\mcp-common-server\lib\dispatchRead.js:119:26)
+    at executeTool (D:\ClaudeDir\mcp-common-server\lib\executeTool.js:85:10)
+    at executePipeline (D:\ClaudeDir\mcp-common-server\lib\executeTool.js:115:47)
+    at D:\ClaudeDir\mcp-common-server\test\sections\188-safe-serialize.js:268:26
+    at test (D:\ClaudeDir\mcp-common-server\test\sections\188-safe-serialize.js:19:15)
+    at run (D:\ClaudeDir\mcp-common-server\test\sections\188-safe-serialize.js:267:9)
+  PASS  F2: pipeline error detail never says 'Error occurred during tool execution'
+  PASS  F3: pipeline passes for valid small step
+[PIPELINE ERROR] step 1: Error (code -32603) [TypeError] in 'read_file': undefined is not iterable (cannot read property Symbol(Symbol.iterator))
+Stack: TypeError: undefined is not iterable (cannot read property Symbol(Symbol.iterator))
+    at resolveClientPath (D:\ClaudeDir\mcp-common-server\lib\roots.js:67:34)
+    at read_file (D:\ClaudeDir\mcp-common-server\lib\dispatchRead.js:119:26)
+    at executeTool (D:\ClaudeDir\mcp-common-server\lib\executeTool.js:85:10)
+    at executePipeline (D:\ClaudeDir\mcp-common-server\lib\executeTool.js:115:47)
+    at async D:\ClaudeDir\mcp-common-server\test\sections\188-safe-serialize.js:284:20
+    at async run (D:\ClaudeDir\mcp-common-server\test\sections\188-safe-serialize.js:283:3)
+  PASS  F4: pipeline with mix of success and error steps
+
+=== Section 188 complete: 33 passed, 0 failed ===
+EXIT:0  

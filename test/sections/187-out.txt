@@ -1,0 +1,89 @@
+
+=== Section 187: udp_client ===
+
+--- A: Input validation ---
+  PASS  A1: missing host
+  PASS  A2: missing port
+  PASS  A3: port 0 invalid
+  PASS  A4: port 65536 invalid
+  PASS  A5: host empty string
+  PASS  A6: host too long (>253)
+  PASS  A7: messages not array
+  PASS  A8: message missing data field
+  PASS  A9: bad message encoding
+  PASS  A10: payload too large (>64 KB)
+  PASS  A11: invalid recv_encoding
+  PASS  A12: invalid family
+  PASS  A13: negative recv_timeout
+  PASS  A14: delay_ms out of range
+  PASS  A15: too many messages (>20)
+  PASS  A16: wait_replies negative
+  PASS  A17: invalid bind_port
+
+--- B: Result shape ---
+  PASS  B1: result is an object with expected fields
+  PASS  B2: datagram entry has expected fields
+  PASS  B3: host and port reflected in result
+  PASS  B4: family defaults to ipv4
+  PASS  B5: resolvedIp is a string
+  PASS  B6: localPort is a number
+
+--- C: Send + receive ---
+  PASS  C1: single message echoed back
+  PASS  C2: messagesSent increments per message
+  PASS  C3: datagramsReceived counts received
+  PASS  C4: totalReceivedBytes accumulates
+  PASS  C5: elapsedMs is a positive number
+  PASS  C6: no error on successful echo
+  PASS  C7: truncated is false on normal completion
+  PASS  C8: datagrams indexed correctly
+
+--- D: wait_replies pipelining ---
+  PASS  D1: wait_replies=1 receives before next send
+  PASS  D2: wait_replies=0 does not block
+  PASS  D3: multi-reply server with wait_replies
+  PASS  D4: delay_ms pauses between sends
+
+--- E: Encodings ---
+  PASS  E1: base64 send decoded correctly
+  PASS  E2: hex send decoded correctly
+  PASS  E3: recv_encoding=base64 returns base64 data
+  PASS  E4: recv_encoding=hex returns hex data
+  PASS  E5: recv_encoding=utf8 default
+  PASS  E6: binary data via hex encoding roundtrip
+
+--- F: Limits / truncation ---
+  PASS  F1: max_recv_bytes triggers truncation
+  PASS  F2: max_datagrams triggers truncation
+  PASS  F3: recv_timeout ends session quickly
+  PASS  F4: total timeout fires before recv_timeout
+  PASS  F5: max_datagrams=1 returns exactly 1 datagram
+
+--- G: Listen-only mode ---
+  PASS  G1: listen-only completes via recv_timeout
+  PASS  G2: listen-only with unsolicited datagrams
+  PASS  G3: messagesSent=0 with no messages
+
+--- H: Security ---
+  PASS  H1: newline in host rejected
+  PASS  H2: CR in host rejected
+  PASS  H3: null byte in host rejected
+  PASS  H4: host exceeds 253 chars rejected
+  PASS  H5: invalid hex data rejected before send
+  PASS  H6: invalid base64 data rejected before send
+  PASS  H7: max_recv_bytes too-large is capped (not an error)
+  PASS  H8: max_datagrams too-large is capped (not an error)
+
+--- I: Error paths ---
+  PASS  I1: DNS resolution failure returns error field
+  PASS  I2: result always returns object (no uncaught throw)
+  PASS  I3: timeout on unreachable host returns error string
+  PASS  I4: send to closed port returns gracefully
+
+--- J: Concurrency + stress ---
+  PASS  J1: 10 parallel clients to same echo server
+  PASS  J2: 10 sequential requests to same server
+  PASS  J3: 5 parallel to different servers
+  PASS  J4: stress — 20 concurrent listen-only (no messages)
+
+=== Section 187 complete: 66 passed, 0 failed ===

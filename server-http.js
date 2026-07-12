@@ -52,6 +52,7 @@ const { PORT, AUTH_TOKEN, READ_ONLY, ALLOW_EXEC, CMD_TIMEOUT, IGNORE_PATTERNS } 
 const { ROOTS, buildRoots } = require("./lib/roots");
 const { TOOLS, executeTool, getErrorCode } = require("./lib/executeTool");
 const { installCrashGuard } = require("./lib/crashGuard");
+const { serializeResult, formatError } = require("./lib/safeSerialize");
 
 installCrashGuard();
 
@@ -170,18 +171,27 @@ const server = http.createServer((req, res) => {
         Promise.resolve()
           .then(() => executeTool(name, args || {}))
           .then((result) => {
-            console.log(`[TOOL] ${name}`, args?.path || args?.command || args?.id || (args?.files?.length ? `(${args.files.length} files)` : "") || (args?.steps?.length ? `(${args.steps.length} steps)` : "") || "");
+            const label = args?.path || args?.command || args?.id ||
+              (args?.files?.length ? `(${args.files.length} files)` : "") ||
+              (args?.steps?.length ? `(${args.steps.length} steps)` : "") || "";
+            const { text, truncated, originalBytes } = serializeResult(result);
+            if (truncated) {
+              console.error(`[TOOL] ${name} ${label} — response truncated (${originalBytes} bytes > 3.5 MB limit)`);
+            } else {
+              console.log(`[TOOL] ${name}`, label);
+            }
             respond({ jsonrpc: "2.0", id, result: {
-              content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+              content: [{ type: "text", text }],
             }});
           })
           .catch((e) => {
             const code = getErrorCode(e);
-            console.error(`[TOOL ERROR] ${name} (code ${code}): ${e.message}`);
+            const detail = formatError(e, name);
+            console.error(`[TOOL ERROR] ${detail}`);
             respond({ jsonrpc: "2.0", id,
-              error: { code, message: e.message },
+              error: { code, message: e.message, data: { tool: name, stack: e.stack || null } },
               result: {
-                content: [{ type: "text", text: `Error (${code}): ${e.message}` }],
+                content: [{ type: "text", text: detail }],
                 isError: true,
               },
             });

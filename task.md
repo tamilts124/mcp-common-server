@@ -2,6 +2,17 @@
 todo / in-progress / done / tested / blocked
 
 ## Current Task
+(none — all tasks completed)
+
+## History
+
+- [x] Add udp_client + safeSerialize tools — status: tested (66/66 + 33/33, v4.159.0 + v4.160.0)
+  - udp_client: zero-dep Node.js dgram UDP socket client; send datagrams, receive responses
+  - Useful for DNS queries, syslog, SNMP, TFTP, game servers, IoT protocols
+  - udpClientOps.js; utilSchemas21.js; section 187 tests (A=validation, B=result-shape, C=send+recv, D=wait_replies, E=encodings, F=limits, G=listen-only, H=security, I=error-paths, J=concurrency) — 66/66
+  - safeSerialize.js: circular-ref-safe JSON.stringify; 3.5 MB response cap with truncation notice; formatError() with code+stack; used by executeTool.js + stdioProtocol.js + server-http.js
+  - section 188 tests (A=basic, B=circular, C=truncation, D=formatError, E=special-values, F=pipeline-integration) — 33/33
+
 - [x] Add tcp_client tool — status: tested (42/42, v4.158.0)
   - Raw TCP/TLS socket client: connect, send messages, receive responses
   - Useful for Redis, SMTP, custom daemons, protocol testing
@@ -14,10 +25,7 @@ todo / in-progress / done / tested / blocked
   - Schema in execSchemas.js; handler in processOps.js + dispatchWrite.js; section 185 tests
   - start_process now spawns with stdin as pipe (was 'ignore'); uncaughtException handler silences Windows EOF on cleanup
 
-## History
-Completed task entries older than the ones below are archived in task-history.md to keep this file cheap to read each session.
-
-## Tasks
+## Older Tasks
 - [x] Add git_write_ops tool — status: tested (77/77, v4.156.0)
   - operations: add, commit, push, pull, checkout, branch, reset, stash, merge, rebase, cherry_pick, tag
   - uses spawnSync (no shell) for injection safety; requires MCP_ALLOW_EXEC=true

@@ -122,7 +122,9 @@
     "test:git-write-ops": "node test/sections/184-git-write-ops.js",
     "test:pdf-rich-extract": "node test/sections/184-pdf-rich-extract.js",
     "test:send-process-input": "node test/sections/185-send-process-input.js",
-    "test:tcp-client": "node test/sections/186-tcp-client.js"
+    "test:tcp-client": "node test/sections/186-tcp-client.js",
+    "test:udp-client": "node test/sections/187-udp-client.js",
+    "test:safe-serialize": "node test/sections/188-safe-serialize.js"
   },
   "engines": {
     "node": ">=18"
@@ -132,5 +134,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.158.0"
+  "version": "4.160.0"
 }
