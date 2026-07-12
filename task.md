@@ -2,6 +2,26 @@
 todo / in-progress / done / tested / blocked
 
 ## Done
+- [tested] Add protobuf_client tool (v4.192.0)
+  - Zero-dep Protocol Buffers (proto3) binary encoder/decoder (pure Node.js; no npm deps)
+  - Operations: encode, decode, encode_file, decode_file, inspect
+  - Full proto3 wire format: varint (WT0), 64-bit fixed (WT1), length-delimited (WT2), 32-bit fixed (WT5)
+  - All scalar types: int32/64, uint32/64, sint32/64 (zigzag), bool, enum, fixed32/64, sfixed32/64, float, double, string, bytes, message
+  - BigInt support for int64/uint64/sint64/sfixed64 (encoded as { __int64: 'string' })
+  - Schema descriptor: { fieldNumber: { name, type, fields? } } for human-readable names + type-aware decode
+  - Schema-less best-effort decode: varints as signed int64, len-delim as string or bytes
+  - Repeated fields: multiple same-tag occurrences automatically coalesced into arrays
+  - Nested messages: recursive encode/decode with depth tracking
+  - inspect: wire-level field layout with sub-message heuristics (configurable max_depth 1-10)
+  - Security: 50 MB file cap; 64-level nesting depth limit; 1,000,000 field limit; NUL-byte path guard
+  - lib/protobufClientOps.js (805 lines); lib/schemas/utilSchemas53.js
+  - Wired into lib/dispatchRead.js + lib/schemas/utilSchemas.js
+  - package.json: version 4.192.0; added test:protobuf-client script
+  - README.md: 296 tools total (Read & File System: 47)
+  - section 220 tests: A=validation x10, B=unit x20, C=happy-path x20,
+    D=security x10, E=error-paths x10, F=concurrency x6 -- 76/76
+
+## Done
 - [tested] Add cbor_client tool (v4.191.0)
   - Zero-dep CBOR (RFC 8949) encoder/decoder (pure Node.js; no npm deps)
   - Operations: encode, decode, encode_file, decode_file, inspect
