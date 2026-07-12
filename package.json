@@ -127,7 +127,8 @@
     "test:safe-serialize": "node test/sections/188-safe-serialize.js",
     "test:ssh-exec": "node test/sections/189-ssh-exec.js",
     "test:smtp-client": "node test/sections/190-smtp-client.js",
-    "test:imap-client": "node test/sections/191-imap-client.js"
+    "test:imap-client": "node test/sections/191-imap-client.js",
+    "test:redis-client": "node test/sections/192-redis-client.js"
   },
   "engines": {
     "node": ">=18"
@@ -137,5 +138,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.163.0"
+  "version": "4.164.0"
 }

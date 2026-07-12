@@ -2,9 +2,28 @@
 todo / in-progress / done / tested / blocked
 
 ## Current Task
-None.
+- [ ] (none — all tasks complete)
 
 ## History
+
+- [x] Add redis_client tool — status: tested (130/130, v4.164.0)
+  - Zero-dep RESP2 Redis protocol client (Node.js net/tls; no npm deps)
+  - Operations: ping, info, dbsize, select, flushdb, get, set (EX/PX/NX/XX/GET), del, exists,
+    expire, pexpire, ttl, pttl, persist, keys, type, rename, incr, decr, incrby, decrby,
+    incrbyfloat, append_str, getrange, setrange, mget, mset,
+    hget, hset, hmget, hmset, hdel, hgetall, hkeys, hvals, hlen, hexists,
+    lpush, rpush, lpop, rpop, llen, lrange, lindex, lset, ltrim,
+    sadd, smembers, srem, sismember, scard, sinter, sunion, sdiff,
+    zadd, zrange, zrangebyscore, zrank, zscore, zrem, zcard, zincrby, publish, pipeline
+  - TLS: tls:true for TLS/SSL connections; reject_unauthorized configurable
+  - Auth: password (AUTH) or ACL username+password (AUTH user pass); never echoed in results
+  - Security: CRLF/NUL injection guards on key/field/channel/auth params; 8 MB response budget;
+    4 KB key length cap; pipeline capped at 500 commands
+  - RESP2 streaming parser: handles fragmented chunks, consecutive replies, null bulk/array
+  - Connection: wall-clock timeout (default 30s), separate connect_timeout (default min(timeout,10s))
+  - lib/redisClientOps.js (1342 lines); lib/schemas/utilSchemas25.js; wired into dispatchRead.js + utilSchemas.js
+  - section 192 tests (A=RESP2-parser x10, B=input-validation x15, C=security x15,
+    D=happy-path-mock x75, E=error-paths x10, F=concurrency x5) — 130/130
 
 - [x] Add imap_client tool — status: tested (230/230, v4.163.0)
   - Zero-dep IMAP4rev1 protocol client (Node.js net/tls modules; zero npm deps)
