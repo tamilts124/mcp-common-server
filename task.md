@@ -6,6 +6,17 @@ todo / in-progress / done / tested / blocked
 
 ## History
 
+- [x] Add smtp_client tool — status: tested (76/76, v4.162.0)
+  - operations: probe (banner+EHLO), send (full delivery), verify (VRFY/EXPN), noop (connectivity check)
+  - TLS: secure=true (SMTPS/465), starttls=true (STARTTLS upgrade, default), starttls=false (plaintext)
+  - Auth: PLAIN (\\0user\\0pass base64) and LOGIN (two-round challenge/response). Credentials redacted from transcript.
+  - RFC 5321/2822 email builder: Date/From/To/Cc/Bcc/Subject headers, quoted-printable encoding, dot-stuffing, multipart/alternative (text+HTML)
+  - Security guards: CRLF/NUL/control-char validation on host, addresses, helo_name, subject, extra_headers; 512 KB response budget
+  - SmtpSession readResponse fix: properly resolves when response data arrived before readResponse() was called (pre-buffered in _pendingLines)
+  - Test mock fix: AUTH LOGIN base64 detection now gated on _loginRound state to prevent false matches on NOOP/DATA/other SMTP commands
+  - smtpClientOps.js; utilSchemas23.js; wired in dispatchRead.js + utilSchemas.js
+  - section 190 tests: A=validation-unit, B=input-validation, C=security-injection, D=happy-path-mock, E=error-paths, F=concurrency — 76/76
+
 - [x] Add ssh_exec tool — status: tested (60/60, v4.161.0)
   - operations: exec (run remote command), copy_to (SCP local→remote), copy_from (SCP remote→local)
   - uses spawnSync args-array (no shell) wrapping system ssh/scp binary; injection-safe
