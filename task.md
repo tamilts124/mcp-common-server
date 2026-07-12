@@ -1,8 +1,6 @@
 ## Status legend
 todo / in-progress / done / tested / blocked
 
-## In Progress
-- [in-progress] Add json_client tool (v4.187.0)
 ## Done
 - [tested] Add json_client tool (v4.187.0)
   - Fine-grained JSON file editor (pure Node.js; zero npm deps)
