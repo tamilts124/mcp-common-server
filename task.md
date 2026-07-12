@@ -6,6 +6,16 @@ todo / in-progress / done / tested / blocked
 
 ## History
 
+- [x] Add ssh_exec tool — status: tested (60/60, v4.161.0)
+  - operations: exec (run remote command), copy_to (SCP local→remote), copy_from (SCP remote→local)
+  - uses spawnSync args-array (no shell) wrapping system ssh/scp binary; injection-safe
+  - auth: key_path (disk), key_data (inline PEM → secure temp file mode 0600, deleted in finally),
+    or SSH agent (SSH_AUTH_SOCK). BatchMode=yes prevents any interactive hang.
+  - StrictHostKeyChecking: accept-new (default) / yes / no; ConnectTimeout derived from timeout
+  - sshExecOps.js; utilSchemas22.js; wired in dispatchRead.js + utilSchemas.js
+  - section 189 tests: A=arg-builder unit, B=validation, C=security-guards, D=key_data-lifecycle,
+    E=error-paths, F=live-SSH (skipped if no key), G=concurrency — 60/60
+
 - [x] Add udp_client + safeSerialize tools — status: tested (66/66 + 33/33, v4.159.0 + v4.160.0)
   - udp_client: zero-dep Node.js dgram UDP socket client; send datagrams, receive responses
   - Useful for DNS queries, syslog, SNMP, TFTP, game servers, IoT protocols
