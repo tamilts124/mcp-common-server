@@ -2,6 +2,14 @@
 todo / in-progress / done / tested / blocked
 
 ## Done
+- [tested] Add zip_client tool (v4.185.0)
+  - Fine-grained ZIP file manipulation (pure Node.js; zero npm deps)
+  - Operations: list, read, extract, add, delete, create, info
+  - 200 MB ZIP read cap; 10 MB per-entry read cap; Zip Slip prevention; NUL/traversal guards
+  - lib/zipClientOps.js; lib/schemas/utilSchemas46.js; wired into dispatchRead.js + utilSchemas.js
+  - section 213 tests: A=input-validation x10, B=unit x20, C=happy-path x20, D=security x10, E=error-paths x10, F=concurrency x5 -- 84/84
+
+## Done
 - [tested] Add graphql_client tool (v4.184.0)
   - GraphQL query/mutation/subscription client (pure Node.js; zero npm deps)
   - Operations: query, mutate, introspect, introspect_type, batch, subscribe_poll

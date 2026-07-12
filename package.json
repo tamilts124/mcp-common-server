@@ -146,7 +146,8 @@
     "test:xml-client": "node test/sections/207-xml-client.js",
     "test:markdown-client": "node test/sections/208-markdown-client.js",
     "test:csv-client": "node test/sections/209-csv-client.js",
-    "test:graphql-client": "node test/sections/212-graphql-client.js"
+    "test:graphql-client": "node test/sections/212-graphql-client.js",
+    "test:zip-client": "node test/sections/213-zip-client.js"
   },
   "engines": {
     "node": ">=18"
@@ -156,5 +157,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.184.0"
+  "version": "4.185.0"
 }
