@@ -1,10 +1,10 @@
 # MCP Common Server
 
-Zero-dependency Node.js MCP server with **283 tools** across 10 categories.
+Zero-dependency Node.js MCP server with **284 tools** across 10 categories.
 
 | # | Category | Tools |
 |---|---|---|
-| 1 | Read & File System | 37 |
+| 1 | Read & File System | 38 |
 | 2 | Write & Edit | 8 |
 | 3 | Git | 42 |
 | 4 | Code Analysis & Audit | 51 |
@@ -14,11 +14,11 @@ Zero-dependency Node.js MCP server with **283 tools** across 10 categories.
 | 8 | Data & Format Utilities | 27 |
 | 9 | Execution & Process | 7 |
 | 10 | Email & Database | 9 |
-| | **Total** | **283** |
+| | **Total** | **284** |
 
-## Read & File System (37)
+## Read & File System (38)
 
-`read_directory`, `read_file`, `read_files`, `read_allfiles`, `file_info`, `search_files`, `search_lines`, `search_in_document`, `file_checksum`, `checksum_verify`, `hash_string`, `regex_test`, `env_info`, `system_resources`, `which_command`, `compare_directories`, `file_diff_dir`, `count_lines`, `file_tree`, `hash_directory`, `base64_encode`, `text_transform`, `file_stats`, `dir_size_stats`, `disk_usage_summary`, `dir_diff_summary`, `image_ops`, `pdf_rich_extract`, `pdf_to_md`, `docx_to_md`, `docx_to_pdf`, `dotenv_client`, `toml_client`, `yaml_client`, `ini_client`, `xml_client`, `markdown_client`, `csv_client`
+`read_directory`, `read_file`, `read_files`, `read_allfiles`, `file_info`, `search_files`, `search_lines`, `search_in_document`, `file_checksum`, `checksum_verify`, `hash_string`, `regex_test`, `env_info`, `system_resources`, `which_command`, `compare_directories`, `file_diff_dir`, `count_lines`, `file_tree`, `hash_directory`, `base64_encode`, `text_transform`, `file_stats`, `dir_size_stats`, `disk_usage_summary`, `dir_diff_summary`, `image_ops`, `pdf_rich_extract`, `pdf_to_md`, `docx_to_md`, `docx_to_pdf`, `dotenv_client`, `toml_client`, `yaml_client`, `ini_client`, `xml_client`, `markdown_client`, `csv_client`, `jsonl_client`
 
 ## Write & Edit (8)
 

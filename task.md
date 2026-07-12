@@ -2,6 +2,15 @@
 todo / in-progress / done / tested / blocked
 
 ## Current Task
+- [tested] Add jsonl_client tool (v4.182.0)
+  - Zero-dep JSONL/NDJSON file reader/writer/editor (pure Node.js fs; no npm deps)
+  - Operations: read, write, append, get_line, set_line, delete_line, filter, map, aggregate, validate, stringify
+  - Supports: JSONL/NDJSON (one JSON value per line), offset/limit pagination, field projection, jq-like filter expressions
+  - Security: path NUL guard; 4 MB file cap; 1,000,000 line limit
+  - lib/jsonlClientOps.js; lib/schemas/utilSchemas43.js; wired into dispatchRead.js + utilSchemas.js
+  - section 210 tests: A=input-validation x10, B=parser-unit x20, C=writer-unit x10, D=happy-path x20, E=security x10, F=concurrency x5 -- 75 total
+
+## Done
 - [tested] Add csv_client tool (v4.181.0)
   - Zero-dep CSV file reader/writer/editor (pure Node.js fs; no npm deps)
   - Operations: read, write, get_row, set_row, delete_row, append_rows, filter, sort, update_column, add_column, delete_column, stringify
