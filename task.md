@@ -2,6 +2,18 @@
 todo / in-progress / done / tested / blocked
 
 ## Current Task
+(none)
+
+## Done
+- [tested] Add markdown_client tool (v4.180.0)
+  - Zero-dep Markdown parser/renderer/editor (pure Node.js fs; no npm deps)
+  - Operations: read, get_section, set_section, extract_links, extract_headings, extract_code_blocks, convert_to_html, stringify
+  - Supports: ATX headings (#/##/###), setext headings, fenced code blocks, inline code, bold/italic/strikethrough, links, images, blockquotes, ordered/unordered lists, horizontal rules, tables (GFM), HTML passthrough with safe-tag whitelist
+  - Security: path NUL guard; 4 MB file cap; 50,000-node limit; dangerous HTML tags (script/style/iframe) escaped
+  - lib/markdownClientOps.js; lib/schemas/utilSchemas41.js; wired into dispatchRead.js + utilSchemas.js
+  - section 208 tests: A=input-validation x10, B=parser-unit x20, C=html-render x10, D=happy-path x20, E=security x10, F=concurrency x5 -- 75/75
+
+## Done
 - [tested] Add xml_client tool (v4.179.0)
   - Zero-dep XML file reader/writer/query/transform (pure Node.js; no npm deps)
   - Operations: read, get, set, delete, list, query (XPath-like), stringify, transform
