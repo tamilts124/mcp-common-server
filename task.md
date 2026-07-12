@@ -2,6 +2,15 @@
 todo / in-progress / done / tested / blocked
 
 ## Done
+- [tested] Add excel_client tool (v4.188.0)
+  - Zero-dep XLSX reader/writer/editor (pure Node.js; no npm deps)
+  - Operations: read, get_cell, set_cell, get_range, set_range, add_sheet, delete_sheet, list_sheets, append_rows, delete_rows, stringify
+  - Supports Office Open XML (.xlsx) only — not legacy .xls BIFF format
+  - ZIP reader/writer (DEFLATE + STORED), CRC-32, minimal XML parser, shared strings, date-format detection
+  - Security: 50 MB file cap; 1,000,000 row limit; 16,384 col limit; NUL-byte path guard; row >= 1 guard
+  - lib/excelClientOps.js (1001 lines); lib/schemas/utilSchemas49.js; wired into dispatchRead.js + utilSchemas.js
+  - section 216 tests: A=validation x10, B=unit x20, C=happy-path x20, D=security x10, E=error-paths x10, F=concurrency x5 -- 97/97
+
 - [tested] Add json_client tool (v4.187.0)
   - Fine-grained JSON file editor (pure Node.js; zero npm deps)
   - Operations: read, get, set, delete, keys, merge, patch, stringify
