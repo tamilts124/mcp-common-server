@@ -2,6 +2,14 @@
 todo / in-progress / done / tested / blocked
 
 ## Current Task
+- [tested] Add dotenv_client tool (v4.175.0)
+  - Zero-dep .env file parser/writer (pure Node.js fs; no npm deps)
+  - Operations: read, write, delete, merge, validate, to_shell, list
+  - Security: path validation; key name guards (no NUL/CRLF/spaces); value size cap
+  - lib/dotenvClientOps.js; lib/schemas/utilSchemas36.js; wired into dispatchRead.js + utilSchemas.js
+  - section 203 tests: A=input-validation, B=parser-unit, C=writer-unit, D=happy-path, E=security, F=concurrency
+
+## Done
 - [tested] Add grpc_client tool (v4.174.0)
   - Zero-dep gRPC client using Node.js built-in `http2` (no npm deps)
   - Operations: unary (single request/response), server_stream (collect streaming responses), health_check (gRPC Health Protocol v1), list_services (gRPC Server Reflection)
