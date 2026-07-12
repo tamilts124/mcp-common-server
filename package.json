@@ -144,7 +144,8 @@
     "test:yaml-client": "node test/sections/205-yaml-client.js",
     "test:ini-client": "node test/sections/206-ini-client.js",
     "test:xml-client": "node test/sections/207-xml-client.js",
-    "test:markdown-client": "node test/sections/208-markdown-client.js"
+    "test:markdown-client": "node test/sections/208-markdown-client.js",
+    "test:csv-client": "node test/sections/209-csv-client.js"
   },
   "engines": {
     "node": ">=18"
@@ -154,5 +155,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.180.0"
+  "version": "4.181.0"
 }

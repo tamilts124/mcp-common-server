@@ -2,7 +2,13 @@
 todo / in-progress / done / tested / blocked
 
 ## Current Task
-(none)
+- [tested] Add csv_client tool (v4.181.0)
+  - Zero-dep CSV file reader/writer/editor (pure Node.js fs; no npm deps)
+  - Operations: read, write, get_row, set_row, delete_row, append_rows, filter, sort, update_column, add_column, delete_column, stringify
+  - Supports: RFC 4180 CSV, custom delimiters (comma/tab/semicolon/pipe), optional headers, quoted fields, embedded newlines in quoted fields, CRLF/LF normalisation
+  - Security: path NUL guard; 4 MB file cap; 500,000 row limit; 1,000 column limit
+  - lib/csvClientOps.js; lib/schemas/utilSchemas42.js; wired into dispatchRead.js + utilSchemas.js
+  - section 209 tests: A=input-validation x10, B=parser-unit x20, C=writer-unit x10, D=happy-path x20, E=security x10, F=concurrency x5 -- 75 total
 
 ## Done
 - [tested] Add markdown_client tool (v4.180.0)
