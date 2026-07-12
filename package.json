@@ -151,7 +151,8 @@
     "test:tar-client": "node test/sections/214-tar-client.js",
     "test:json-client": "node test/sections/215-json-client.js",
     "test:excel-client": "node test/sections/216-excel-client.js",
-    "test:pdf-client": "node test/sections/217-pdf-client.js"
+    "test:pdf-client": "node test/sections/217-pdf-client.js",
+    "test:msgpack-client": "node test/sections/218-msgpack-client.js"
   },
   "engines": {
     "node": ">=18"
@@ -161,5 +162,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.189.0"
+  "version": "4.190.0"
 }

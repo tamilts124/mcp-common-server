@@ -2,6 +2,16 @@
 todo / in-progress / done / tested / blocked
 
 ## Done
+- [tested] Add msgpack_client tool (v4.190.0)
+  - Zero-dep MessagePack encoder/decoder (pure Node.js; no npm deps)
+  - Operations: encode, decode, encode_file, decode_file, inspect
+  - Implements full MessagePack spec: nil, bool, int, float, str, bin, array, map, ext types
+  - MsgpackReader class; encode/decodeBuffer/inspectBuffer exported for tests
+  - Security: 50 MB file cap; 100-level depth limit; 1,000,000 element limit; NUL-byte path guard
+  - lib/msgpackClientOps.js (674 lines); lib/schemas/utilSchemas51.js; wired into dispatchRead.js + utilSchemas.js
+  - section 218 tests: A=validation x10, B=unit x20, C=happy-path x20, D=security x10, E=error-paths x10, F=concurrency x5 -- 94/94
+
+## Done
 - [tested] Add pdf_client tool (v4.189.0)
   - Zero-dep PDF reader/writer/manipulator (pure Node.js; no npm deps)
   - Operations: info, get_text, merge, split, rotate, remove_pages, add_watermark, encrypt, decrypt
@@ -20,20 +30,7 @@ todo / in-progress / done / tested / blocked
   - section 216 tests: A=validation x10, B=unit x20, C=happy-path x20, D=security x10, E=error-paths x10, F=concurrency x5 -- 97/97
 
 - [tested] Add json_client tool (v4.187.0)
-  - Fine-grained JSON file editor (pure Node.js; zero npm deps)
-  - Operations: read, get, set, delete, keys, merge, patch, stringify
-  - Completes the file-format client family: dotenv/toml/yaml/ini/xml/markdown/csv/jsonl/zip/tar → json
-  - lib/jsonClientOps.js (478 lines); lib/schemas/utilSchemas48.js; wired into dispatchRead.js + utilSchemas.js
-  - section 215 tests: A=validation x10, B=unit x20, C=happy-path x20, D=security x10, E=error-paths x10, F=concurrency x5 -- 75/75
 - [tested] Add tar_client tool (v4.186.0)
-  - Fine-grained TAR file manipulation (pure Node.js; zero npm deps)
-  - Operations: list, read, extract, add, delete, create, info
-  - Supports .tar, .tar.gz/.tgz (gzip), .tar.bz2 (bzip2 detection), .tar.xz (xz detection)
-  - Builds on tarOps.js (parseTar, assertSafeEntryName, splitName, buildHeader)
-  - lib/tarClientOps.js (644 lines); lib/schemas/utilSchemas47.js; wired into dispatchRead.js + utilSchemas.js
-  - section 214 tests: A=validation x10, B=unit x20, C=happy-path x20, D=security x10, E=error-paths x10, F=concurrency x5 -- 95/95
-
-## Done
 - [tested] Add zip_client tool (v4.185.0)
 - [tested] Add graphql_client tool (v4.184.0)
 - [tested] Add http_client tool v4.183.0 (136/136 tests)
