@@ -1,7 +1,15 @@
 ## Status legend
 todo / in-progress / done / tested / blocked
 
+## In Progress
+- [in-progress] Add json_client tool (v4.187.0)
 ## Done
+- [tested] Add json_client tool (v4.187.0)
+  - Fine-grained JSON file editor (pure Node.js; zero npm deps)
+  - Operations: read, get, set, delete, keys, merge, patch, stringify
+  - Completes the file-format client family: dotenv/toml/yaml/ini/xml/markdown/csv/jsonl/zip/tar → json
+  - lib/jsonClientOps.js (478 lines); lib/schemas/utilSchemas48.js; wired into dispatchRead.js + utilSchemas.js
+  - section 215 tests: A=validation x10, B=unit x20, C=happy-path x20, D=security x10, E=error-paths x10, F=concurrency x5 -- 75/75
 - [tested] Add tar_client tool (v4.186.0)
   - Fine-grained TAR file manipulation (pure Node.js; zero npm deps)
   - Operations: list, read, extract, add, delete, create, info
