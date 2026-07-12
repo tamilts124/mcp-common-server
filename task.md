@@ -2,6 +2,26 @@
 todo / in-progress / done / tested / blocked
 
 ## Current Task
+(none)
+
+## Done
+- [x] Add amqp_client tool — status: tested (70/70, v4.166.0)
+  - Zero-dep AMQP 0-9-1 client (Node.js net/tls; no npm deps) — RabbitMQ, Azure Service Bus, CloudAMQP
+  - Operations: connect (TCP/TLS + AMQP handshake probe), publish (basic.publish),
+    get (basic.get single message), consume (subscribe + collect with QoS prefetch),
+    purge (queue.purge), declare_queue (durable/exclusive/auto_delete/passive + queue_args),
+    delete_queue, ack (basic.ack), nack (basic.nack)
+  - Auth: PLAIN SASL (username/password); credentials never echoed in results
+  - TLS: tls:true for AMQPS (default port 5671); reject_unauthorized configurable
+  - vhost, exchange, routing_key, queue, persistent delivery mode, mandatory flag
+  - Security: NUL-byte injection guards on all string fields; 10 MB message body cap
+  - Bug fixed: stale nextFrame() waiter from consume loop consumed BASIC_CANCEL_OK
+    before waitForMethod could see it — added drainWaiters() called before BASIC_CANCEL
+    send and in closeAmqpConnection(). Also fixed waitForMethod to handle null frame.
+  - lib/amqpClientOps.js (1150+ lines); lib/schemas/utilSchemas27.js; wired into dispatchRead.js + utilSchemas.js
+  - section 194 tests (A=input-validation x10, B=codec-stubs x10, C=security-guards x10,
+    D=happy-path-mock x30, E=error-paths x5, F=concurrency x5) — 70/70
+  - package.json: test:amqp-client script added
 - [x] Add mqtt_client tool — status: tested (70/70, v4.165.0)
   - Zero-dep MQTT v3.1.1 client (Node.js net/tls; no npm deps)
   - Operations: connect (probe CONNACK), ping (PINGREQ→PINGRESP latency), publish (QoS 0/1),
