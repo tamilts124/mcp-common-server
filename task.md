@@ -2,9 +2,22 @@
 todo / in-progress / done / tested / blocked
 
 ## Current Task
-(none)
+- [ ] (next task — to be defined)
 
 ## Done
+- [x] Add stomp_client tool — status: tested (70/70, v4.167.0)
+  - Zero-dep STOMP 1.2 client (Node.js net/tls; no npm deps) — ActiveMQ, RabbitMQ, Apollo, Artemis
+  - Operations: connect (probe CONNECTED frame), send (SEND to destination),
+    subscribe (SUBSCRIBE + collect messages for timeout), request (request-reply pattern),
+    disconnect (graceful DISCONNECT + RECEIPT)
+  - Auth: PLAIN (login/passcode in CONNECT frame); credentials never echoed in results
+  - TLS: tls:true for STOMP+TLS (default port 61614); reject_unauthorized configurable
+  - Security: NUL/CRLF injection guards on all header fields; 10 MB body cap
+  - heart-beat negotiation support; client-ack mode with explicit ACK per message
+  - StompParser: streaming, fragmented chunks, heartbeat skip, content-length body trim, first-header-wins
+  - lib/stompClientOps.js (700 lines); lib/schemas/utilSchemas28.js; wired into dispatchRead.js + utilSchemas.js
+  - section 195 tests (A=validation x10, B=codec x10, C=security x10, D=happy-path x30, E=errors x5, F=concurrency x5) — 70/70
+  - package.json: test:stomp-client script added
 - [x] Add amqp_client tool — status: tested (70/70, v4.166.0)
   - Zero-dep AMQP 0-9-1 client (Node.js net/tls; no npm deps) — RabbitMQ, Azure Service Bus, CloudAMQP
   - Operations: connect (TCP/TLS + AMQP handshake probe), publish (basic.publish),
