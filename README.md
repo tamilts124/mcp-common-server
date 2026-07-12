@@ -1,6 +1,6 @@
 # MCP Common Server
 
-Zero-dependency Node.js MCP server with **276 tools** across 10 categories.
+Zero-dependency Node.js MCP server with **277 tools** across 10 categories.
 
 | # | Category | Tools |
 |---|---|---|
@@ -10,11 +10,11 @@ Zero-dependency Node.js MCP server with **276 tools** across 10 categories.
 | 4 | Code Analysis & Audit | 51 |
 | 5 | Security Scanning | 44 |
 | 6 | Browser Automation | 36 |
-| 7 | Network & Messaging | 20 |
+| 7 | Network & Messaging | 21 |
 | 8 | Data & Format Utilities | 27 |
 | 9 | Execution & Process | 7 |
 | 10 | Email & Database | 9 |
-| | **Total** | **276** |
+| | **Total** | **277** |
 
 ## Read & File System (31)
 
@@ -42,7 +42,7 @@ Zero-dependency Node.js MCP server with **276 tools** across 10 categories.
 
 ## Network & Messaging (20)
 
-`http_fetch`, `http_download`, `port_check`, `wait_for_port`, `port_scan_range`, `dns_lookup`, `websocket_client`, `sse_client`, `smtp_client`, `redis_client`, `mqtt_client`, `imap_client`, `snmp_client`, `ftp_client`, `kafka_client`, `amqp_client`, `stomp_client`, `ldap_client`, `nats_client`, `memcached_client`
+`http_fetch`, `http_download`, `port_check`, `wait_for_port`, `port_scan_range`, `dns_lookup`, `websocket_client`, `sse_client`, `smtp_client`, `redis_client`, `mqtt_client`, `imap_client`, `snmp_client`, `ftp_client`, `kafka_client`, `amqp_client`, `stomp_client`, `ldap_client`, `nats_client`, `memcached_client`, `grpc_client`
 
 ## Data & Format Utilities (27)
 
