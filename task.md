@@ -1,13 +1,32 @@
 ## Status legend
 todo / in-progress / done / tested / blocked
 
-## Current Task
-- [tested] Add http_client tool (v4.183.0)
-  - Stateful HTTP session client: cookie jar, redirect following, auth (Basic/Bearer/Digest), retry with backoff, timeout, proxy, form/multipart/JSON bodies, streaming download, response compression (gzip/br), TLS options
-  - Operations: request, get, post, put, patch, delete, head, options, download, session_new, session_clear
-  - Security: URL validation, SSRF guard (block private IPs optionally), header injection prevention, redirect limit
-  - lib/httpClientOps.js; lib/schemas/utilSchemas44.js; wired into dispatchRead.js + utilSchemas.js
-  - section 211 tests: A=input-validation x10, B=unit x20, C=integration x10, D=happy-path x20, E=security x10, F=concurrency x5 -- 136/136
+## Done
+- [tested] Add graphql_client tool (v4.184.0)
+  - GraphQL query/mutation/subscription client (pure Node.js; zero npm deps)
+  - Operations: query, mutate, introspect, introspect_type, batch, subscribe_poll
+  - Features: variables, operation name, custom headers, HTTP/HTTPS, auth (Basic/Bearer/api_key), response parsing, error extraction, schema introspection helpers, batch requests
+  - Security: URL validation, SSRF guard, header injection prevention, response size cap, retry with backoff
+  - lib/graphqlClientOps.js; lib/schemas/utilSchemas45.js; wired into dispatchRead.js + utilSchemas.js
+  - section 212 tests: A=input-validation x10, B=unit x20, C=integration x10, D=happy-path x20, E=security x10, F=concurrency x5 -- 90/90 (75 core + 15 sub-assertions)
+
+## Done
+- [tested] Add http_client tool v4.183.0 (136/136 tests)
+  - Stateful HTTP/HTTPS session client (pure Node.js; zero npm deps)
+  - Cookie jar per session (RFC 6265 subset)
+  - Auto redirect following (max_redirects, follow_redirects)
+  - Auth: Basic, Bearer, Digest (MD5 challenge-response)
+  - Retry with exponential backoff
+  - Body types: JSON, form-urlencoded, multipart/form-data, raw
+  - Response decompression: gzip, deflate, brotli
+  - Proxy: HTTP CONNECT tunnel for HTTPS targets
+  - TLS: reject_unauthorized, ca, cert, key
+  - Download to file (streaming)
+  - SSRF guard (private/loopback IP block, optional)
+  - Header injection prevention (NUL/CRLF)
+  - Response body size cap (default 10 MB, hard 200 MB)
+  - Session operations: session_new, session_clear
+  - 136 tests: A=validation, B=unit, C=integration, D=happy-path, E=security, F=concurrency
 
 ## Done
 - [tested] Add jsonl_client tool (v4.182.0)
