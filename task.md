@@ -2,9 +2,19 @@
 todo / in-progress / done / tested / blocked
 
 ## Current Task
-(none — all tasks completed)
+None.
 
 ## History
+
+- [x] Add imap_client tool — status: tested (230/230, v4.163.0)
+  - Zero-dep IMAP4rev1 protocol client (Node.js net/tls modules; zero npm deps)
+  - Operations: list (LIST), select (SELECT/EXAMINE), status (STATUS), search (SEARCH), fetch (FETCH), append (APPEND), store (STORE), copy (COPY), expunge (EXPUNGE)
+  - Auth: LOGIN (default) and AUTHENTICATE PLAIN (base64)
+  - TLS: implicit TLS (secure:true/port 993), STARTTLS upgrade (default when plaintext), or plaintext
+  - Security guards: CRLF/NUL injection on host/mailbox/criteria/auth/reference/dest_mailbox; IMAP literal syntax ({}) forbidden in user inputs; sequence_set whitelist (/^[\d:,*]+$/); 8 MB response budget cap; credentials never echoed in results or transcript
+  - Bug fixed: guardOptString called with empty string '' for default reference='' caused spurious validation failure
+  - lib/imapClientOps.js (799 lines); lib/schemas/utilSchemas24.js; wired into dispatchRead.js + utilSchemas.js
+  - section 191 tests (A=validation x15, B=parsing-unit x10, C=security x15, D=happy-path-mock x25, E=error-paths x10, F=concurrency x5) — 230/230
 
 - [x] Add smtp_client tool — status: tested (76/76, v4.162.0)
   - operations: probe (banner+EHLO), send (full delivery), verify (VRFY/EXPN), noop (connectivity check)
