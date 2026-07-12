@@ -2,6 +2,25 @@
 todo / in-progress / done / tested / blocked
 
 ## Done
+- [tested] Add cbor_client tool (v4.191.0)
+  - Zero-dep CBOR (RFC 8949) encoder/decoder (pure Node.js; no npm deps)
+  - Operations: encode, decode, encode_file, decode_file, inspect
+  - Implements full RFC 8949 CBOR spec: MT0 uint, MT1 negint, MT2 bytes, MT3 text,
+    MT4 array, MT5 map, MT6 tags (bignum tags 2/3), MT7 float16/32/64 + simples
+  - Indefinite-length encoding for bytes, text, arrays, and maps (break code 0xff)
+  - BigInt support for uint64/int64 and bignum tags 2/3
+  - CborReader class with depth tracking, element counting, and offset reporting
+  - toJsonSafe: Buffer→{__bytes,length}; BigInt→{__bigint}; tag→{__tag,value}
+  - Security: 50 MB file cap; 100-level nesting depth limit; 1,000,000 element limit;
+    NUL-byte path guard; directory path rejected; empty hex/base64 caught
+  - lib/cborClientOps.js (852 lines); lib/schemas/utilSchemas52.js
+  - Wired into lib/dispatchRead.js + lib/schemas/utilSchemas.js
+  - package.json: version 4.191.0; added test:cbor-client script
+  - README.md: 295 tools total (Read & File System: 46)
+  - section 219 tests: A=validation x10, B=unit x20, C=happy-path x20,
+    D=security x10, E=error-paths x10, F=concurrency x5 -- 96/96
+
+## Done
 - [tested] Add msgpack_client tool (v4.190.0)
   - Zero-dep MessagePack encoder/decoder (pure Node.js; no npm deps)
   - Operations: encode, decode, encode_file, decode_file, inspect
