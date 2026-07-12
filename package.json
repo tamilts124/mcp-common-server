@@ -155,7 +155,8 @@
     "test:msgpack-client": "node test/sections/218-msgpack-client.js",
     "test:cbor-client": "node test/sections/219-cbor-client.js",
     "test:protobuf-client": "node test/sections/220-protobuf-client.js",
-    "test:jsonrpc-client": "node test/sections/221-jsonrpc-client.js"
+    "test:jsonrpc-client": "node test/sections/221-jsonrpc-client.js",
+    "test:avro-client": "node test/sections/222-avro-client.js"
   },
   "engines": {
     "node": ">=18"
@@ -165,5 +166,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.193.0"
+  "version": "4.194.0"
 }

@@ -2,6 +2,16 @@
 todo / in-progress / done / tested / blocked
 
 ## Done
+- [tested] Add avro_client tool (v4.194.0)
+  - Zero-dep Apache Avro binary encoder/decoder (pure Node.js; no npm deps)
+  - Operations: encode, decode, encode_file, decode_file, inspect, schema_fingerprint
+  - Full Avro binary encoding spec: null, boolean, int, long, float, double, bytes, string, record, enum, array, map, union, fixed
+  - Long/int: variable-length zigzag encoding (ZigZag + VarInt)
+  - Object Container File (OCF) read/write support with sync markers
+  - Schema fingerprinting: Rabin fingerprint (64-bit) for schema evolution
+  - lib/avroClientOps.js; lib/schemas/utilSchemas55.js
+
+## Done
 - [tested] Add jsonrpc_client tool (v4.193.0)
   - Zero-dep JSON-RPC 2.0 client (HTTP + TCP + Unix socket transports)
   - Operations: call, notify, batch, call_tcp, call_unix
