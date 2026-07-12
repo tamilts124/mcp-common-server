@@ -2,6 +2,15 @@
 todo / in-progress / done / tested / blocked
 
 ## Current Task
+- [tested] Add ini_client tool (v4.178.0)
+  - Zero-dep INI/CFG file parser and writer (pure Node.js fs; no npm deps)
+  - Operations: read, get, set, delete, list_keys, list_sections, merge, stringify
+  - Supports: '=' and ':' separators, '#'/';' comments (full-line and inline), line continuation (\), single/double-quoted values, global (pre-section) keys under __global__
+  - Security: path NUL guard; 4 MB file cap; 50,000-key limit; section/key name length cap (256 chars)
+  - lib/iniClientOps.js; lib/schemas/utilSchemas39.js; wired into dispatchRead.js + utilSchemas.js
+  - section 206 tests: A=input-validation x10, B=parser-unit x20, C=writer-unit x10, D=happy-path x20, E=security x10, F=concurrency x5 -- 75/75
+
+## Done
 - [tested] Add yaml_client tool (v4.177.0)
   - Zero-dep YAML 1.2 subset parser/writer (pure Node.js fs; no npm deps)
   - Operations: read, get, set, delete, list_keys, list_sections, merge, stringify

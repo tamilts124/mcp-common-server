@@ -141,7 +141,8 @@
     "test:grpc-client": "node test/sections/202-grpc-client.js",
     "test:dotenv-client": "node test/sections/203-dotenv-client.js",
     "test:toml-client": "node test/sections/204-toml-client.js",
-    "test:yaml-client": "node test/sections/205-yaml-client.js"
+    "test:yaml-client": "node test/sections/205-yaml-client.js",
+    "test:ini-client": "node test/sections/206-ini-client.js"
   },
   "engines": {
     "node": ">=18"
@@ -151,5 +152,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.177.0"
+  "version": "4.178.0"
 }
