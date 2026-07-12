@@ -2,6 +2,15 @@
 todo / in-progress / done / tested / blocked
 
 ## Current Task
+- [tested] Add toml_client tool (v4.176.0)
+  - Zero-dep TOML v1.0 parser/writer (pure Node.js fs; no npm deps)
+  - Operations: read, get, set, delete, list_keys, list_sections, merge, stringify
+  - Supports: strings (basic/literal/multiline), integers (decimal/hex/octal/binary), floats (inf/nan), booleans, dates, arrays, inline tables, standard tables, array of tables
+  - Security: path NUL guard; 4 MB file cap; key nesting depth limit (max 20); 50,000 key limit
+  - lib/tomlClientOps.js; lib/schemas/utilSchemas37.js; wired into dispatchRead.js + utilSchemas.js
+  - section 204 tests: A=input-validation x10, B=parser-unit x20, C=writer-unit x10, D=happy-path x20, E=security x10, F=concurrency x5 -- 75/75
+
+## Done
 - [tested] Add dotenv_client tool (v4.175.0)
   - Zero-dep .env file parser/writer (pure Node.js fs; no npm deps)
   - Operations: read, write, delete, merge, validate, to_shell, list
