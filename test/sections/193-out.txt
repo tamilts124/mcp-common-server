@@ -1,0 +1,85 @@
+
+A — Input validation
+  ✓ A01 missing host throws
+  ✓ A02 invalid operation throws
+  ✓ A03 empty topic rejected
+  ✓ A04 qos=2 rejected for publish
+  ✓ A05 missing topic_filters throws
+  ✓ A06 max_messages=0 throws
+  ✓ A07 max_messages>500 throws
+  ✓ A08 qos=3 rejected for pubsub
+  ✓ A09 payload >1 MB rejected
+  ✓ A10 NUL byte in topic rejected
+
+B — Packet codec stubs
+  ✓ B01 CONNACK stub is 4 bytes
+  ✓ B02 CONNACK first-byte type correct
+  ✓ B03 CONNACK return code 0
+  ✓ B04 PINGRESP is 2 bytes
+  ✓ B05 PINGRESP type byte correct
+  ✓ B06 SUBACK type byte correct
+  ✓ B07 SUBACK packet-id round-trips
+  ✓ B08 PUBACK type byte correct
+  ✓ B09 PUBACK packet-id round-trips
+  ✓ B10 PUBLISH type byte correct
+
+C — Security injection guards
+  ✓ C01 NUL in publish topic rejected
+  ✓ C02 NUL in subscribe filter rejected
+  ✓ C03 NUL in username rejected
+  ✓ C04 NUL in password rejected
+  ✓ C05 NUL in will_topic rejected
+  ✓ C06 topic > 65535 bytes rejected
+  ✓ C07 base64 payload > 1 MB rejected
+  ✓ C08 NUL in one of multiple filters rejected
+  ✓ C09 '+' wildcard in publish topic rejected
+  ✓ C10 '#' wildcard in pubsub topic rejected
+
+D — Happy-path mock broker
+  ✓ D01 connect returns connected:true
+  ✓ D02 operation field correct
+  ✓ D03 clientId auto-generated
+  ✓ D04 elapsedMs is a number
+  ✓ D05 port echoed in result
+  ✓ D06 ping returns pong:true
+  ✓ D07 latencyMs non-negative
+  ✓ D08 publish qos0 succeeds
+  ✓ D09 result.qos=0
+  ✓ D10 topic echoed
+  ✓ D11 payloadBytes correct
+  ✓ D12 qos1 publish succeeds
+  ✓ D13 acknowledged:true
+  ✓ D14 result.qos=1
+  ✓ D15 packetId set
+  ✓ D16 subscribe returns subscribed:true
+  ✓ D17 messages is an array
+  ✓ D18 at least 3 messages received
+  ✓ D19 message topic correct
+  ✓ D20 message payload correct
+  ✓ D21 pubsub published:true
+  ✓ D22 pubsub received:true
+  ✓ D23 pubsub message not null
+  ✓ D24 pubsub payload matches
+  ✓ D25 array topic_filters succeeds
+  ✓ D26 two filters in result
+  ✓ D27 grantedQos has two entries
+  ✓ D28 base64 payload publish succeeds
+  ✓ D29 base64 decodes to 4 bytes
+  ✓ D30 retain flag echoed in result
+
+E — Error paths
+  ✓ E01 connection refused throws
+  ✓ E02 CONNACK error code rejects
+  ✓ E03 timeout waiting for CONNACK
+  ✓ E04 ping timeout
+  ✓ E05 connect succeeds even if broker closes after CONNACK
+
+F — Concurrency
+  ✓ F01 10 concurrent connects succeed
+  ✓ F02 all results have elapsedMs
+  ✓ F03 5 concurrent publishes succeed
+  ✓ F04 5 sequential QoS1 publishes all acknowledged
+  ✓ F05 max_messages cap enforced
+
+==================================================
+mqtt_client: 70 passed, 0 failed

@@ -2,7 +2,25 @@
 todo / in-progress / done / tested / blocked
 
 ## Current Task
-- [ ] (none — all tasks complete)
+- [x] Add mqtt_client tool — status: tested (70/70, v4.165.0)
+  - Zero-dep MQTT v3.1.1 client (Node.js net/tls; no npm deps)
+  - Operations: connect (probe CONNACK), ping (PINGREQ→PINGRESP latency), publish (QoS 0/1),
+    subscribe (collect messages with timeout), pubsub (publish then verify receipt)
+  - TLS: tls:true for MQTTS (port 8883); reject_unauthorized configurable
+  - Auth: username/password CONNECT credentials; never echoed in results
+  - QoS 0 (fire-and-forget) and QoS 1 (PUBACK acknowledged delivery)
+  - Security: NUL-byte injection guards on topic/filter/username/password/will_topic;
+    wildcard chars (+/#) forbidden in publish/pubsub topics; 1 MB payload cap;
+    65535-byte topic length cap (MQTT spec); base64 payload pre-decode size check
+  - Will message support (Last Will and Testament): will_topic/will_payload/will_qos/will_retain
+  - MQTT v3.1.1 packet codec: CONNECT/CONNACK/PUBLISH/PUBACK/SUBSCRIBE/SUBACK/PINGREQ/PINGRESP/DISCONNECT
+  - Streaming packet parser: variable-length field decoder, fragmented chunk assembly
+  - Connection: wall-clock timeout (default 30s), connect_timeout (default min(timeout,10s))
+  - lib/mqttClientOps.js (881 lines); lib/schemas/utilSchemas26.js; wired into dispatchRead.js + utilSchemas.js
+  - section 193 tests (A=input-validation x10, B=codec-stubs x10, C=security-guards x10,
+    D=happy-path-mock x30, E=error-paths x5, F=concurrency x5) — 70/70
+  - Test bug fixed: E01 used real TCP (hung on Windows) → replaced with mock ECONNREFUSED emitter
+  - Test bug fixed: makeBrokerFactory shared connackDone across connections → moved into per-connection closure
 
 ## History
 
