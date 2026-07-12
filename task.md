@@ -2,6 +2,15 @@
 todo / in-progress / done / tested / blocked
 
 ## Current Task
+- [tested] Add xml_client tool (v4.179.0)
+  - Zero-dep XML file reader/writer/query/transform (pure Node.js; no npm deps)
+  - Operations: read, get, set, delete, list, query (XPath-like), stringify, transform
+  - Supports: elements, attributes, text nodes, CDATA, comments, processing instructions, namespaces
+  - Security: path NUL guard; 4 MB file cap; nesting depth limit (max 50); 100,000-node limit
+  - lib/xmlClientOps.js; lib/schemas/utilSchemas40.js; wired into dispatchRead.js + utilSchemas.js
+  - section 207 tests: A=input-validation, B=parser-unit, C=writer-unit, D=happy-path, E=security, F=concurrency
+
+## Done
 - [tested] Add ini_client tool (v4.178.0)
   - Zero-dep INI/CFG file parser and writer (pure Node.js fs; no npm deps)
   - Operations: read, get, set, delete, list_keys, list_sections, merge, stringify
@@ -37,23 +46,7 @@ todo / in-progress / done / tested / blocked
 
 ## Done
 - [tested] Add grpc_client tool (v4.174.0)
-  - Zero-dep gRPC client using Node.js built-in `http2` (no npm deps)
-  - Operations: unary (single request/response), server_stream (collect streaming responses), health_check (gRPC Health Protocol v1), list_services (gRPC Server Reflection)
-  - Protocol Buffers: hand-built proto3 varint/wire-type encoder/decoder (no protobufjs)
-  - Security: host NUL/CRLF guards; method path validation; 16 MB message size cap; TLS support
-  - lib/grpcClientOps.js; lib/schemas/utilSchemas35.js; wired into dispatchRead.js + utilSchemas.js
-  - section 202 tests: A=input-validation x10, B=proto-codec x10, C=security-guards x10, D=happy-path-mock x30, E=error-paths x5, F=concurrency x5 -- 70/70
-
-## Done
 - [tested] Add memcached_client tool (v4.173.0)
-  - Zero-dep Memcached ASCII protocol client (Node.js net; no npm deps)
-  - Operations: get (single/multi-get), set, add, replace, append, prepend, delete, increment, decrement, flush_all (optional delay), stats (optional subcommand), version
-  - Security: key validation (no whitespace/control chars, max 250 bytes); host NUL/CRLF guards; 1 MB value cap; 32 MB response cap; 100-key multi-get limit
-  - Wall-clock timeout (default 30s), connect_timeout (default min(timeout,10s))
-  - lib/memcachedClientOps.js; lib/schemas/utilSchemas34.js; wired into dispatchRead.js + utilSchemas.js
-  - section 201 tests: A=input-validation x10, B=protocol-unit x10, C=security-guards x10, D=happy-path-mock x30, E=error-paths x5, F=concurrency x5 -- 70/70
-
-## Done
 - [tested] Add kafka_client tool (v4.172.0)
 - [tested] Add snmp_client tool (v4.171.0)
 - [tested] Add ftp_client tool (v4.170.0)
