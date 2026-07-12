@@ -2,20 +2,20 @@
 todo / in-progress / done / tested / blocked
 
 ## Current Task
-- [x] (tested) Add nats_client tool (v4.168.0)
-  - Zero-dep NATS protocol client (Node.js net/tls; no npm deps)
-  - Operations: connect (probe INFO+CONNECT), publish (PUB to subject), subscribe (SUB + collect messages), request (request-reply), ping (PING/PONG latency)
-  - Auth: basic user/pass or single token auth_token; credentials never echoed in results
-  - TLS: tls:true (default port 4443); reject_unauthorized configurable
-  - Security: CR/LF/NUL injection guards on all subject names and auth credentials; 8 MB payload cap
-  - NatsParser: streaming, fragmented chunks, multi-line MSG frames, auto-responds to server PING keepalives
-  - All internal timers use .unref() so process exits cleanly after operations complete
-  - lib/natsClientOps.js (595 lines); lib/schemas/utilSchemas29.js; wired into dispatchRead.js + utilSchemas.js
-  - section 196 tests (A=input-validation x10, B=codec x10, C=security x10, D=happy-path x30, E=errors x5, F=concurrency x5) — 70/70
-  - E05 fix: track server-side sockets and destroy them before hangSrv.close() to prevent close() from hanging
-  - package.json: test:nats-client script added, version 4.168.0
+- [x] (tested) Add ldap_client tool (v4.169.0)
+  - Zero-dep LDAP v3 client (Node.js net/tls; no npm deps)
+  - Operations: bind (authenticate DN + password), search (LDAP search with filter/scope/attributes), add (add entry), modify (modify attributes), delete (delete entry), compare (compare attribute value), whoami (RFC 4532 extended op)
+  - BER (Basic Encoding Rules) codec: encoder + streaming LdapParser + BerReader decoder
+  - RFC 4515 filter parser: AND/OR/NOT/equality/substring/present/ge/le/approx
+  - Auth: simple bind (bind_dn + bind_password) or SASL (sasl_mechanism + sasl_credentials)
+  - TLS: tls:true for LDAPS (default port 636); reject_unauthorized configurable
+  - Security: NUL-byte guards on all DN/filter/attr fields; max DN 1024 chars; max attr 8192 chars; 8 MB data cap
+  - lib/ldapClientOps.js (1118 lines); lib/schemas/utilSchemas30.js; wired into dispatchRead.js + utilSchemas.js
+  - section 197 tests: A=input-validation x10, B=BER-codec x10, C=security x10, D=happy-path x30, E=errors x5, F=concurrency x5 — 70/70
+  - package.json: test:ldap-client script added, version 4.169.0
 
 ## Done
+- [x] Add nats_client tool — status: tested (70/70, v4.168.0)
 - [x] Add stomp_client tool — status: tested (70/70, v4.167.0)
   - Zero-dep STOMP 1.2 client (Node.js net/tls; no npm deps) — ActiveMQ, RabbitMQ, Apollo, Artemis
   - Operations: connect (probe CONNECTED frame), send (SEND to destination),
