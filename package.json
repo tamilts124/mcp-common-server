@@ -135,7 +135,8 @@
     "test:nats-client": "node test/sections/196-nats-client.js",
     "test:ldap-client": "node test/sections/197-ldap-client.js",
     "test:ftp-client": "node test/sections/198-ftp-client.js",
-    "test:snmp-client": "node test/sections/199-snmp-client.js"
+    "test:snmp-client": "node test/sections/199-snmp-client.js",
+    "test:kafka-client": "node test/sections/200-kafka-client.js"
   },
   "engines": {
     "node": ">=18"
@@ -145,5 +146,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.171.0"
+  "version": "4.172.0"
 }

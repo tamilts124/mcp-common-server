@@ -2,6 +2,18 @@
 todo / in-progress / done / tested / blocked
 
 ## Current Task
+- [tested] Add kafka_client tool (v4.172.0)
+  - Zero-dep Apache Kafka client (Node.js net; no npm deps)
+  - Kafka binary protocol (KIP-compatible, API versions for Kafka 0.10+)
+  - Operations: produce (send messages to topic/partition), fetch (consume messages), list_offsets (get partition offsets), metadata (topic/broker/partition info), create_topics, delete_topics, list_topics
+  - SASL PLAIN authentication support
+  - Message compression: none (raw bytes/UTF-8)
+  - Security: NUL/CRLF guards on topic names, client.id; 10 MB message cap; 50 MB fetch cap
+  - Wall-clock timeout (default 30s), connect_timeout (default min(timeout,10s))
+  - lib/kafkaClientOps.js; lib/schemas/utilSchemas33.js; wired into dispatchRead.js + utilSchemas.js
+  - section 200 tests: A=input-validation x10, B=codec-stubs x10, C=security-guards x10, D=happy-path-mock x30, E=error-paths x5, F=concurrency x5 -- 70/70
+
+## Done
 - [x] (tested) Add snmp_client tool (v4.171.0)
   - Zero-dep SNMP v1/v2c/v3 client (Node.js dgram/crypto; no npm deps)
   - Operations: get (GET single/multi OID), get_next (GETNEXT walk), get_bulk (GETBULK v2c/v3), walk (recursive GETNEXT walk), set (SET OID value), trap_listen (receive traps), inform (send INFORM-REQUEST)
