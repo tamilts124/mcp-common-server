@@ -2,6 +2,20 @@
 todo / in-progress / done / tested / blocked
 
 ## Current Task
+- [x] (tested) Add ftp_client tool (v4.170.0)
+  - Zero-dep FTP/FTPS client (Node.js net/tls; no npm deps)
+  - Operations: list (LIST directory), get (download file), put (upload file), delete (DELE), rename (RNFR/RNTO), mkdir (MKD), rmdir (RMD), pwd (PWD), stat (SIZE+MDTM), quit
+  - Passive mode (PASV/EPSV) for data connections
+  - TLS: ftps:true for explicit FTPS (AUTH TLS/SSL); reject_unauthorized configurable
+  - Auth: username/password (USER/PASS); anonymous supported
+  - Security: path injection guards, 50 MB download cap, 100 MB upload cap
+  - lib/ftpClientOps.js (769 lines); lib/schemas/utilSchemas31.js; wired into dispatchRead.js + utilSchemas.js
+  - section 198 tests: A=input-validation x10, B=parser-unit x10, C=security x10, D=happy-path x30, E=error-paths x5, F=concurrency x5 -- 70/70
+  - FtpResponseParser: byte-offset-aware _parse() using indexOf("\n") (fixes CRLF consumed-counter bug)
+  - makeMockFtp: first-connection flag routes data connections to real TCP (makeDataServer), control to mock socket
+  - Pre-decode upload size estimate (avoids 101 MB Buffer allocation on size-exceed)
+
+## Done
 - [x] (tested) Add ldap_client tool (v4.169.0)
   - Zero-dep LDAP v3 client (Node.js net/tls; no npm deps)
   - Operations: bind (authenticate DN + password), search (LDAP search with filter/scope/attributes), add (add entry), modify (modify attributes), delete (delete entry), compare (compare attribute value), whoami (RFC 4532 extended op)
