@@ -2,6 +2,15 @@
 todo / in-progress / done / tested / blocked
 
 ## Done
+- [tested] Add tar_client tool (v4.186.0)
+  - Fine-grained TAR file manipulation (pure Node.js; zero npm deps)
+  - Operations: list, read, extract, add, delete, create, info
+  - Supports .tar, .tar.gz/.tgz (gzip), .tar.bz2 (bzip2 detection), .tar.xz (xz detection)
+  - Builds on tarOps.js (parseTar, assertSafeEntryName, splitName, buildHeader)
+  - lib/tarClientOps.js (644 lines); lib/schemas/utilSchemas47.js; wired into dispatchRead.js + utilSchemas.js
+  - section 214 tests: A=validation x10, B=unit x20, C=happy-path x20, D=security x10, E=error-paths x10, F=concurrency x5 -- 95/95
+
+## Done
 - [tested] Add zip_client tool (v4.185.0)
   - Fine-grained ZIP file manipulation (pure Node.js; zero npm deps)
   - Operations: list, read, extract, add, delete, create, info
