@@ -1,7 +1,25 @@
 ## Status legend
 todo / in-progress / done / tested / blocked
 
-## In Progress
+## Done
+- [tested] Add hdf5_client tool (v4.199.0)
+  - Zero-dep HDF5 file reader (pure Node.js; no npm deps)
+  - Operations: info, list, attrs, read, to_json, to_csv
+  - Datatypes: fixed-point int (int8/16/32/64 signed/unsigned), float (float32/float64),
+    string (fixed/variable-length), compound, array, vlen, opaque, enum, reference, bitfield
+  - Superblock v0-v2, B-tree v1/v2, symbol tables, object headers v1/v2
+  - Local/global/fractal heaps, v2 link info + name-indexed B-tree traversal
+  - Filters: none, deflate/gzip (node:zlib), shuffle, fletcher32, szip (best-effort)
+  - Security: 256 MB file cap; 10,000,000 element limit; NUL-byte path guard;
+    directory path rejected; max 64-level group depth
+  - lib/hdf5ClientOps.js (1705 lines); lib/schemas/utilSchemas60.js
+  - Wired into lib/dispatchRead.js + lib/schemas/utilSchemas.js
+  - package.json: version 4.199.0; added test:hdf5-client script
+  - README.md: 303 tools total (Read & File System: 53)
+  - section 227 tests: A=validation x10, B=unit x20, C=happy-path x20,
+    D=security x10, E=error-paths x10, F=concurrency x6 -- 76/76
+
+## Done
 - [tested] Add arrow_client tool (v4.198.0)
   - Zero-dep Apache Arrow IPC file/stream reader (pure Node.js; no npm deps)
   - Operations: info, schema, read, to_json, to_csv
