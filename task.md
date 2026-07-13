@@ -2,6 +2,14 @@
 todo / in-progress / done / tested / blocked
 
 ## Done
+- [tested] Add cassandra_client tool (v4.219.0)
+  - Zero-dep Apache Cassandra CQL native protocol client (pure Node.js net/tls; no npm deps)
+  - Operations: info, query, execute, batch, tables, keyspaces, describe, use_keyspace
+  - Auth: username/password (SASL plain), unauthenticated
+  - CQL Native Protocol v4 (Cassandra 2.2+, ScyllaDB, AstraDB)
+  - lib/cassandraClientOps.js; lib/schemas/utilSchemas79.js
+
+## Done
 - [tested] Add mongodb_client tool (v4.218.0)
   - Zero-dep MongoDB Wire Protocol client (pure Node.js net/tls; no npm deps)
   - Operations: info, find, find_one, insert, insert_many, update, update_many, delete, delete_many, count, aggregate, list_collections, create_collection, drop_collection, create_index, list_indexes
@@ -102,7 +110,7 @@ todo / in-progress / done / tested / blocked
 - [tested] Add ftp_client tool (v4.170.0)
 - [tested] Add ldap_client tool (v4.169.0)
 - [tested] Add nats_client tool (v4.168.0)
-- [tested] Add stomp_client tool (v4.167.0)
+- [tested] Add stomp_client tool (v4.166.0)
 - [tested] Add amqp_client tool (v4.166.0)
 - [tested] Add mqtt_client tool (v4.165.0)
 
