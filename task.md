@@ -2,6 +2,17 @@
 todo / in-progress / done / tested / blocked
 
 ## Done
+- [tested] Add whois_client tool (v4.226.0)
+  - Zero-dep WHOIS (RFC 3912) client (pure Node.js net; no npm deps)
+  - Operations: domain, ip, asn, tld, raw, info
+  - lib/whoisClientOps.js (1000 lines); lib/schemas/utilSchemas86.js (55 lines)
+  - Wired into lib/dispatchRead.js + lib/schemas/utilSchemas.js
+  - package.json: version 4.226.0; added test:whois-client script
+  - README.md: 445 tools total (Network & Messaging: 32); added whois_client
+  - section 253 tests: A=validation x10, B=unit/protocol x20, C=mock-network x10,
+    D=security x10, E=error-paths x10 -- 60/60
+
+## Done
 - [tested] Add coap_client tool (v4.225.0)
   - Zero-dep CoAP (RFC 7252) client (pure Node.js dgram; no npm deps)
   - Operations: get, post, put, delete, discover, observe, ping, info
