@@ -1,7 +1,19 @@
 ## Status legend
 todo / in-progress / done / tested / blocked
 
-## In Progress
+## Done
+- [tested] Add mongodb_client tool (v4.218.0)
+  - Zero-dep MongoDB Wire Protocol client (pure Node.js net/tls; no npm deps)
+  - Operations: info, find, find_one, insert, insert_many, update, update_many, delete, delete_many, count, aggregate, list_collections, create_collection, drop_collection, create_index, list_indexes
+  - Auth: SCRAM-SHA-1, SCRAM-SHA-256, unauthenticated
+  - lib/mongodbClientOps.js; lib/schemas/utilSchemas78.js
+  - Wired into lib/dispatchRead.js + lib/schemas/utilSchemas.js
+  - package.json: version 4.218.0; added test:mongodb-client script
+  - README.md: 437 tools total (Read & File System: 89); added mongodb_client
+  - section 245 tests: A=validation x10, B=unit/bson x16, C=mock-network x10, D=security x10, E=error-paths x10 -- 56/56
+  - Bug fix: bsonEncodeValue() pushed type-byte constants as raw numbers instead of Buffer.from([type]); fixed all type-byte pushes to wrap in Buffer.from([...])
+
+## Done
 - [tested] Add elasticsearch_client tool (v4.217.0)
   - Zero-dep Elasticsearch/OpenSearch client (pure Node.js https; no npm deps)
   - Operations: info, search, get, index, delete, create_index, delete_index, indices, mapping, bulk, count, cluster_health
