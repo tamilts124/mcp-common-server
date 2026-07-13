@@ -2,6 +2,20 @@
 todo / in-progress / done / tested / blocked
 
 ## Done
+- [tested] Add geo_client tool (v4.205.0)
+  - Zero-dep geospatial file reader (pure Node.js; no npm deps)
+  - Operations: info, read, search, stats, bbox, convert
+  - Formats: GeoJSON (.geojson/.json), KML (.kml), GPX (.gpx), TopoJSON (.json)
+  - Filters: geometry type, property matching, bounding box, feature ID
+  - Security: 200 MB file cap; 500,000 feature limit; NUL-byte guard; directory guard
+  - lib/geoClientOps.js (1043 lines); lib/schemas/utilSchemas65.js
+  - Wired into lib/dispatchRead.js + lib/schemas/utilSchemas.js
+  - package.json: version 4.205.0; added test:geo-client script
+  - README.md: 424 tools total (Read & File System: 76)
+  - section 232 tests: A=validation x10, B=unit x20, C=happy-path x20,
+    D=security x10, E=error-paths x10, F=concurrency x6 -- 76/76
+
+## Done
 - [tested] Add log_client tool (v4.204.0)
   - Zero-dep structured log file reader/analyzer (pure Node.js; no npm deps)
   - Operations: info, read, search, stats, tail, export
