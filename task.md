@@ -2,6 +2,20 @@
 todo / in-progress / done / tested / blocked
 
 ## Done
+- [tested] Add sqlite_client tool (v4.203.0)
+  - Zero-dep stateless SQLite file reader/writer (pure Node.js; no npm deps)
+  - Operations: info, query, execute, tables, schema, export
+  - Reads/writes .db/.sqlite/.sqlite3 files directly without session management
+  - Security: 256 MB file cap; 1,000,000 row limit; NUL-byte guard; directory guard
+  - Complement to existing sqlite session tools (sqlite_create/connect/execute/disconnect)
+  - lib/sqliteClientOps.js (985 lines); lib/schemas/utilSchemas63.js
+  - Wired into lib/dispatchRead.js + lib/schemas/utilSchemas.js
+  - package.json: version 4.203.0; added test:sqlite-client script
+  - README.md: 422 tools total (Read & File System: 74)
+  - section 230 tests: A=validation x10, B=unit x20, C=happy-path x20,
+    D=security x10, E=error-paths x10, F=concurrency x6 -- 79/79
+
+## Done
 - [tested] Add ical_client tool (v4.202.0)
   - Zero-dep iCalendar (.ics) file reader/parser (pure Node.js; no npm deps)
   - Operations: info, events, todos, freebusy, to_json

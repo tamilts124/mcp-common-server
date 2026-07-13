@@ -163,7 +163,8 @@
     "test:arrow-client": "node test/sections/226-arrow-client.js",
     "test:hdf5-client": "node test/sections/227-hdf5-client.js",
     "test:pcap-client": "node test/sections/228-pcap-client.js",
-    "test:ical-client": "node test/sections/229-ical-client.js"
+    "test:ical-client": "node test/sections/229-ical-client.js",
+    "test:sqlite-client": "node test/sections/230-sqlite-client.js"
   },
   "engines": {
     "node": ">=18"
@@ -173,5 +174,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.202.0"
+  "version": "4.203.0"
 }
