@@ -189,7 +189,8 @@
     "test:coap-client": "node test/sections/252-coap-client.js",
     "test:whois-client": "node test/sections/253-whois-client.js",
     "test:tls-client": "node test/sections/254-tls-client.js",
-    "test:dns-client": "node test/sections/255-dns-client.js"
+    "test:dns-client": "node test/sections/255-dns-client.js",
+    "test:irc-client": "node test/sections/256-irc-client.js"
   },
   "engines": {
     "node": ">=18"
@@ -199,5 +200,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.228.0"
+  "version": "4.229.0"
 }

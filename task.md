@@ -2,6 +2,18 @@
 todo / in-progress / done / tested / blocked
 
 ## Done
+- [tested] Add irc_client tool (v4.229.0)
+  - Zero-dep IRC client (pure Node.js net/tls; no npm deps)
+  - Operations: send_message, join, list, whois, nick, raw, info
+  - Supports plain TCP and TLS; RFC 1459 + IRC v3 capabilities
+  - SASL PLAIN authentication; NickServ IDENTIFY fallback
+  - lib/ircClientOps.js (943 lines); lib/schemas/utilSchemas89.js (110 lines)
+  - Wired into lib/dispatchRead.js + lib/schemas/utilSchemas.js
+  - package.json: version 4.229.0; added test:irc-client script
+  - README.md: 448 tools total (Network & Messaging: 35); added irc_client
+  - section 256 tests: A=pure-helpers x20, B=validation x15, C=mock-network x12, D=security x10, E=concurrency x8 -- 65/65
+
+## Done
 - [tested] Add dns_client tool (v4.228.0)
   - Full-featured DNS client: UDP/TCP classic DNS + DNS-over-HTTPS (DoH)
   - Operations: query, reverse, batch, resolvers, info
