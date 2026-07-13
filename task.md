@@ -2,6 +2,19 @@
 todo / in-progress / done / tested / blocked
 
 ## Done
+- [tested] Add syslog_client tool (v4.222.0)
+  - Zero-dep syslog client (pure Node.js dgram/net; no npm deps)
+  - Operations: send, send_batch, info
+  - Supports RFC 5424 (modern) and RFC 3164 (BSD legacy) formats
+  - Transports: UDP, TCP, TCP+TLS
+  - lib/syslogClientOps.js (545 lines); lib/schemas/utilSchemas82.js (179 lines)
+  - Wired into lib/dispatchRead.js + lib/schemas/utilSchemas.js
+  - package.json: version 4.222.0; added test:syslog-client script
+  - README.md: 441 tools total (Read & File System: 93); added syslog_client
+  - section 249 tests: A=validation x10, B=unit/protocol x20, C=mock-network x10,
+    D=security x10, E=error-paths x6 -- 59/59
+
+## Done
 - [tested] Add ntp_client tool (v4.221.0)
   - Zero-dep NTP/SNTP client (pure Node.js dgram; no npm deps)
   - Operations: query, sync_check, servers, stratum
