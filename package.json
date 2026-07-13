@@ -177,7 +177,8 @@
     "test:wasm-client": "node test/sections/239-wasm-client.js",
     "test:registry-client": "node test/sections/241-registry-client.js",
     "test:k8s-client": "node test/sections/242-k8s-client.js",
-    "test:prometheus-client": "node test/sections/243-prometheus-client.js"
+    "test:prometheus-client": "node test/sections/243-prometheus-client.js",
+    "test:elasticsearch-client": "node test/sections/244-elasticsearch-client.js"
   },
   "engines": {
     "node": ">=18"
@@ -187,5 +188,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.216.0"
+  "version": "4.217.0"
 }
