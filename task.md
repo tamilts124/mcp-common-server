@@ -2,6 +2,19 @@
 todo / in-progress / done / tested / blocked
 
 ## Done
+- [tested] Add audio_client tool (v4.208.0)
+  - Zero-dep audio metadata reader (pure Node.js; no npm deps)
+  - Operations: info, tags, covers, chapters, validate
+  - Formats: MP3 (ID3v1/ID3v2.2/2.3/2.4), FLAC, OGG Vorbis/Opus, WAV, AIFF/AIFF-C, M4A/MP4, WMA/ASF
+  - Security: 500 MB file cap; 50 MB per-cover cap; NUL-byte and directory guards
+  - lib/audioClientOps.js (1347 lines); lib/schemas/utilSchemas68.js
+  - Wired into lib/dispatchRead.js + lib/schemas/utilSchemas.js
+  - package.json: version 4.208.0; added test:audio-client script
+  - README.md: 427 tools total (Read & File System: 79)
+  - section 235 tests: A=validation x10, B=unit x20, C=happy-path x20,
+    D=security x10, E=error-paths x10, F=concurrency x6 -- 76/76
+
+## Done
 - [tested] Add epub_client tool (v4.207.0)
   - Zero-dep EPUB ebook reader (pure Node.js; no npm deps)
   - Operations: info, metadata, toc, chapters, read, images
@@ -106,22 +119,6 @@ todo / in-progress / done / tested / blocked
 
 ## Done
 - [tested] Add pcap_client tool (v4.200.0)
-  - Zero-dep PCAP/PCAPng network capture file reader (pure Node.js; no npm deps)
-  - Operations: info, read, summary, filter, to_json
-  - Formats: PCAP little/big/nanosecond variants, PCAPng (SHB+IDB+EPB/SPB)
-  - Link layers: Ethernet, NULL/loopback, Linux SLL, Raw IP
-  - Protocols: IPv4, IPv6, TCP, UDP, ICMPv4, ICMPv6, ARP, OSPF, GRE, ESP, AH
-  - App protocols: DNS, DHCP, NTP, SNMP, mDNS, VXLAN (auto-detected from UDP ports)
-  - Filter: field==value, !=, >=, <=, >, < combined with && and ||
-  - Security: 500 MB file cap; 10,000,000 packet limit; NUL-byte guard; directory guard
-  - lib/pcapClientOps.js (755 lines); lib/schemas/utilSchemas61.js
-  - Wired into lib/dispatchRead.js + lib/schemas/utilSchemas.js
-  - package.json: version 4.200.0; added test:pcap-client script
-  - README.md: 304 tools total (Read & File System: 54)
-  - section 228 tests: A=validation x10, B=unit x20, C=happy-path x20,
-    D=security x10, E=error-paths x10, F=concurrency x6 -- 76/76
-
-## Done
 - [tested] Add hdf5_client tool (v4.199.0)
 - [tested] Add arrow_client tool (v4.198.0)
 - [tested] Add orc_client tool (v4.197.0)

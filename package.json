@@ -168,7 +168,8 @@
     "test:log-client": "node test/sections/231-log-client.js",
     "test:geo-client": "node test/sections/232-geo-client.js",
     "test:font-client": "node test/sections/233-font-client.js",
-    "test:epub-client": "node test/sections/234-epub-client.js"
+    "test:epub-client": "node test/sections/234-epub-client.js",
+    "test:audio-client": "node test/sections/235-audio-client.js"
   },
   "engines": {
     "node": ">=18"
@@ -178,5 +179,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.207.0"
+  "version": "4.208.0"
 }
