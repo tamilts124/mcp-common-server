@@ -2,6 +2,21 @@
 todo / in-progress / done / tested / blocked
 
 ## Done
+- [tested] Add ical_client tool (v4.202.0)
+  - Zero-dep iCalendar (.ics) file reader/parser (pure Node.js; no npm deps)
+  - Operations: info, events, todos, freebusy, to_json
+  - Supports VEVENT, VTODO, VJOURNAL, VFREEBUSY, VTIMEZONE components
+  - RFC 5545 / 2445 compliant; recurrence rules (RRULE), VALARM, attachments
+  - Line folding, CRLF/LF, quoted-printable, base64, EXDATE support
+  - Security: 50 MB file cap; 100,000 component limit; NUL-byte guard; directory guard
+  - lib/icalClientOps.js (560 lines); lib/schemas/utilSchemas62.js
+  - Wired into lib/dispatchRead.js + lib/schemas/utilSchemas.js
+  - package.json: version 4.202.0; added test:ical-client script
+  - README.md: 421 tools total (Read & File System: 73)
+  - section 229 tests: A=validation x10, B=unit x20, C=happy-path x20,
+    D=security x10, E=error-paths x10, F=concurrency x6 -- 79/79
+
+## Done
 - [tested] Sync README.md with actual server tool count (v4.201.0)
   - 118 tools were wired in the server but missing from README documentation
   - Updated all 10 category sections with correct tool lists and counts
@@ -39,61 +54,11 @@ todo / in-progress / done / tested / blocked
 
 ## Done
 - [tested] Add hdf5_client tool (v4.199.0)
-  - Zero-dep HDF5 file reader (pure Node.js; no npm deps)
-  - Operations: info, list, attrs, read, to_json, to_csv
-  - Datatypes: fixed-point int (int8/16/32/64 signed/unsigned), float (float32/float64),
-    string (fixed/variable-length), compound, array, vlen, opaque, enum, reference, bitfield
-  - Superblock v0-v2, B-tree v1/v2, symbol tables, object headers v1/v2
-  - Local/global/fractal heaps, v2 link info + name-indexed B-tree traversal
-  - Filters: none, deflate/gzip (node:zlib), shuffle, fletcher32, szip (best-effort)
-  - Security: 256 MB file cap; 10,000,000 element limit; NUL-byte path guard;
-    directory path rejected; max 64-level group depth
-  - lib/hdf5ClientOps.js (1705 lines); lib/schemas/utilSchemas60.js
-  - Wired into lib/dispatchRead.js + lib/schemas/utilSchemas.js
-  - package.json: version 4.199.0; added test:hdf5-client script
-  - README.md: 303 tools total (Read & File System: 53)
-  - section 227 tests: A=validation x10, B=unit x20, C=happy-path x20,
-    D=security x10, E=error-paths x10, F=concurrency x6 -- 76/76
-
-## Done
 - [tested] Add arrow_client tool (v4.198.0)
-  - Zero-dep Apache Arrow IPC file/stream reader (pure Node.js; no npm deps)
-  - Operations: info, schema, read, to_json, to_csv
-  - Column types: NULL, Bool, Int (8/16/32/64 signed/unsigned), FloatingPoint (half/single/double),
-    Binary, LargeBinary, Utf8, LargeUtf8, Date (day/ms), Time (32/64), Timestamp, Duration,
-    Interval, Decimal (128/256-bit), FixedSizeBinary, List, LargeList, FixedSizeList, Struct, Map,
-    Union, and dictionary-encoded variants of any type
-  - Supports both Arrow IPC File format (.arrow, magic header/footer) and IPC Stream format (.arrows)
-  - Minimal FlatBuffers reader for Schema, RecordBatch, DictionaryBatch, and Footer messages
-  - IEEE 754 half-precision float decoder; time/date/timestamp formatted to ISO strings
-  - Security: 200 MB file cap; 10,000,000 row limit; NUL-byte path guard; directory path rejected
-  - lib/arrowClientOps.js (1288 lines); lib/schemas/utilSchemas59.js
-  - Wired into lib/dispatchRead.js + lib/schemas/utilSchemas.js
-  - package.json: version 4.198.0; added test:arrow-client script
-  - README.md: 302 tools total (Read & File System: 52)
-  - section 226 tests: A=validation x10, B=unit x20, C=happy-path x20,
-    D=security x10, E=error-paths x10, F=concurrency x6 -- 76/76
-
-## Done
 - [tested] Add orc_client tool (v4.197.0)
-  - Zero-dep Apache ORC file reader (pure Node.js; no npm deps)
-  - Operations: info, schema, stripe, read, to_json, to_csv
-  - Column types: BOOLEAN, BYTE, SHORT, INT, LONG, FLOAT, DOUBLE, STRING, BINARY,
-    TIMESTAMP, DATE, DECIMAL, VARCHAR, CHAR, LIST, MAP, STRUCT, UNION, TIMESTAMP_INSTANT
-  - Column encodings: DIRECT, DIRECT_V2, DICTIONARY, DICTIONARY_V2 (RLE v1 and v2)
-  - Compression: NONE, ZLIB (node:zlib), SNAPPY (pure-JS), LZ4 (raw block decode)
-  - Minimal Protocol Buffer decoder for ORC footer/postscript/stripe-footer parsing
-  - Security: 200 MB file cap; 10,000,000 row limit; NUL-byte path guard; directory path rejected
-  - lib/orcClientOps.js (1270 lines); lib/schemas/utilSchemas58.js
-  - Wired into lib/dispatchRead.js + lib/schemas/utilSchemas.js
-  - package.json: version 4.197.0; added test:orc-client script
-  - README.md: 301 tools total (Read & File System: 51)
-  - section 225 tests: A=validation x10, B=unit x20, C=happy-path x20,
-    D=security x10, E=error-paths x10, F=concurrency x6 -- 76/76
-
 - [tested] Add parquet_client tool (v4.196.0)
 - [tested] Add thrift_client tool (v4.195.0)
-- [tested] Add avro_client tool (v4.194.0)
+- [tested] Add avro_client tool (v4.196.0)
 - [tested] Add jsonrpc_client tool (v4.193.0)
 - [tested] Add protobuf_client tool (v4.192.0)
 - [tested] Add cbor_client tool (v4.191.0)
