@@ -1,6 +1,25 @@
 ## Status legend
 todo / in-progress / done / tested / blocked
 
+## In Progress
+- [tested] Add arrow_client tool (v4.198.0)
+  - Zero-dep Apache Arrow IPC file/stream reader (pure Node.js; no npm deps)
+  - Operations: info, schema, read, to_json, to_csv
+  - Column types: NULL, Bool, Int (8/16/32/64 signed/unsigned), FloatingPoint (half/single/double),
+    Binary, LargeBinary, Utf8, LargeUtf8, Date (day/ms), Time (32/64), Timestamp, Duration,
+    Interval, Decimal (128/256-bit), FixedSizeBinary, List, LargeList, FixedSizeList, Struct, Map,
+    Union, and dictionary-encoded variants of any type
+  - Supports both Arrow IPC File format (.arrow, magic header/footer) and IPC Stream format (.arrows)
+  - Minimal FlatBuffers reader for Schema, RecordBatch, DictionaryBatch, and Footer messages
+  - IEEE 754 half-precision float decoder; time/date/timestamp formatted to ISO strings
+  - Security: 200 MB file cap; 10,000,000 row limit; NUL-byte path guard; directory path rejected
+  - lib/arrowClientOps.js (1288 lines); lib/schemas/utilSchemas59.js
+  - Wired into lib/dispatchRead.js + lib/schemas/utilSchemas.js
+  - package.json: version 4.198.0; added test:arrow-client script
+  - README.md: 302 tools total (Read & File System: 52)
+  - section 226 tests: A=validation x10, B=unit x20, C=happy-path x20,
+    D=security x10, E=error-paths x10, F=concurrency x6 -- 76/76
+
 ## Done
 - [tested] Add orc_client tool (v4.197.0)
   - Zero-dep Apache ORC file reader (pure Node.js; no npm deps)
