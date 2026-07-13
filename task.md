@@ -2,6 +2,21 @@
 todo / in-progress / done / tested / blocked
 
 ## In Progress
+(none)
+
+## Done
+- [tested] Add image_client tool (v4.210.0)
+  - Zero-dep image metadata reader (pure Node.js; no npm deps)
+  - Operations: info, exif, iptc, xmp, validate
+  - Formats: JPEG, PNG, WebP, TIFF, BMP, GIF, ICO
+  - Security: 200 MB file cap; 4 MB header scan window; NUL-byte and directory guards
+  - lib/imageClientOps.js (1126 lines); lib/schemas/utilSchemas70.js
+  - Wired into lib/dispatchRead.js + lib/schemas/utilSchemas.js
+  - package.json: version 4.210.0; added test:image-client script
+  - README.md: 429 tools total (Read & File System: 81)
+  - section 237 tests: A=validation x10, B=unit x20, C=happy-path x20,
+    D=security x10, E=error-paths x10, F=concurrency x6 -- 76/76
+
 - [tested] Add video_client tool (v4.209.0)
   - Zero-dep video container reader (pure Node.js; no npm deps)
   - Operations: info, streams, tags, chapters, validate
