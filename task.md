@@ -2,6 +2,19 @@
 todo / in-progress / done / tested / blocked
 
 ## Done
+- [tested] Add clickhouse_client tool (v4.223.0)
+  - Zero-dep ClickHouse HTTP API client (pure Node.js http/https; no npm deps)
+  - Operations: ping, info, query, insert, databases, tables, create_table, drop_table
+  - Auth: X-ClickHouse-User / X-ClickHouse-Key headers (username/password)
+  - Formats: JSONEachRow (default), JSON (with meta/statistics), CSV, TSVWithNames
+  - lib/clickhouseClientOps.js (518 lines); lib/schemas/utilSchemas83.js (153 lines)
+  - Wired into lib/dispatchRead.js + lib/schemas/utilSchemas.js
+  - package.json: version 4.223.0; added test:clickhouse-client script
+  - README.md: 442 tools total (Read & File System: 94); added clickhouse_client
+  - section 250 tests: A=validation x10, B=unit/protocol x20, C=mock-network x10,
+    D=security x10, E=error-paths x6 -- 70/70
+
+## Done
 - [tested] Add syslog_client tool (v4.222.0)
   - Zero-dep syslog client (pure Node.js dgram/net; no npm deps)
   - Operations: send, send_batch, info
