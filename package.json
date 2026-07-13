@@ -187,7 +187,8 @@
     "test:clickhouse-client": "node test/sections/250-clickhouse-client.js",
     "test:modbus-client": "node test/sections/251-modbus-client.js",
     "test:coap-client": "node test/sections/252-coap-client.js",
-    "test:whois-client": "node test/sections/253-whois-client.js"
+    "test:whois-client": "node test/sections/253-whois-client.js",
+    "test:tls-client": "node test/sections/254-tls-client.js"
   },
   "engines": {
     "node": ">=18"
@@ -197,5 +198,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.226.0"
+  "version": "4.227.0"
 }

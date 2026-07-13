@@ -2,6 +2,17 @@
 todo / in-progress / done / tested / blocked
 
 ## Done
+- [tested] Add tls_client tool (v4.227.0)
+  - Zero-dep TLS/SSL live inspector (pure Node.js tls; no npm deps)
+  - Operations: inspect, chain, ciphers, verify, scan, info
+  - lib/tlsClientOps.js (802 lines); lib/schemas/utilSchemas87.js (49 lines)
+  - Wired into lib/dispatchRead.js + lib/schemas/utilSchemas.js
+  - package.json: version 4.227.0; added test:tls-client script
+  - README.md: 446 tools total (Network & Messaging: 33); added tls_client
+  - section 254 tests: A=pure-helpers x23, B=validation x14, C=mock-network x10,
+    D=security x10, E=concurrency+cipher x10 -- 67/67
+
+## Done
 - [tested] Add whois_client tool (v4.226.0)
   - Zero-dep WHOIS (RFC 3912) client (pure Node.js net; no npm deps)
   - Operations: domain, ip, asn, tld, raw, info
