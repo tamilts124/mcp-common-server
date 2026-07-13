@@ -2,6 +2,18 @@
 todo / in-progress / done / tested / blocked
 
 ## Done
+- [tested] Add ntp_client tool (v4.221.0)
+  - Zero-dep NTP/SNTP client (pure Node.js dgram; no npm deps)
+  - Operations: query, sync_check, servers, stratum
+  - RFC 4330 / RFC 5905 NTP packet encoding/parsing
+  - lib/ntpClientOps.js (359 lines); lib/schemas/utilSchemas81.js (61 lines)
+  - Wired into lib/dispatchRead.js + lib/schemas/utilSchemas.js
+  - package.json: version 4.221.0; added test:ntp-client script
+  - README.md: 440 tools total (Read & File System: 92); added ntp_client
+  - section 248 tests: A=validation x10, B=unit/protocol x20, C=mock-network x10,
+    D=security x10, E=error-paths x6 -- 56/56
+
+## Done
 - [tested] Add influxdb_client tool (v4.220.0)
   - Zero-dep InfluxDB v1/v2/v3 HTTP API client (pure Node.js https; no npm deps)
   - Operations: ping, health, write, query_flux, query_influxql, buckets, orgs, measurements, delete
