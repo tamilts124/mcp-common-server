@@ -2,6 +2,19 @@
 todo / in-progress / done / tested / blocked
 
 ## Done
+- [tested] Add modbus_client tool (v4.224.0)
+  - Zero-dep Modbus TCP client (pure Node.js net; no npm deps)
+  - Operations: read_coils, read_discrete_inputs, read_holding_registers, read_input_registers, write_coil, write_register, write_multiple_coils, write_multiple_registers, info
+  - FC01–FC06, FC15, FC16; MBAP framing per IEC 61158 / MODBUS Application Protocol v1.1b3
+  - Modbus exceptions decoded to human-readable messages; NUL guard; timeout 500ms-30s
+  - lib/modbusClientOps.js (693 lines); lib/schemas/utilSchemas84.js (67 lines)
+  - Wired into lib/dispatchRead.js + lib/schemas/utilSchemas.js
+  - package.json: version 4.224.0; added test:modbus-client script
+  - README.md: 443 tools total (Network & Messaging: 30); added modbus_client
+  - section 251 tests: A=validation x10, B=protocol/codec x20, C=mock-network x10,
+    D=security x10, E=error-paths x6 -- 76/76
+
+## Done
 - [tested] Add clickhouse_client tool (v4.223.0)
   - Zero-dep ClickHouse HTTP API client (pure Node.js http/https; no npm deps)
   - Operations: ping, info, query, insert, databases, tables, create_table, drop_table

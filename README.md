@@ -1,6 +1,6 @@
 # MCP Common Server
 
-Zero-dependency Node.js MCP server with **442 tools** across 10 categories.
+Zero-dependency Node.js MCP server with **443 tools** across 10 categories.
 
 | # | Category | Tools |
 |---|---|---|
@@ -10,11 +10,11 @@ Zero-dependency Node.js MCP server with **442 tools** across 10 categories.
 | 4 | Code Analysis & Audit | 79 |
 | 5 | Security Scanning | 57 |
 | 6 | Browser Automation | 71 |
-| 7 | Network & Messaging | 29 |
+| 7 | Network & Messaging | 30 |
 | 8 | Data & Format Utilities | 31 |
 | 9 | Execution & Process | 8 |
 | 10 | Email & Database | 9 |
-| | **Total** | **442** |
+| | **Total** | **443** |
 
 ## Read & File System (94)
 
@@ -42,7 +42,7 @@ Zero-dependency Node.js MCP server with **442 tools** across 10 categories.
 
 ## Network & Messaging (29)
 
-`http_fetch`, `http_download`, `port_check`, `wait_for_port`, `port_scan_range`, `dns_lookup`, `websocket_client`, `sse_client`, `smtp_client`, `redis_client`, `mqtt_client`, `imap_client`, `snmp_client`, `ftp_client`, `kafka_client`, `amqp_client`, `stomp_client`, `ldap_client`, `nats_client`, `memcached_client`, `grpc_client`, `http_client`, `graphql_client`, `tcp_client`, `udp_client`, `ssh_exec`, `http_multi_fetch`, `multipart_upload`, `http_serve`
+`http_fetch`, `http_download`, `port_check`, `wait_for_port`, `port_scan_range`, `dns_lookup`, `websocket_client`, `sse_client`, `smtp_client`, `redis_client`, `mqtt_client`, `imap_client`, `snmp_client`, `ftp_client`, `kafka_client`, `amqp_client`, `stomp_client`, `ldap_client`, `nats_client`, `memcached_client`, `grpc_client`, `http_client`, `graphql_client`, `tcp_client`, `udp_client`, `ssh_exec`, `http_multi_fetch`, `multipart_upload`, `http_serve`, `modbus_client`
 
 ## Data & Format Utilities (31)
 

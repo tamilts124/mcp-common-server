@@ -184,7 +184,8 @@
     "test:influxdb-client": "node test/sections/247-influxdb-client.js",
     "test:ntp-client": "node test/sections/248-ntp-client.js",
     "test:syslog-client": "node test/sections/249-syslog-client.js",
-    "test:clickhouse-client": "node test/sections/250-clickhouse-client.js"
+    "test:clickhouse-client": "node test/sections/250-clickhouse-client.js",
+    "test:modbus-client": "node test/sections/251-modbus-client.js"
   },
   "engines": {
     "node": ">=18"
@@ -194,5 +195,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.223.0"
+  "version": "4.224.0"
 }
