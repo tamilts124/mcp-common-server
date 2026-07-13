@@ -2,6 +2,23 @@
 todo / in-progress / done / tested / blocked
 
 ## Done
+- [tested] Add pcap_client tool (v4.200.0)
+  - Zero-dep PCAP/PCAPng network capture file reader (pure Node.js; no npm deps)
+  - Operations: info, read, summary, filter, to_json
+  - Formats: PCAP little/big/nanosecond variants, PCAPng (SHB+IDB+EPB/SPB)
+  - Link layers: Ethernet, NULL/loopback, Linux SLL, Raw IP
+  - Protocols: IPv4, IPv6, TCP, UDP, ICMPv4, ICMPv6, ARP, OSPF, GRE, ESP, AH
+  - App protocols: DNS, DHCP, NTP, SNMP, mDNS, VXLAN (auto-detected from UDP ports)
+  - Filter: field==value, !=, >=, <=, >, < combined with && and ||
+  - Security: 500 MB file cap; 10,000,000 packet limit; NUL-byte guard; directory guard
+  - lib/pcapClientOps.js (755 lines); lib/schemas/utilSchemas61.js
+  - Wired into lib/dispatchRead.js + lib/schemas/utilSchemas.js
+  - package.json: version 4.200.0; added test:pcap-client script
+  - README.md: 304 tools total (Read & File System: 54)
+  - section 228 tests: A=validation x10, B=unit x20, C=happy-path x20,
+    D=security x10, E=error-paths x10, F=concurrency x6 -- 76/76
+
+## Done
 - [tested] Add hdf5_client tool (v4.199.0)
   - Zero-dep HDF5 file reader (pure Node.js; no npm deps)
   - Operations: info, list, attrs, read, to_json, to_csv
@@ -56,139 +73,14 @@ todo / in-progress / done / tested / blocked
     D=security x10, E=error-paths x10, F=concurrency x6 -- 76/76
 
 - [tested] Add parquet_client tool (v4.196.0)
-  - Zero-dep Apache Parquet file reader (pure Node.js; no npm deps)
-  - Operations: info, read, schema, row_group, to_json, to_csv
-  - Thrift Compact protocol decoder for parsing Parquet footer metadata
-  - Physical types: BOOLEAN, INT32, INT64, INT96, FLOAT, DOUBLE, BYTE_ARRAY, FIXED_LEN_BYTE_ARRAY
-  - Logical/converted types: STRING, DATE, TIMESTAMP, DECIMAL, UUID, ENUM, JSON, BSON, LIST, MAP
-  - Encodings: PLAIN, RLE, BIT_PACKED, DELTA_BINARY_PACKED, DELTA_LENGTH_BYTE_ARRAY, PLAIN_DICTIONARY, RLE_DICTIONARY
-  - Compression: UNCOMPRESSED, SNAPPY (pure-JS), GZIP (node:zlib)
-  - Definition/repetition level support (RLE/bit-packed, length-prefixed v1 and inline v2)
-  - Security: 200 MB file cap; 10,000,000 row limit; NUL-byte path guard; directory path rejected
-  - lib/parquetClientOps.js (1080 lines); lib/schemas/utilSchemas57.js
-  - Wired into lib/dispatchRead.js + lib/schemas/utilSchemas.js
-  - package.json: version 4.196.0; added test:parquet-client script
-  - README.md: 300 tools total (Read & File System: 51)
-  - section 224 tests: A=validation x10, B=unit x20, C=happy-path x20,
-    D=security x10, E=error-paths x10, F=concurrency x6 -- 76/76
-
-## Done
 - [tested] Add thrift_client tool (v4.195.0)
-  - Zero-dep Apache Thrift binary + compact protocol encoder/decoder (pure Node.js; no npm deps)
-  - Operations: encode, decode, encode_file, decode_file, inspect
-  - Binary protocol: fixed-width int16/32/64 (big-endian), big-endian double, 4-byte string length prefix
-  - Compact protocol: zigzag VarInt for i16/i32/i64, delta field IDs, bool embedded in type nibble, little-endian double
-  - Full type system: BOOL(2), BYTE(3), DOUBLE(4), I16(6), I32(8), I64(10), STRING/BINARY(11), STRUCT(12), MAP(13), SET(14), LIST(15), UUID(16)
-  - Schema resolver: string shorthands (bool/byte/i8/i16/i32/i64/double/string/binary/uuid) + object form (struct/list/set/map)
-  - Schema-less inspect: binary protocol wire-level field layout (typeId, fieldId, value) with sub-struct recursion
-  - BigInt support for I64 (encode from number/BigInt/string; decode to number or {__i64:string})
-  - UUID encode/decode: 8-4-4-4-12 hex format <-> 16-byte binary
-  - STRING/BINARY: UTF-8 auto-detection; raw binary returned as {__binary,length}
-  - Security: 50 MB file cap; 64-level nesting depth limit; 1,000,000 element limit; NUL-byte path guard; directory path rejected
-  - lib/thriftClientOps.js (1067 lines); lib/schemas/utilSchemas56.js
-  - Wired into lib/dispatchRead.js + lib/schemas/utilSchemas.js
-  - package.json: version 4.195.0; added test:thrift-client script
-  - README.md: 299 tools total (Read & File System: 50)
-  - section 223 tests: A=validation x10, B=unit x20, C=happy-path x20,
-    D=security x10, E=error-paths x10, F=concurrency x6 -- 76/76
-
-## Done
 - [tested] Add avro_client tool (v4.194.0)
-  - Zero-dep Apache Avro binary encoder/decoder (pure Node.js; no npm deps)
-  - Operations: encode, decode, encode_file, decode_file, inspect, schema_fingerprint
-  - Full Avro binary encoding spec: null, boolean, int, long, float, double, bytes, string, record, enum, array, map, union, fixed
-  - Long/int: variable-length zigzag encoding (ZigZag + VarInt)
-  - Object Container File (OCF) read/write support with sync markers
-  - Schema fingerprinting: Rabin fingerprint (64-bit) for schema evolution
-  - lib/avroClientOps.js; lib/schemas/utilSchemas55.js
-
-## Done
 - [tested] Add jsonrpc_client tool (v4.193.0)
-  - Zero-dep JSON-RPC 2.0 client (HTTP + TCP + Unix socket transports)
-  - Operations: call, notify, batch, call_tcp, call_unix
-  - HTTP/HTTPS POST transport with Content-Type: application/json
-  - TCP socket transport with newline-delimited JSON framing
-  - Unix domain socket transport (same framing as TCP)
-  - Full JSON-RPC 2.0 spec: single calls, fire-and-forget notifications, batch requests
-  - Batch: aligned responses by id; notification entries marked notify:true
-  - Auto-incrementing id generator; explicit id override supported
-  - Response validation: RPC-level errors surfaced as ToolError with error code
-  - Security: 10 MB response cap; 100-call batch limit; NUL-byte path guard for Unix sockets
-  - Timeouts: default 30s for HTTP, 30s for sockets; configurable
-  - lib/jsonrpcClientOps.js (468 lines); lib/schemas/utilSchemas54.js (140 lines)
-  - Wired into lib/dispatchRead.js + lib/schemas/utilSchemas.js
-  - package.json: version 4.193.0; added test:jsonrpc-client script
-  - README.md: 297 tools total (Read & File System: 48)
-  - section 221 tests: A=validation x10, B=unit x20, C=happy-path x20,
-    D=security x10, E=error-paths x10, F=concurrency x6 -- 76/76
-
-## Done
 - [tested] Add protobuf_client tool (v4.192.0)
-  - Zero-dep Protocol Buffers (proto3) binary encoder/decoder (pure Node.js; no npm deps)
-  - Operations: encode, decode, encode_file, decode_file, inspect
-  - Full proto3 wire format: varint (WT0), 64-bit fixed (WT1), length-delimited (WT2), 32-bit fixed (WT5)
-  - All scalar types: int32/64, uint32/64, sint32/64 (zigzag), bool, enum, fixed32/64, sfixed32/64, float, double, string, bytes, message
-  - BigInt support for int64/uint64/sint64/sfixed64 (encoded as { __int64: 'string' })
-  - Schema descriptor: { fieldNumber: { name, type, fields? } } for human-readable names + type-aware decode
-  - Schema-less best-effort decode: varints as signed int64, len-delim as string or bytes
-  - Repeated fields: multiple same-tag occurrences automatically coalesced into arrays
-  - Nested messages: recursive encode/decode with depth tracking
-  - inspect: wire-level field layout with sub-message heuristics (configurable max_depth 1-10)
-  - Security: 50 MB file cap; 64-level nesting depth limit; 1,000,000 field limit; NUL-byte path guard
-  - lib/protobufClientOps.js (805 lines); lib/schemas/utilSchemas53.js
-  - Wired into lib/dispatchRead.js + lib/schemas/utilSchemas.js
-  - package.json: version 4.192.0; added test:protobuf-client script
-  - README.md: 296 tools total (Read & File System: 47)
-  - section 220 tests: A=validation x10, B=unit x20, C=happy-path x20,
-    D=security x10, E=error-paths x10, F=concurrency x6 -- 76/76
-
-## Done
 - [tested] Add cbor_client tool (v4.191.0)
-  - Zero-dep CBOR (RFC 8949) encoder/decoder (pure Node.js; no npm deps)
-  - Operations: encode, decode, encode_file, decode_file, inspect
-  - Implements full RFC 8949 CBOR spec: MT0 uint, MT1 negint, MT2 bytes, MT3 text,
-    MT4 array, MT5 map, MT6 tags (bignum tags 2/3), MT7 float16/32/64 + simples
-  - Indefinite-length encoding for bytes, text, arrays, and maps (break code 0xff)
-  - BigInt support for uint64/int64 and bignum tags 2/3
-  - CborReader class with depth tracking, element counting, and offset reporting
-  - toJsonSafe: Buffer→{__bytes,length}; BigInt→{__bigint}; tag→{__tag,value}
-  - Security: 50 MB file cap; 100-level nesting depth limit; 1,000,000 element limit;
-    NUL-byte path guard; directory path rejected; empty hex/base64 caught
-  - lib/cborClientOps.js (852 lines); lib/schemas/utilSchemas52.js
-  - Wired into lib/dispatchRead.js + lib/schemas/utilSchemas.js
-  - package.json: version 4.191.0; added test:cbor-client script
-  - README.md: 295 tools total (Read & File System: 46)
-  - section 219 tests: A=validation x10, B=unit x20, C=happy-path x20,
-    D=security x10, E=error-paths x10, F=concurrency x5 -- 96/96
-
-## Done
 - [tested] Add msgpack_client tool (v4.190.0)
-  - Zero-dep MessagePack encoder/decoder (pure Node.js; no npm deps)
-  - Operations: encode, decode, encode_file, decode_file, inspect
-  - Implements full MessagePack spec: nil, bool, int, float, str, bin, array, map, ext types
-  - MsgpackReader class; encode/decodeBuffer/inspectBuffer exported for tests
-  - Security: 50 MB file cap; 100-level depth limit; 1,000,000 element limit; NUL-byte path guard
-  - lib/msgpackClientOps.js (674 lines); lib/schemas/utilSchemas51.js; wired into dispatchRead.js + utilSchemas.js
-  - section 218 tests: A=validation x10, B=unit x20, C=happy-path x20, D=security x10, E=error-paths x10, F=concurrency x5 -- 94/94
-
-## Done
 - [tested] Add pdf_client tool (v4.189.0)
-  - Zero-dep PDF reader/writer/manipulator (pure Node.js; no npm deps)
-  - Operations: info, get_text, merge, split, rotate, remove_pages, add_watermark, encrypt, decrypt
-  - Security: 100 MB file cap; 10,000 page limit; NUL-byte path guard; %PDF- header validation
-  - lib/pdfClientOps.js (866 lines); lib/schemas/utilSchemas50.js; wired into dispatchRead.js + utilSchemas.js
-  - section 217 tests: A=validation x10, B=unit x20, C=happy-path x20, D=security x10, E=error-paths x10, F=concurrency x5 -- 77/77
-
-## Done
 - [tested] Add excel_client tool (v4.188.0)
-  - Zero-dep XLSX reader/writer/editor (pure Node.js; no npm deps)
-  - Operations: read, get_cell, set_cell, get_range, set_range, add_sheet, delete_sheet, list_sheets, append_rows, delete_rows, stringify
-  - Supports Office Open XML (.xlsx) only — not legacy .xls BIFF format
-  - ZIP reader/writer (DEFLATE + STORED), CRC-32, minimal XML parser, shared strings, date-format detection
-  - Security: 50 MB file cap; 1,000,000 row limit; 16,384 col limit; NUL-byte path guard; row >= 1 guard
-  - lib/excelClientOps.js (1001 lines); lib/schemas/utilSchemas49.js; wired into dispatchRead.js + utilSchemas.js
-  - section 216 tests: A=validation x10, B=unit x20, C=happy-path x20, D=security x10, E=error-paths x10, F=concurrency x5 -- 97/97
-
 - [tested] Add json_client tool (v4.187.0)
 - [tested] Add tar_client tool (v4.186.0)
 - [tested] Add zip_client tool (v4.185.0)
