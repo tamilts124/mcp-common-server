@@ -2,7 +2,11 @@
 todo / in-progress / done / tested / blocked
 
 ## In Progress
-- (none)
+- [in-progress] Add k8s_client tool (v4.215.0)
+  - Zero-dep Kubernetes API client (pure Node.js https; reads kubeconfig; no npm deps)
+  - Operations: pods, deployments, services, namespaces, nodes, logs, get, list, apply, delete
+  - Auth: kubeconfig (token, client-cert, basic); in-cluster service account token
+  - lib/k8sClientOps.js; lib/schemas/utilSchemas75.js
 
 ## Done
 - [tested] Add registry_client tool (v4.214.0)

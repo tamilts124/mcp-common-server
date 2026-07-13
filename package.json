@@ -175,7 +175,8 @@
     "test:3d-client": "node test/sections/238-3d-client.js",
     "test:ssh-keygen": "node tests/section240_ssh_keygen.js",
     "test:wasm-client": "node test/sections/239-wasm-client.js",
-    "test:registry-client": "node test/sections/241-registry-client.js"
+    "test:registry-client": "node test/sections/241-registry-client.js",
+    "test:k8s-client": "node test/sections/242-k8s-client.js"
   },
   "engines": {
     "node": ">=18"
@@ -185,5 +186,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.214.0"
+  "version": "4.215.0"
 }
