@@ -2,6 +2,22 @@
 todo / in-progress / done / tested / blocked
 
 ## Done
+- [tested] Add orc_client tool (v4.197.0)
+  - Zero-dep Apache ORC file reader (pure Node.js; no npm deps)
+  - Operations: info, schema, stripe, read, to_json, to_csv
+  - Column types: BOOLEAN, BYTE, SHORT, INT, LONG, FLOAT, DOUBLE, STRING, BINARY,
+    TIMESTAMP, DATE, DECIMAL, VARCHAR, CHAR, LIST, MAP, STRUCT, UNION, TIMESTAMP_INSTANT
+  - Column encodings: DIRECT, DIRECT_V2, DICTIONARY, DICTIONARY_V2 (RLE v1 and v2)
+  - Compression: NONE, ZLIB (node:zlib), SNAPPY (pure-JS), LZ4 (raw block decode)
+  - Minimal Protocol Buffer decoder for ORC footer/postscript/stripe-footer parsing
+  - Security: 200 MB file cap; 10,000,000 row limit; NUL-byte path guard; directory path rejected
+  - lib/orcClientOps.js (1270 lines); lib/schemas/utilSchemas58.js
+  - Wired into lib/dispatchRead.js + lib/schemas/utilSchemas.js
+  - package.json: version 4.197.0; added test:orc-client script
+  - README.md: 301 tools total (Read & File System: 51)
+  - section 225 tests: A=validation x10, B=unit x20, C=happy-path x20,
+    D=security x10, E=error-paths x10, F=concurrency x6 -- 76/76
+
 - [tested] Add parquet_client tool (v4.196.0)
   - Zero-dep Apache Parquet file reader (pure Node.js; no npm deps)
   - Operations: info, read, schema, row_group, to_json, to_csv

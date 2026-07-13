@@ -158,7 +158,8 @@
     "test:jsonrpc-client": "node test/sections/221-jsonrpc-client.js",
     "test:avro-client": "node test/sections/222-avro-client.js",
     "test:thrift-client": "node test/sections/223-thrift-client.js",
-    "test:parquet-client": "node test/sections/224-parquet-client.js"
+    "test:parquet-client": "node test/sections/224-parquet-client.js",
+    "test:orc-client": "node test/sections/225-orc-client.js"
   },
   "engines": {
     "node": ">=18"
@@ -168,5 +169,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.196.0"
+  "version": "4.197.0"
 }
