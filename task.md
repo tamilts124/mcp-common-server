@@ -2,6 +2,20 @@
 todo / in-progress / done / tested / blocked
 
 ## Done
+- [tested] Add dns_client tool (v4.228.0)
+  - Full-featured DNS client: UDP/TCP classic DNS + DNS-over-HTTPS (DoH)
+  - Operations: query, reverse, batch, resolvers, info
+  - All common record types: A, AAAA, MX, TXT, NS, SOA, CNAME, PTR, SRV, CAA, DNSKEY, DS, NAPTR, HTTPS, SVCB
+  - Multiple resolver presets: Cloudflare, Google, Quad9, custom
+  - Manual wire-format encoding/decoding (pure Node.js, no npm deps)
+  - DNSSEC indicators, TTL, response codes, all RR sections
+  - lib/dnsClientOps.js (1094 lines); lib/schemas/utilSchemas88.js (72 lines)
+  - Wired into lib/dispatchRead.js + lib/schemas/utilSchemas.js
+  - package.json: version 4.228.0; added test:dns-client script
+  - README.md: 447 tools total (Network & Messaging: 34); added dns_client
+  - section 255 tests: A=pure-helpers x20, B=validation x15, C=mock-network x12, D=security x10, E=concurrency x8 -- 65/65
+
+## Done
 - [tested] Add tls_client tool (v4.227.0)
   - Zero-dep TLS/SSL live inspector (pure Node.js tls; no npm deps)
   - Operations: inspect, chain, ciphers, verify, scan, info
