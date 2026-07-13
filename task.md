@@ -254,3 +254,9 @@ todo / in-progress / done / tested / blocked
 - [x] Add multipart_upload + http_serve tools — status: tested (90/90, v4.152.0)
 - [x] Add key_generate + oauth2_token tools — status: tested (100/100, v4.151.0)
 - [x] Add tls_cert_inspect + http_multi_fetch tools — status: tested (92/92, v4.150.0)
+
+## In-Progress
+- [in-progress] Add tftp_client tool (v4.230.0)
+  - Zero-dep TFTP RFC 1350/2347/2348/2349 client (pure Node.js dgram; no npm deps)
+  - Operations: get, put, info
+  - lib/tftpClientOps.js; lib/schemas/utilSchemas90.js
