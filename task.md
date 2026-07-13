@@ -2,6 +2,17 @@
 todo / in-progress / done / tested / blocked
 
 ## Done
+- [tested] Add coap_client tool (v4.225.0)
+  - Zero-dep CoAP (RFC 7252) client (pure Node.js dgram; no npm deps)
+  - Operations: get, post, put, delete, discover, observe, ping, info
+  - lib/coapClientOps.js (1053 lines); lib/schemas/utilSchemas85.js (57 lines)
+  - Wired into lib/dispatchRead.js + lib/schemas/utilSchemas.js
+  - package.json: version 4.225.0; added test:coap-client script
+  - README.md: 444 tools total (Network & Messaging: 31); added coap_client
+  - section 252 tests: A=validation x11, B=codec x22, C=mock-network x22,
+    D=security x10, E=error-paths x10, F=concurrency x10 -- 85/85
+
+## Done
 - [tested] Add modbus_client tool (v4.224.0)
   - Zero-dep Modbus TCP client (pure Node.js net; no npm deps)
   - Operations: read_coils, read_discrete_inputs, read_holding_registers, read_input_registers, write_coil, write_register, write_multiple_coils, write_multiple_registers, info
