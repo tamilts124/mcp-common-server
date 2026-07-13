@@ -2,6 +2,25 @@
 todo / in-progress / done / tested / blocked
 
 ## Done
+- [tested] Sync README.md with actual server tool count (v4.201.0)
+  - 118 tools were wired in the server but missing from README documentation
+  - Updated all 10 category sections with correct tool lists and counts
+  - Read & File System: 54→72 (+18 tools: semver_compare, url_parse, json_flatten, uuid_generate,
+    diff_strings, base62_encode, base62_decode, markdown_to_html, xml_parse, string_transform,
+    ip_cidr, color_convert, number_format, date_calc, text_extract, str_similarity, cron_next, json_unflatten[was dup])
+  - Write & Edit: 8→22 (+14: delete_file, delete_files, move_file, copy_file, move_directory,
+    copy_directory, create_directory, delete_directory, gzip_compress, brotli_compress,
+    md_to_docx, md_to_pdf, pdf_to_docx, json_path_set)
+  - Code Analysis & Audit: 51→79 (+28 code/HTML/security analysis tools)
+  - Security Scanning: 44→57 (+13: jwt_*, crypto_*, hmac_*, totp_*, password_generate, key_generate, oauth2_token, tls_cert_inspect)
+  - Browser Automation: 36→71 (+35 browser tools: recording, pages, cookies, network, frames, etc.)
+  - Network & Messaging: 23→29 (+6: tcp_client, udp_client, ssh_exec, http_multi_fetch, multipart_upload, http_serve)
+  - Data & Format Utilities: 27→31 (+4: template_render, table_ops, graphql_query, jsonl_ops)
+  - Execution & Process: 7→8 (+1: send_process_input)
+  - Total: 304→420 tools
+  - package.json: version 4.200.0→4.201.0
+
+## Done
 - [tested] Add pcap_client tool (v4.200.0)
   - Zero-dep PCAP/PCAPng network capture file reader (pure Node.js; no npm deps)
   - Operations: info, read, summary, filter, to_json
