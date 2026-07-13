@@ -2,6 +2,20 @@
 todo / in-progress / done / tested / blocked
 
 ## Done
+- [tested] Add font_client tool (v4.206.0)
+  - Zero-dep font file reader (pure Node.js; no npm deps)
+  - Operations: info, names, metrics, tables, glyphs, unicode
+  - Formats: TTF/OTF (OpenType), WOFF, WOFF2 (header decode only), TTC (first font)
+  - Security: 50 MB file cap; NUL-byte guard; directory guard
+  - lib/fontClientOps.js (1323 lines); lib/schemas/utilSchemas66.js
+  - Wired into lib/dispatchRead.js + lib/schemas/utilSchemas.js
+  - Fixed UTF-16 BE name decoding in decodeNameString (was incorrectly using utf16le + reverse)
+  - package.json: version 4.206.0; added test:font-client script
+  - README.md: 425 tools total (Read & File System: 77)
+  - section 233 tests: A=validation x10, B=unit x20, C=happy-path x20,
+    D=security x10, E=error-paths x10, F=concurrency x6 -- 76/76
+
+## Done
 - [tested] Add geo_client tool (v4.205.0)
   - Zero-dep geospatial file reader (pure Node.js; no npm deps)
   - Operations: info, read, search, stats, bbox, convert
