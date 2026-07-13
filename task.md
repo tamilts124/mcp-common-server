@@ -2,6 +2,18 @@
 todo / in-progress / done / tested / blocked
 
 ## Done
+- [tested] Add influxdb_client tool (v4.220.0)
+  - Zero-dep InfluxDB v1/v2/v3 HTTP API client (pure Node.js https; no npm deps)
+  - Operations: ping, health, write, query_flux, query_influxql, buckets, orgs, measurements, delete
+  - Auth: token (Bearer, v2/v3), username/password (v1 / v2 compat)
+  - lib/influxdbClientOps.js (528 lines); lib/schemas/utilSchemas80.js (158 lines)
+  - Wired into lib/dispatchRead.js + lib/schemas/utilSchemas.js
+  - package.json: version 4.220.0; added test:influxdb-client script
+  - README.md: 439 tools total (Read & File System: 91); added influxdb_client
+  - section 247 tests: A=validation x10, B=unit/protocol x20, C=mock-network x10,
+    D=security x10, E=error-paths x6 -- 56/56
+
+## Done
 - [tested] Add cassandra_client tool (v4.219.0)
   - Zero-dep Apache Cassandra CQL native protocol client (pure Node.js net/tls; no npm deps)
   - Operations: info, query, execute, batch, tables, keyspaces, describe, use_keyspace
@@ -98,7 +110,7 @@ todo / in-progress / done / tested / blocked
 - [tested] Add jsonl_client tool (v4.182.0)
 - [tested] Add csv_client tool (v4.181.0)
 - [tested] Add markdown_client tool (v4.180.0)
-- [tested] Add xml_client tool (v4.179.0)
+- [tested] Add xml_client tool (v4.178.0)
 - [tested] Add ini_client tool (v4.178.0)
 - [tested] Add yaml_client tool (v4.177.0)
 - [tested] Add toml_client tool (v4.176.0)
