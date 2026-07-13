@@ -1,6 +1,11 @@
 ## Status legend
 todo / in-progress / done / tested / blocked
 
+## In Progress
+
+## Done
+- [tested] Add radius_client tool (v4.234.0)
+
 ## Done
 - [tested] Add xmpp_client tool (v4.233.0)
 - [tested] Add sip_client tool (v4.232.0)
