@@ -173,6 +173,7 @@
     "test:video-client": "node test/sections/236-video-client.js",
     "test:image-client": "node test/sections/237-image-client.js",
     "test:3d-client": "node test/sections/238-3d-client.js",
+    "test:ssh-keygen": "node tests/section240_ssh_keygen.js",
     "test:wasm-client": "node test/sections/239-wasm-client.js"
   },
   "engines": {
@@ -183,5 +184,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.212.0"
+  "version": "4.213.0"
 }

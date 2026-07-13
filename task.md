@@ -5,6 +5,22 @@ todo / in-progress / done / tested / blocked
 (none)
 
 ## Done
+- [tested] Add ssh_keygen tool (v4.213.0)
+  - Zero-dep SSH key inspector/generator (pure Node.js crypto; no npm deps)
+  - Operations: generate, inspect, fingerprint, convert, validate, authorized_keys, known_hosts
+  - Algorithms: RSA (1024–8192 bits), ECDSA P-256/P-384/P-521, Ed25519, Ed448
+  - PEM formats: PKCS#8, SEC1, PKCS#1 RSA, OpenSSH private, SPKI public
+  - Fingerprints: SHA256 (default) and MD5; full SSH wire-format blob builder
+  - authorized_keys: options prefix parsing, byType breakdown, entry fingerprints
+  - known_hosts: hashed host detection, markers (@cert-authority/@revoked), byKeyType
+  - Security: RSA key-size guards; 4 MB file cap; NUL-byte path guard; directory guard
+  - lib/sshKeygenOps.js (738 lines); lib/schemas/utilSchemas73.js
+  - Wired into lib/dispatchRead.js + lib/schemas/utilSchemas.js
+  - package.json: version 4.213.0; added test:ssh-keygen script
+  - README.md: 432 tools total (Read & File System: 84)
+  - section 240 tests: A=validation x10, B=unit x20, C=happy-path x20,
+    D=security x10, E=error-paths x10, F=concurrency x6 -- 76/76
+
 - [tested] Add wasm_client tool (v4.212.0)
   - Zero-dep WebAssembly binary inspector (pure Node.js; no npm deps)
   - Operations: info, imports, exports, types, functions, memory, validate
