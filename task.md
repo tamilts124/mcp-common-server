@@ -2,6 +2,19 @@
 todo / in-progress / done / tested / blocked
 
 ## Done
+- [tested] Add rtsp_client tool (v4.231.0)
+  - Zero-dep RTSP (RFC 2326) client (pure Node.js net/tls; no npm deps)
+  - Operations: options, describe, setup, play, pause, teardown, info
+  - SDP (RFC 2327) parsed into structured mediaDescriptions with controlUrl per track
+  - Auth: Basic (RFC 7617) and Digest MD5 (RFC 7616), auto-negotiated on 401
+  - TLS: rtsps:// uses tls.connect (port 322); rtsp:// uses net.connect (port 554)
+  - lib/rtspClientOps.js (634 lines); lib/schemas/utilSchemas91.js (64 lines)
+  - Wired into lib/dispatchRead.js + lib/schemas/utilSchemas.js
+  - package.json: version 4.231.0; added test:rtsp-client script
+  - README.md: 450 tools total (Network & Messaging: 37); added rtsp_client
+  - section 258 tests: A=pure-helpers x40, B=validation x15, C=mock-network x13, D=security x10, E=concurrency x8 -- 87/87
+
+## Done
 - [tested] Add irc_client tool (v4.229.0)
   - Zero-dep IRC client (pure Node.js net/tls; no npm deps)
   - Operations: send_message, join, list, whois, nick, raw, info

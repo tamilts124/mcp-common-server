@@ -191,7 +191,8 @@
     "test:tls-client": "node test/sections/254-tls-client.js",
     "test:dns-client": "node test/sections/255-dns-client.js",
     "test:irc-client": "node test/sections/256-irc-client.js",
-    "test:tftp-client": "node test/sections/257-tftp-client.js"
+    "test:tftp-client": "node test/sections/257-tftp-client.js",
+    "test:rtsp-client": "node test/sections/258-rtsp-client.js"
   },
   "engines": {
     "node": ">=18"
@@ -201,5 +202,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.230.0"
+  "version": "4.231.0"
 }
