@@ -1,6 +1,12 @@
 ## Status legend
 todo / in-progress / done / tested / blocked
 
+## In Progress
+- [tested] Add video_client tool (v4.209.0)
+  - Zero-dep video container reader (pure Node.js; no npm deps)
+  - Operations: info, streams, tags, chapters, validate
+  - Formats: MP4/MOV (ISO BMFF), MKV/WebM (EBML/Matroska), AVI (RIFF)
+
 ## Done
 - [tested] Add audio_client tool (v4.208.0)
   - Zero-dep audio metadata reader (pure Node.js; no npm deps)
