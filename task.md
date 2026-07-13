@@ -2,6 +2,19 @@
 todo / in-progress / done / tested / blocked
 
 ## Done
+- [tested] Add epub_client tool (v4.207.0)
+  - Zero-dep EPUB ebook reader (pure Node.js; no npm deps)
+  - Operations: info, metadata, toc, chapters, read, images
+  - Formats: EPUB 2 and EPUB 3 (.epub)
+  - Security: 200 MB file cap; 5 MB per-read cap; NUL-byte and directory guards
+  - lib/epubClientOps.js (536 lines); lib/schemas/utilSchemas67.js
+  - Wired into lib/dispatchRead.js + lib/schemas/utilSchemas.js
+  - package.json: version 4.207.0; added test:epub-client script
+  - README.md: 426 tools total (Read & File System: 78)
+  - section 234 tests: A=validation x10, B=unit x20, C=happy-path x20,
+    D=security x10, E=error-paths x10, F=concurrency x6 -- 76/76
+
+## Done
 - [tested] Add font_client tool (v4.206.0)
   - Zero-dep font file reader (pure Node.js; no npm deps)
   - Operations: info, names, metrics, tables, glyphs, unicode
