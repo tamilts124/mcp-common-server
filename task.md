@@ -2,9 +2,24 @@
 todo / in-progress / done / tested / blocked
 
 ## In Progress
-(none)
+- (none)
 
 ## Done
+- [tested] Add registry_client tool (v4.214.0)
+  - Zero-dep Docker/OCI registry client (pure Node.js https; no npm deps)
+  - Operations: ping, tags, manifest, config, layers, exists, digest
+  - Supports Docker Hub, GCR, ECR, GHCR, and any OCI-compliant registry
+  - Auth: anonymous, Basic, Bearer token (OAuth2 token exchange)
+  - parseImageRef: auto-parses docker-pull format, normalises docker.io
+  - Security: 16 MB response cap; NUL-byte guard; 20 s default timeout
+  - lib/registryClientOps.js (598 lines); lib/schemas/utilSchemas74.js
+  - Wired into lib/dispatchRead.js + lib/schemas/utilSchemas.js
+  - package.json: version 4.214.0; added test:registry-client script
+  - README.md: 433 tools total (Read & File System: 85)
+  - section 241 offline tests: A=validation x10, B=unit x20, D=security x10,
+    E=error-paths x5, F=concurrency x3 -- 48/48
+  - section 241 full tests: 76/76 (requires network for C/E/F network sections)
+
 - [tested] Add ssh_keygen tool (v4.213.0)
   - Zero-dep SSH key inspector/generator (pure Node.js crypto; no npm deps)
   - Operations: generate, inspect, fingerprint, convert, validate, authorized_keys, known_hosts
