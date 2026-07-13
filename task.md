@@ -2,6 +2,7 @@
 todo / in-progress / done / tested / blocked
 
 ## In Progress
+- [tested] Add pop3_client tool (v4.236.0)
 
 ## Done
 - [tested] Add diameter_client tool (v4.235.0)
