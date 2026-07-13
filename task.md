@@ -5,6 +5,20 @@ todo / in-progress / done / tested / blocked
 (none)
 
 ## Done
+- [tested] Add wasm_client tool (v4.212.0)
+  - Zero-dep WebAssembly binary inspector (pure Node.js; no npm deps)
+  - Operations: info, imports, exports, types, functions, memory, validate
+  - Formats: .wasm (WebAssembly Binary Format MVP v1)
+  - LEB128 decoder, type/import/export/function/memory/global/table/custom section parsing
+  - Security: 50 MB file cap; NUL-byte path guard; directory guard
+  - lib/wasmClientOps.js (618 lines); lib/schemas/utilSchemas72.js
+  - Wired into lib/dispatchRead.js + lib/schemas/utilSchemas.js
+  - package.json: version 4.212.0; added test:wasm-client script
+  - README.md: 431 tools total (Read & File System: 83)
+  - section 239 tests: A=validation x10, B=unit x20, C=happy-path x20,
+    D=security x10, E=error-paths x10, F=concurrency x6 -- 76/76
+
+## Done
 - [tested] Add 3d_client tool (v4.211.0)
   - Zero-dep 3D model file reader (pure Node.js; no npm deps)
   - Operations: info, vertices, faces, materials, validate
