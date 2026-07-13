@@ -2,6 +2,20 @@
 todo / in-progress / done / tested / blocked
 
 ## Done
+- [tested] Add log_client tool (v4.204.0)
+  - Zero-dep structured log file reader/analyzer (pure Node.js; no npm deps)
+  - Operations: info, read, search, stats, tail, export
+  - Formats: JSON-lines, Apache/Nginx CLF+combined, syslog RFC3164/5424, W3C extended, TSV/CSV logs
+  - Filters: level, time range, pattern/regex, field matching, AND/OR combinators
+  - Security: 500 MB file cap; 5,000,000 line limit; NUL-byte guard; directory guard
+  - lib/logClientOps.js (841 lines); lib/schemas/utilSchemas64.js
+  - Wired into lib/dispatchRead.js + lib/schemas/utilSchemas.js
+  - package.json: version 4.204.0; added test:log-client script
+  - README.md: 423 tools total (Read & File System: 75)
+  - section 231 tests: A=validation x10, B=unit x20, C=happy-path x20,
+    D=security x10, E=error-paths x10, F=concurrency x6 -- 76/76
+
+## Done
 - [tested] Add sqlite_client tool (v4.203.0)
   - Zero-dep stateless SQLite file reader/writer (pure Node.js; no npm deps)
   - Operations: info, query, execute, tables, schema, export
