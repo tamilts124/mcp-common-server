@@ -195,7 +195,8 @@
     "test:rtsp-client": "node test/sections/258-rtsp-client.js",
     "test:sip-client": "node test/sections/259-sip-client.js",
     "test:xmpp-client": "node test/sections/260-xmpp-client.js",
-    "test:radius-client": "node test/sections/261-radius-client.js"
+    "test:radius-client": "node test/sections/261-radius-client.js",
+    "test:diameter-client": "node test/sections/262-diameter-client.js"
   },
   "engines": {
     "node": ">=18"
@@ -205,5 +206,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.234.0"
+  "version": "4.235.0"
 }

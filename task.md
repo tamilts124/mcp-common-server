@@ -4,6 +4,7 @@ todo / in-progress / done / tested / blocked
 ## In Progress
 
 ## Done
+- [tested] Add diameter_client tool (v4.235.0)
 - [tested] Add radius_client tool (v4.234.0)
 
 ## Done
