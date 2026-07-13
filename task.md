@@ -255,8 +255,12 @@ todo / in-progress / done / tested / blocked
 - [x] Add key_generate + oauth2_token tools — status: tested (100/100, v4.151.0)
 - [x] Add tls_cert_inspect + http_multi_fetch tools — status: tested (92/92, v4.150.0)
 
-## In-Progress
-- [in-progress] Add tftp_client tool (v4.230.0)
+## Done
+- [tested] Add tftp_client tool (v4.230.0)
   - Zero-dep TFTP RFC 1350/2347/2348/2349 client (pure Node.js dgram; no npm deps)
   - Operations: get, put, info
-  - lib/tftpClientOps.js; lib/schemas/utilSchemas90.js
+  - lib/tftpClientOps.js (721 lines); lib/schemas/utilSchemas90.js (62 lines)
+  - Wired into lib/dispatchRead.js + lib/schemas/utilSchemas.js
+  - package.json: version 4.230.0; added test:tftp-client script
+  - README.md: 449 tools total (Network & Messaging: 36); added tftp_client
+  - section 257 tests: A=pure-helpers x40, B=validation x15, C=mock-network x13, D=security x10, E=concurrency x8 -- 86/86
