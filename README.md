@@ -1,10 +1,10 @@
 # MCP Common Server
 
-Zero-dependency Node.js MCP server with **434 tools** across 10 categories.
+Zero-dependency Node.js MCP server with **435 tools** across 10 categories.
 
 | # | Category | Tools |
 |---|---|---|
-| 1 | Read & File System | 85 |
+| 1 | Read & File System | 87 |
 | 2 | Write & Edit | 22 |
 | 3 | Git | 42 |
 | 4 | Code Analysis & Audit | 79 |
@@ -16,9 +16,9 @@ Zero-dependency Node.js MCP server with **434 tools** across 10 categories.
 | 10 | Email & Database | 9 |
 | | **Total** | **434** |
 
-## Read & File System (86)
+## Read & File System (87)
 
-`read_directory`, `read_file`, `read_files`, `read_allfiles`, `file_info`, `search_files`, `search_lines`, `search_in_document`, `file_checksum`, `checksum_verify`, `hash_string`, `regex_test`, `env_info`, `system_resources`, `which_command`, `compare_directories`, `file_diff_dir`, `count_lines`, `file_tree`, `hash_directory`, `base64_encode`, `text_transform`, `file_stats`, `dir_size_stats`, `disk_usage_summary`, `dir_diff_summary`, `image_ops`, `pdf_rich_extract`, `pdf_to_md`, `docx_to_md`, `docx_to_pdf`, `dotenv_client`, `toml_client`, `yaml_client`, `ini_client`, `xml_client`, `markdown_client`, `csv_client`, `jsonl_client`, `zip_client`, `tar_client`, `json_client`, `excel_client`, `pdf_client`, `msgpack_client`, `cbor_client`, `protobuf_client`, `jsonrpc_client`, `avro_client`, `thrift_client`, `parquet_client`, `orc_client`, `arrow_client`, `hdf5_client`, `pcap_client`, `ical_client`, `sqlite_client`, `log_client`, `geo_client`, `font_client`, `epub_client`, `audio_client`, `video_client`, `image_client`, `3d_client`, `wasm_client`, `ssh_keygen`, `registry_client`, `k8s_client`, `semver_compare`, `url_parse`, `json_flatten`, `uuid_generate`, `diff_strings`, `base62_encode`, `base62_decode`, `markdown_to_html`, `xml_parse`, `string_transform`, `ip_cidr`, `color_convert`, `number_format`, `date_calc`, `text_extract`, `str_similarity`, `cron_next`
+`read_directory`, `read_file`, `read_files`, `read_allfiles`, `file_info`, `search_files`, `search_lines`, `search_in_document`, `file_checksum`, `checksum_verify`, `hash_string`, `regex_test`, `env_info`, `system_resources`, `which_command`, `compare_directories`, `file_diff_dir`, `count_lines`, `file_tree`, `hash_directory`, `base64_encode`, `text_transform`, `file_stats`, `dir_size_stats`, `disk_usage_summary`, `dir_diff_summary`, `image_ops`, `pdf_rich_extract`, `pdf_to_md`, `docx_to_md`, `docx_to_pdf`, `dotenv_client`, `toml_client`, `yaml_client`, `ini_client`, `xml_client`, `markdown_client`, `csv_client`, `jsonl_client`, `zip_client`, `tar_client`, `json_client`, `excel_client`, `pdf_client`, `msgpack_client`, `cbor_client`, `protobuf_client`, `jsonrpc_client`, `avro_client`, `thrift_client`, `parquet_client`, `orc_client`, `arrow_client`, `hdf5_client`, `pcap_client`, `ical_client`, `sqlite_client`, `log_client`, `geo_client`, `font_client`, `epub_client`, `audio_client`, `video_client`, `image_client`, `3d_client`, `wasm_client`, `ssh_keygen`, `registry_client`, `k8s_client`, `prometheus_client`, `semver_compare`, `url_parse`, `json_flatten`, `uuid_generate`, `diff_strings`, `base62_encode`, `base62_decode`, `markdown_to_html`, `xml_parse`, `string_transform`, `ip_cidr`, `color_convert`, `number_format`, `date_calc`, `text_extract`, `str_similarity`, `cron_next`
 
 ## Write & Edit (22)
 

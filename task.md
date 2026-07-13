@@ -2,7 +2,20 @@
 todo / in-progress / done / tested / blocked
 
 ## In Progress
-- [in-progress] Add k8s_client tool (v4.215.0)
+- [tested] Add prometheus_client tool (v4.216.0)
+  - Zero-dep Prometheus/OpenMetrics text format parser (pure Node.js; no npm deps)
+  - Operations: parse, query, labels, stats, filter, fetch, validate
+  - Supports Prometheus text exposition format 0.0.4 and OpenMetrics text 1.0
+  - HTTP fetch with configurable timeout and size cap (64 MB)
+  - Bug fix: metadata (TYPE/HELP) for suffixed names (e.g. _total) now stored under base name
+  - lib/prometheusClientOps.js (551 lines); lib/schemas/utilSchemas76.js
+  - Wired into lib/dispatchRead.js + lib/schemas/utilSchemas.js
+  - package.json: version 4.216.0; added test:prometheus-client script
+  - README.md: 435 tools total (Read & File System: 87)
+  - section 243 tests: A=validation x10, B=unit x20, C=happy-path x10, D=security x10, E=error-paths x6 -- 56/56
+
+## Done
+- [tested] Add k8s_client tool (v4.215.0)
   - Zero-dep Kubernetes API client (pure Node.js https; reads kubeconfig; no npm deps)
   - Operations: pods, deployments, services, namespaces, nodes, logs, get, list, apply, delete
   - Auth: kubeconfig (token, client-cert, basic); in-cluster service account token
