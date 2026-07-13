@@ -2,6 +2,24 @@
 todo / in-progress / done / tested / blocked
 
 ## Done
+- [tested] Add parquet_client tool (v4.196.0)
+  - Zero-dep Apache Parquet file reader (pure Node.js; no npm deps)
+  - Operations: info, read, schema, row_group, to_json, to_csv
+  - Thrift Compact protocol decoder for parsing Parquet footer metadata
+  - Physical types: BOOLEAN, INT32, INT64, INT96, FLOAT, DOUBLE, BYTE_ARRAY, FIXED_LEN_BYTE_ARRAY
+  - Logical/converted types: STRING, DATE, TIMESTAMP, DECIMAL, UUID, ENUM, JSON, BSON, LIST, MAP
+  - Encodings: PLAIN, RLE, BIT_PACKED, DELTA_BINARY_PACKED, DELTA_LENGTH_BYTE_ARRAY, PLAIN_DICTIONARY, RLE_DICTIONARY
+  - Compression: UNCOMPRESSED, SNAPPY (pure-JS), GZIP (node:zlib)
+  - Definition/repetition level support (RLE/bit-packed, length-prefixed v1 and inline v2)
+  - Security: 200 MB file cap; 10,000,000 row limit; NUL-byte path guard; directory path rejected
+  - lib/parquetClientOps.js (1080 lines); lib/schemas/utilSchemas57.js
+  - Wired into lib/dispatchRead.js + lib/schemas/utilSchemas.js
+  - package.json: version 4.196.0; added test:parquet-client script
+  - README.md: 300 tools total (Read & File System: 51)
+  - section 224 tests: A=validation x10, B=unit x20, C=happy-path x20,
+    D=security x10, E=error-paths x10, F=concurrency x6 -- 76/76
+
+## Done
 - [tested] Add thrift_client tool (v4.195.0)
   - Zero-dep Apache Thrift binary + compact protocol encoder/decoder (pure Node.js; no npm deps)
   - Operations: encode, decode, encode_file, decode_file, inspect
