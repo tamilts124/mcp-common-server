@@ -5,6 +5,19 @@ todo / in-progress / done / tested / blocked
 (none)
 
 ## Done
+- [tested] Add 3d_client tool (v4.211.0)
+  - Zero-dep 3D model file reader (pure Node.js; no npm deps)
+  - Operations: info, vertices, faces, materials, validate
+  - Formats: OBJ + MTL (Wavefront), STL ASCII + Binary, PLY (ASCII + Binary LE/BE), GLTF + GLB (GL Transmission)
+  - Security: 200 MB file cap; 10 MB text window; NUL-byte and directory guards; vertex/face caps at 5 M each
+  - lib/3dClientOps.js (871 lines); lib/schemas/utilSchemas71.js
+  - Wired into lib/dispatchRead.js + lib/schemas/utilSchemas.js
+  - package.json: version 4.211.0; added test:3d-client script
+  - README.md: 430 tools total (Read & File System: 82)
+  - section 238 tests: A=validation x10, B=unit x20, C=happy-path x20,
+    D=security x10, E=error-paths x10, F=concurrency x6 -- 76/76
+
+## Done
 - [tested] Add image_client tool (v4.210.0)
   - Zero-dep image metadata reader (pure Node.js; no npm deps)
   - Operations: info, exif, iptc, xmp, validate

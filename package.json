@@ -171,7 +171,8 @@
     "test:epub-client": "node test/sections/234-epub-client.js",
     "test:audio-client": "node test/sections/235-audio-client.js",
     "test:video-client": "node test/sections/236-video-client.js",
-    "test:image-client": "node test/sections/237-image-client.js"
+    "test:image-client": "node test/sections/237-image-client.js",
+    "test:3d-client": "node test/sections/238-3d-client.js"
   },
   "engines": {
     "node": ">=18"
@@ -181,5 +182,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.210.0"
+  "version": "4.211.0"
 }
