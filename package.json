@@ -197,7 +197,8 @@
     "test:xmpp-client": "node test/sections/260-xmpp-client.js",
     "test:radius-client": "node test/sections/261-radius-client.js",
     "test:diameter-client": "node test/sections/262-diameter-client.js",
-    "test:pop3-client": "node test/sections/263-pop3-client.js"
+    "test:pop3-client": "node test/sections/263-pop3-client.js",
+    "test:nntp-client": "node test/sections/264-nntp-client.js"
   },
   "engines": {
     "node": ">=18"
@@ -207,5 +208,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.236.0"
+  "version": "4.237.0"
 }
