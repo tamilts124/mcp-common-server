@@ -2,9 +2,10 @@
 todo / in-progress / done / tested / blocked
 
 ## In Progress
-- [tested] Add teams_client tool (v4.252.0)
+(none)
 
 ## Recently Done
+- [tested] Add teams_client tool (v4.252.0)
 - [tested] Add slack_client tool (v4.251.0)
 - [tested] Add confluence_client tool (v4.250.0)
 - [tested] Add jira_client tool (v4.249.0)
@@ -40,7 +41,7 @@ todo / in-progress / done / tested / blocked
 - [tested] Add tls_client tool (v4.227.0)
 - [tested] Add whois_client tool (v4.226.0)
 - [tested] Add coap_client tool (v4.225.0)
-- [tested] Add modbus_client tool (v4.224.0)
+- [tested] Add modbus_client tool (v4.223.0)
 - [tested] Add clickhouse_client tool (v4.223.0)
 - [tested] Add syslog_client tool (v4.222.0)
 - [tested] Add ntp_client tool (v4.221.0)
