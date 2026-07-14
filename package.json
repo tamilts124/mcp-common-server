@@ -204,7 +204,8 @@
     "test:consul-client": "node test/sections/267-consul-client.js",
     "test:vault-client": "node test/sections/268-vault-client.js",
     "test:aws-client": "node test/sections/269-aws-client.js",
-    "test:gcp-client": "node test/sections/270-gcp-client.js"
+    "test:gcp-client": "node test/sections/270-gcp-client.js",
+    "test:azure-client": "node test/sections/271-azure-client.js"
   },
   "engines": {
     "node": ">=18"
@@ -214,5 +215,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.243.0"
+  "version": "4.244.0"
 }

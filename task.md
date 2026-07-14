@@ -2,6 +2,9 @@
 todo / in-progress / done / tested / blocked
 
 ## In Progress
+
+## Done (recent)
+- [tested] Add azure_client tool (v4.244.0)
 - [tested] Add gcp_client tool (v4.243.0)
 - [tested] Add aws_client tool (v4.242.0)
 - [tested] Add vault_client tool (v4.241.0)
