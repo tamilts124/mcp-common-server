@@ -1,6 +1,9 @@
 ## Status legend
 todo / in-progress / done / tested / blocked
 
+## In Progress
+- [in-progress] Add slack_client tool (v4.251.0)
+
 ## Recently Done
 - [tested] Add confluence_client tool (v4.250.0)
 - [tested] Add jira_client tool (v4.249.0)
