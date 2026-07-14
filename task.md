@@ -1,10 +1,10 @@
 ## Status legend
 todo / in-progress / done / tested / blocked
 
-## In Progress
-(none)
-
 ## Recently Done
+- [tested] Add notion_client tool (v4.253.0)
+
+## Done
 - [tested] Add teams_client tool (v4.252.0)
 - [tested] Add slack_client tool (v4.251.0)
 - [tested] Add confluence_client tool (v4.250.0)
