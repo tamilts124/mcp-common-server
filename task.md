@@ -4,6 +4,7 @@ todo / in-progress / done / tested / blocked
 ## In Progress
 
 ## Done (recent)
+- [tested] Add terraform_client tool (v4.245.0)
 - [tested] Add azure_client tool (v4.244.0)
 - [tested] Add gcp_client tool (v4.243.0)
 - [tested] Add aws_client tool (v4.242.0)
