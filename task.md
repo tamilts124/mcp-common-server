@@ -2,7 +2,7 @@
 todo / in-progress / done / tested / blocked
 
 ## In Progress
-(none)
+- [tested] Add teams_client tool (v4.252.0)
 
 ## Recently Done
 - [tested] Add slack_client tool (v4.251.0)
