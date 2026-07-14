@@ -2,6 +2,7 @@
 todo / in-progress / done / tested / blocked
 
 ## In Progress
+- [tested] Add github_client tool (v4.246.0)
 
 ## Done (recent)
 - [tested] Add terraform_client tool (v4.245.0)

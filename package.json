@@ -206,7 +206,8 @@
     "test:aws-client": "node test/sections/269-aws-client.js",
     "test:gcp-client": "node test/sections/270-gcp-client.js",
     "test:azure-client": "node test/sections/271-azure-client.js",
-    "test:terraform-client": "node test/sections/272-terraform-client.js"
+    "test:terraform-client": "node test/sections/272-terraform-client.js",
+    "test:github-client": "node test/sections/273-github-client.js"
   },
   "engines": {
     "node": ">=18"
@@ -216,5 +217,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.245.0"
+  "version": "4.246.0"
 }
