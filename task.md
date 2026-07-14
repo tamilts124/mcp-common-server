@@ -1,6 +1,9 @@
 ## Status legend
 todo / in-progress / done / tested / blocked
 
+## In Progress
+- [tested] Add bitbucket_client tool (v4.248.0)
+
 ## Done (recent)
 - [tested] Add gitlab_client tool (v4.247.0)
 - [tested] Add github_client tool (v4.246.0)

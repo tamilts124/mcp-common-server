@@ -208,7 +208,8 @@
     "test:azure-client": "node test/sections/271-azure-client.js",
     "test:terraform-client": "node test/sections/272-terraform-client.js",
     "test:github-client": "node test/sections/273-github-client.js",
-    "test:gitlab-client": "node test/sections/274-gitlab-client.js"
+    "test:gitlab-client": "node test/sections/274-gitlab-client.js",
+    "test:bitbucket-client": "node test/sections/275-bitbucket-client.js"
   },
   "engines": {
     "node": ">=18"
@@ -218,5 +219,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.247.0"
+  "version": "4.248.0"
 }
