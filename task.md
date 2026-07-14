@@ -1,7 +1,10 @@
 ## Status legend
 todo / in-progress / done / tested / blocked
 
-## In Progress
+## Recently Done
+- [tested] Add jira_client tool (v4.249.0)
+
+## Recently Done
 - [tested] Add bitbucket_client tool (v4.248.0)
 
 ## Done (recent)
