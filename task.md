@@ -2,6 +2,7 @@
 todo / in-progress / done / tested / blocked
 
 ## In Progress
+- [tested] Add consul_client tool (v4.240.0)
 
 ## Done
 - [tested] Add etcd_client tool (v4.239.0)
