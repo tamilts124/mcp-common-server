@@ -2,9 +2,10 @@
 todo / in-progress / done / tested / blocked
 
 ## In Progress
-- [tested] Add nntp_client tool (v4.237.0)
 
 ## Done
+- [tested] Add zookeeper_client tool (v4.238.0)
+- [tested] Add nntp_client tool (v4.237.0)
 - [tested] Add pop3_client tool (v4.236.0)
 - [tested] Add diameter_client tool (v4.235.0)
 - [tested] Add radius_client tool (v4.234.0)
