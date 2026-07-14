@@ -1,10 +1,8 @@
 ## Status legend
 todo / in-progress / done / tested / blocked
 
-## In Progress
-- [in-progress] Add gitlab_client tool (v4.247.0)
-
 ## Done (recent)
+- [tested] Add gitlab_client tool (v4.247.0)
 - [tested] Add github_client tool (v4.246.0)
 - [tested] Add terraform_client tool (v4.245.0)
 - [tested] Add azure_client tool (v4.244.0)
