@@ -202,7 +202,8 @@
     "test:zookeeper-client": "node test/sections/265-zookeeper-client.js",
     "test:etcd-client": "node test/sections/266-etcd-client.js",
     "test:consul-client": "node test/sections/267-consul-client.js",
-    "test:vault-client": "node test/sections/268-vault-client.js"
+    "test:vault-client": "node test/sections/268-vault-client.js",
+    "test:aws-client": "node test/sections/269-aws-client.js"
   },
   "engines": {
     "node": ">=18"
@@ -212,5 +213,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.241.0"
+  "version": "4.242.0"
 }
