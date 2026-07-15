@@ -219,7 +219,8 @@
     "test:linear-client": "node test/sections/282-linear-client.js",
     "test:zendesk-client": "node test/sections/283-zendesk-client.js",
     "test:pagerduty-client": "node test/sections/284-pagerduty-client.js",
-    "test:twilio-client": "node test/sections/285-twilio-client.js"
+    "test:twilio-client": "node test/sections/285-twilio-client.js",
+    "test:stripe-client": "node test/sections/286-stripe-client.js"
   },
   "engines": {
     "node": ">=18"
@@ -229,5 +230,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.258.0"
+  "version": "4.259.0"
 }

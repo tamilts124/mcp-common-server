@@ -1,6 +1,6 @@
 # MCP Common Server
 
-Zero-dependency Node.js MCP server with **475 tools** across 10 categories.
+Zero-dependency Node.js MCP server with **476 tools** across 10 categories.
 
 | # | Category | Tools |
 |---|---|---|
@@ -10,7 +10,7 @@ Zero-dependency Node.js MCP server with **475 tools** across 10 categories.
 | 4 | Code Analysis & Audit | 79 |
 | 5 | Security Scanning | 57 |
 | 6 | Browser Automation | 71 |
-| 7 | Network & Messaging | 63 |
+| 7 | Network & Messaging | 64 |
 | 8 | Data & Format Utilities | 31 |
 | 9 | Execution & Process | 8 |
 | 10 | Email & Database | 9 |
@@ -40,9 +40,10 @@ Zero-dependency Node.js MCP server with **475 tools** across 10 categories.
 
 `browser_launch`, `browser_navigate`, `browser_get_content`, `browser_get_title`, `browser_evaluate`, `browser_click`, `browser_type`, `browser_screenshot`, `browser_get_console_logs`, `browser_list_sessions`, `browser_close`, `browser_wait_for_navigation`, `browser_hover`, `browser_upload_file`, `browser_drag_and_drop`, `browser_download`, `browser_get_attribute`, `browser_is_checked`, `browser_uncheck`, `browser_get_element_info`, `browser_close_page`, `browser_emulate`, `browser_set_viewport`, `browser_set_extra_headers`, `browser_set_local_storage`, `browser_add_init_script`, `browser_get_page_metrics`, `browser_get_exposed_calls`, `browser_wait_for_response`, `browser_get_storage_state`, `browser_storage_state_save`, `browser_accessibility_snapshot`, `browser_find_by_role`, `browser_wait_for_dialog`, `browser_frame_evaluate`, `browser_replay_actions`, `browser_new_page`, `browser_switch_page`, `browser_list_pages`, `browser_start_recording`, `browser_stop_recording`, `browser_get_recording`, `browser_clear_recording`, `browser_select_option`, `browser_press_key`, `browser_scroll`, `browser_double_click`, `browser_right_click`, `browser_check`, `browser_wait_for_selector`, `browser_get_current_url`, `browser_go_back`, `browser_go_forward`, `browser_reload`, `browser_pdf`, `browser_is_visible`, `browser_expose_function`, `browser_get_cookies`, `browser_set_cookies`, `browser_network_start`, `browser_network_stop`, `browser_get_network_requests`, `browser_route`, `browser_unroute`, `browser_get_local_storage`, `browser_handle_next_dialog`, `browser_get_dialog_log`, `browser_list_frames`, `browser_frame_click`, `browser_frame_type`, `browser_frame_get_content`
 
-## Network & Messaging (63)
+## Network & Messaging (64)
 
 `http_fetch`, `http_download`, `port_check`, `wait_for_port`, `port_scan_range`, `dns_lookup`, `websocket_client`, `sse_client`, `smtp_client`, `redis_client`, `mqtt_client`, `imap_client`, `snmp_client`, `ftp_client`, `kafka_client`, `amqp_client`, `stomp_client`, `ldap_client`, `nats_client`, `memcached_client`, `grpc_client`, `http_client`, `graphql_client`, `tcp_client`, `udp_client`, `ssh_exec`, `http_multi_fetch`, `multipart_upload`, `http_serve`, `modbus_client`, `coap_client`, `whois_client`, `tls_client`, `dns_client`, `irc_client`, `tftp_client`, `rtsp_client`, `sip_client`, `xmpp_client`, `radius_client`, `diameter_client`, `pop3_client`, `nntp_client`, `zookeeper_client`, `etcd_client`, `consul_client`, `vault_client`, `aws_client`, `gcp_client`, `azure_client`, `terraform_client`, `github_client`, `gitlab_client`, `bitbucket_client`, `jira_client`, `confluence_client`, `slack_client`, `teams_client`, `notion_client`, `discord_client`, `linear_client`, `zendesk_client`, `pagerduty_client`, `twilio_client`
+`stripe_client` - Zero-dependency Stripe REST API v1 client (pure Node.js https). Auth: secret_key (sk_*/rk_*). 63 ops: Customers, PaymentIntents, PaymentMethods, Charges, Refunds, Subscriptions, Invoices, Products, Prices, Coupons, Checkout Sessions, Webhook Endpoints, Balance/Payouts, Disputes, Generic. Stripe Connect support, idempotency keys, credentials scrubbed from all errors.
 
 ## Data & Format Utilities (31)
 

@@ -1,6 +1,9 @@
 ## Status legend
 todo / in-progress / done / tested / blocked
 
+## In Progress
+- [tested] Add stripe_client tool (v4.259.0)
+
 ## Recently Done
 - [tested] Add twilio_client tool (v4.258.0)
 
