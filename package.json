@@ -214,7 +214,8 @@
     "test:confluence-client": "node test/sections/277-confluence-client.js",
     "test:slack-client": "node test/sections/278-slack-client.js",
     "test:teams-client": "node test/sections/279-teams-client.js",
-    "test:notion-client": "node test/sections/280-notion-client.js"
+    "test:notion-client": "node test/sections/280-notion-client.js",
+    "test:discord-client": "node test/sections/281-discord-client.js"
   },
   "engines": {
     "node": ">=18"
@@ -224,5 +225,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.253.0"
+  "version": "4.254.0"
 }
