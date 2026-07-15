@@ -1,6 +1,9 @@
 ## Status legend
 todo / in-progress / done / tested / blocked
 
+## In Progress
+- [tested] Add zendesk_client tool (v4.256.0)
+
 ## Recently Done
 - [tested] Add linear_client tool (v4.255.0)
 - [tested] Add discord_client tool (v4.254.0)

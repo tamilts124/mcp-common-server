@@ -216,7 +216,8 @@
     "test:teams-client": "node test/sections/279-teams-client.js",
     "test:notion-client": "node test/sections/280-notion-client.js",
     "test:discord-client": "node test/sections/281-discord-client.js",
-    "test:linear-client": "node test/sections/282-linear-client.js"
+    "test:linear-client": "node test/sections/282-linear-client.js",
+    "test:zendesk-client": "node test/sections/283-zendesk-client.js"
   },
   "engines": {
     "node": ">=18"
@@ -226,5 +227,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.255.0"
+  "version": "4.256.0"
 }
