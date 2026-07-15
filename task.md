@@ -2,6 +2,9 @@
 todo / in-progress / done / tested / blocked
 
 ## In Progress
+- [tested] Add pagerduty_client tool (v4.257.0)
+
+## Recently Done
 - [tested] Add zendesk_client tool (v4.256.0)
 
 ## Recently Done
