@@ -1,7 +1,10 @@
 ## Status legend
 todo / in-progress / done / tested / blocked
 
-## In Progress
+## Recently Done
+- [tested] Add twilio_client tool (v4.258.0)
+
+## Recently Done
 - [tested] Add pagerduty_client tool (v4.257.0)
 
 ## Recently Done
