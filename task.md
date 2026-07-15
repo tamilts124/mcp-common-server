@@ -2,6 +2,7 @@
 todo / in-progress / done / tested / blocked
 
 ## Recently Done
+- [tested] Add linear_client tool (v4.255.0)
 - [tested] Add discord_client tool (v4.254.0)
 - [tested] Add notion_client tool (v4.253.0)
 
