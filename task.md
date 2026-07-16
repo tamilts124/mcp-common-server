@@ -1,7 +1,10 @@
 ## Status legend
 todo / in-progress / done / tested / blocked
 
-## In Progress
+## Recently Done
+- [tested] Add mailchimp_client tool (v4.261.0)
+
+## Recently Done
 - [tested] Add sendgrid_client tool (v4.260.0)
 
 ## Recently Done
