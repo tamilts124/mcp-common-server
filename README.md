@@ -1,6 +1,6 @@
 # MCP Common Server
 
-Zero-dependency Node.js MCP server with **481 tools** across 10 categories.
+Zero-dependency Node.js MCP server with **482 tools** across 10 categories.
 
 | # | Category | Tools |
 |---|---|---|
@@ -10,11 +10,11 @@ Zero-dependency Node.js MCP server with **481 tools** across 10 categories.
 | 4 | Code Analysis & Audit | 79 |
 | 5 | Security Scanning | 57 |
 | 6 | Browser Automation | 71 |
-| 7 | Network & Messaging | 68 |
+| 7 | Network & Messaging | 69 |
 | 8 | Data & Format Utilities | 31 |
 | 9 | Execution & Process | 8 |
 | 10 | Email & Database | 9 |
-| | **Total** | **481** |
+| | **Total** | **482** |
 
 ## Read & File System (94)
 
@@ -42,7 +42,7 @@ Zero-dependency Node.js MCP server with **481 tools** across 10 categories.
 
 ## Network & Messaging (65)
 
-`http_fetch`, `http_download`, `port_check`, `wait_for_port`, `port_scan_range`, `dns_lookup`, `websocket_client`, `sse_client`, `smtp_client`, `redis_client`, `mqtt_client`, `imap_client`, `snmp_client`, `ftp_client`, `kafka_client`, `amqp_client`, `stomp_client`, `ldap_client`, `nats_client`, `memcached_client`, `grpc_client`, `http_client`, `graphql_client`, `tcp_client`, `udp_client`, `ssh_exec`, `http_multi_fetch`, `multipart_upload`, `http_serve`, `modbus_client`, `coap_client`, `whois_client`, `tls_client`, `dns_client`, `irc_client`, `tftp_client`, `rtsp_client`, `sip_client`, `xmpp_client`, `radius_client`, `diameter_client`, `pop3_client`, `nntp_client`, `zookeeper_client`, `etcd_client`, `consul_client`, `vault_client`, `aws_client`, `gcp_client`, `azure_client`, `terraform_client`, `github_client`, `gitlab_client`, `bitbucket_client`, `jira_client`, `confluence_client`, `slack_client`, `teams_client`, `notion_client`, `discord_client`, `linear_client`, `zendesk_client`, `pagerduty_client`, `twilio_client`, `stripe_client`, `sendgrid_client`, `mailchimp_client`, `hubspot_client`, `salesforce_client`
+`http_fetch`, `http_download`, `port_check`, `wait_for_port`, `port_scan_range`, `dns_lookup`, `websocket_client`, `sse_client`, `smtp_client`, `redis_client`, `mqtt_client`, `imap_client`, `snmp_client`, `ftp_client`, `kafka_client`, `amqp_client`, `stomp_client`, `ldap_client`, `nats_client`, `memcached_client`, `grpc_client`, `http_client`, `graphql_client`, `tcp_client`, `udp_client`, `ssh_exec`, `http_multi_fetch`, `multipart_upload`, `http_serve`, `modbus_client`, `coap_client`, `whois_client`, `tls_client`, `dns_client`, `irc_client`, `tftp_client`, `rtsp_client`, `sip_client`, `xmpp_client`, `radius_client`, `diameter_client`, `pop3_client`, `nntp_client`, `zookeeper_client`, `etcd_client`, `consul_client`, `vault_client`, `aws_client`, `gcp_client`, `azure_client`, `terraform_client`, `github_client`, `gitlab_client`, `bitbucket_client`, `jira_client`, `confluence_client`, `slack_client`, `teams_client`, `notion_client`, `discord_client`, `linear_client`, `zendesk_client`, `pagerduty_client`, `twilio_client`, `stripe_client`, `sendgrid_client`, `mailchimp_client`, `hubspot_client`, `salesforce_client`, `shopify_client`
 ## Data & Format Utilities (31)
 
 `json_schema_validate`, `env_diff`, `zip_directory`, `create_tar`, `read_archive`, `query_json`, `query_data`, `diff_files`, `query_path`, `json_patch_generate`, `json_diff`, `json_format`, `json_patch`, `apply_patch`, `unzip_archive`, `extract_tar`, `yaml_patch`, `yaml_merge`, `json_merge`, `convert_data`, `csv_convert`, `gzip_decompress`, `brotli_decompress`, `csv_diff`, `json_schema_generate`, `csv_query`, `json_unflatten`, `template_render`, `table_ops`, `graphql_query`, `jsonl_ops`

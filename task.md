@@ -1,7 +1,10 @@
 ## Status legend
 todo / in-progress / done / tested / blocked
 
-## In Progress
+## Recently Done
+- [tested] Add shopify_client tool (v4.264.0)
+
+## Recently Done
 - [tested] Add salesforce_client tool (v4.263.0)
 
 ## Recently Done
