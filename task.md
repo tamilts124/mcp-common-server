@@ -2,9 +2,10 @@
 todo / in-progress / done / tested / blocked
 
 ## In Progress
-- [tested] Add stripe_client tool (v4.259.0)
+- [tested] Add sendgrid_client tool (v4.260.0)
 
 ## Recently Done
+- [tested] Add stripe_client tool (v4.259.0)
 - [tested] Add twilio_client tool (v4.258.0)
 
 ## Recently Done
