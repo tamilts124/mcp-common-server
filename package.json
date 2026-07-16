@@ -222,7 +222,8 @@
     "test:twilio-client": "node test/sections/285-twilio-client.js",
     "test:stripe-client": "node test/sections/286-stripe-client.js",
     "test:sendgrid-client": "node test/sections/287-sendgrid-client.js",
-    "test:hubspot-client": "node test/sections/288-hubspot-client.js"
+    "test:hubspot-client": "node test/sections/288-hubspot-client.js",
+    "test:salesforce-client": "node test/sections/289-salesforce-client.js"
   },
   "engines": {
     "node": ">=18"
@@ -232,5 +233,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.262.0"
+  "version": "4.263.0"
 }

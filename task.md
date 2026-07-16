@@ -1,6 +1,9 @@
 ## Status legend
 todo / in-progress / done / tested / blocked
 
+## In Progress
+- [tested] Add salesforce_client tool (v4.263.0)
+
 ## Recently Done
 - [tested] Add hubspot_client tool (v4.262.0)
 
