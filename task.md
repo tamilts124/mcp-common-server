@@ -2,6 +2,9 @@
 todo / in-progress / done / tested / blocked
 
 ## Recently Done
+- [tested] Add airtable_client tool (v4.266.0)
+
+## Recently Done
 - [tested] Add woocommerce_client tool (v4.265.0)
 
 ## Recently Done

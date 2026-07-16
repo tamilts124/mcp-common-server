@@ -225,7 +225,8 @@
     "test:hubspot-client": "node test/sections/288-hubspot-client.js",
     "test:salesforce-client": "node test/sections/289-salesforce-client.js",
     "test:shopify-client": "node test/sections/290-shopify-client.js",
-    "test:woocommerce-client": "node test/sections/291-woocommerce-client.js"
+    "test:woocommerce-client": "node test/sections/291-woocommerce-client.js",
+    "test:airtable-client": "node test/sections/292-airtable-client.js"
   },
   "engines": {
     "node": ">=18"
@@ -235,5 +236,5 @@
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
-  "version": "4.265.0"
+  "version": "4.266.0"
 }
