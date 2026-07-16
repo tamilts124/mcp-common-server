@@ -2,6 +2,9 @@
 todo / in-progress / done / tested / blocked
 
 ## Recently Done
+- [tested] Add hubspot_client tool (v4.262.0)
+
+## Recently Done
 - [tested] Add mailchimp_client tool (v4.261.0)
 
 ## Recently Done
