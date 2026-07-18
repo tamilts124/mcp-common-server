@@ -22,11 +22,14 @@
  *   # With shell command execution enabled
  *   MCP_ALLOW_EXEC=true MCP_ROOT_DIR=D:/myproject node server-http.js
  *
- *   # Load only specific tool categories
- *   node server-http.js --tools=read_file_system,git,code_analysis_audit
+ *   # Load only specific categories (by category name)
+ *   node server-http.js --category=read_file_system,git,code_analysis_audit
  *
- *   # Load multiple categories (comma-separated, no spaces)
- *   node server-http.js --tools=read_file_system,write_edit,git,security_scanning
+ *   # Load specific individual tools (by tool name)
+ *   node server-http.js --tools=read_file,write_file,git_log,git_status
+ *
+ *   # Combine both: categories + extra individual tools
+ *   node server-http.js --category=git --tools=read_file,write_file
  *
  *   # Show help and all available categories/tools
  *   node server-http.js --help
@@ -282,7 +285,7 @@ ENVIRONMENT VARIABLES:
   MCP_IGNORE        Comma-separated names to skip in directory listings
 
 AVAILABLE CATEGORIES:
-  (use the key name with --tools=)
+  (use the key name with --category=)
 
   Key                     Description
   ─────────────────────── ────────────────────────────────────────────
@@ -301,17 +304,17 @@ EXAMPLES:
   # Start with all 484 tools (default)
   node server-http.js
 
-  # Only file system + git tools
-  node server-http.js --tools=read_file_system,git
+  # Load categories by name
+  node server-http.js --category=read_file_system,git
 
-  # File system, write, git, code analysis, and security
-  node server-http.js --tools=read_file_system,write_edit,git,code_analysis_audit,security_scanning
+  # Load specific individual tools by name
+  node server-http.js --tools=read_file,write_file,git_log,git_status,git_diff
 
-  # Browser automation only
-  node server-http.js --tools=browser_automation
+  # Mix: a whole category + a few extra individual tools
+  node server-http.js --category=git --tools=read_file,write_file
 
   # Full suite with auth + exec enabled
-  MCP_AUTH_TOKEN=secret MCP_ALLOW_EXEC=true node server-http.js --tools=read_file_system,write_edit,git,code_analysis_audit,security_scanning,browser_automation,network_messaging,data_format_utilities,execution_process,email_database
+  MCP_AUTH_TOKEN=secret MCP_ALLOW_EXEC=true node server-http.js --category=read_file_system,write_edit,git,code_analysis_audit,security_scanning,browser_automation,network_messaging,data_format_utilities,execution_process,email_database
 
 TOOL LISTING PER CATEGORY:
 `);
@@ -333,6 +336,9 @@ TOOL LISTING PER CATEGORY:
 }
 
 // ── PARSE CLI ARGS ────────────────────────────────────────────────────────────
+// --category=cat1,cat2   → load all tools from those categories
+// --tools=tool1,tool2    → load specific individual tools by name
+// Both can be combined; the union is used.
 function parseArgs() {
   const args = process.argv.slice(2);
 
@@ -340,41 +346,66 @@ function parseArgs() {
     printHelp();
   }
 
+  // ── --category= ──────────────────────────────────────────────────────────
+  const categoryArg = args.find(a => a.startsWith("--category="));
+  let selectedCategories = null;
+  if (categoryArg) {
+    const raw = categoryArg.slice("--category=".length).trim();
+    if (!raw) {
+      console.error("Error: --category= requires a value. Use --help to see categories.");
+      process.exit(1);
+    }
+    selectedCategories = raw.split(",").map(s => s.trim().toLowerCase()).filter(Boolean);
+    const unknown = selectedCategories.filter(k => !CATEGORY_TOOLS[k]);
+    if (unknown.length > 0) {
+      console.error(`Error: Unknown categor${unknown.length > 1 ? "ies" : "y"}: ${unknown.join(", ")}`);
+      console.error(`Run 'node server-http.js --help' to see valid category names.`);
+      process.exit(1);
+    }
+  }
+
+  // ── --tools= ──────────────────────────────────────────────────────────────
   const toolsArg = args.find(a => a.startsWith("--tools="));
-  if (!toolsArg) return null; // null = all categories
-
-  const raw = toolsArg.slice("--tools=".length).trim();
-  if (!raw) {
-    console.error("Error: --tools= requires a value. Use --help to see categories.");
-    process.exit(1);
+  let selectedTools = null;
+  if (toolsArg) {
+    const raw = toolsArg.slice("--tools=".length).trim();
+    if (!raw) {
+      console.error("Error: --tools= requires a value. Use --help to see tool names.");
+      process.exit(1);
+    }
+    selectedTools = raw.split(",").map(s => s.trim()).filter(Boolean);
+    // Validate against the full known tool set
+    const allKnownTools = new Set(Object.values(CATEGORY_TOOLS).flatMap(s => [...s]));
+    const unknown = selectedTools.filter(t => !allKnownTools.has(t));
+    if (unknown.length > 0) {
+      console.error(`Error: Unknown tool${unknown.length > 1 ? "s" : ""}: ${unknown.join(", ")}`);
+      console.error(`Run 'node server-http.js --help' to see all tool names.`);
+      process.exit(1);
+    }
   }
 
-  const requested = raw.split(",").map(s => s.trim().toLowerCase()).filter(Boolean);
-  const unknown   = requested.filter(k => !CATEGORY_TOOLS[k]);
-
-  if (unknown.length > 0) {
-    console.error(`Error: Unknown tool categor${unknown.length > 1 ? "ies" : "y"}: ${unknown.join(", ")}`);
-    console.error(`Run 'node server-http.js --help' to see valid categories.`);
-    process.exit(1);
-  }
-
-  return requested; // array of valid category keys
+  return { selectedCategories, selectedTools };
 }
 
 // ── RESOLVE ACTIVE TOOL SET ───────────────────────────────────────────────────
-// Returns a Set<string> of tool names that are allowed given the --tools flag.
-// If no flag → null (meaning "allow all").
-function resolveAllowedTools(selectedCategories) {
-  if (!selectedCategories) return null; // all tools allowed
+// --category expands to all tools in those categories.
+// --tools adds specific tool names.
+// Union of both; if neither → null (all tools).
+function resolveAllowedTools(selectedCategories, selectedTools) {
+  if (!selectedCategories && !selectedTools) return null; // all tools
   const allowed = new Set();
-  for (const cat of selectedCategories) {
-    for (const name of CATEGORY_TOOLS[cat]) allowed.add(name);
+  if (selectedCategories) {
+    for (const cat of selectedCategories)
+      for (const name of CATEGORY_TOOLS[cat]) allowed.add(name);
+  }
+  if (selectedTools) {
+    for (const name of selectedTools) allowed.add(name);
   }
   return allowed;
 }
 
-const selectedCategories = parseArgs();
-const ALLOWED_TOOLS      = resolveAllowedTools(selectedCategories);
+const { selectedCategories, selectedTools } = parseArgs();
+const ALLOWED_TOOLS = resolveAllowedTools(selectedCategories, selectedTools);
 
 // ── LOAD CORE MODULES ─────────────────────────────────────────────────────────
 const { PORT, AUTH_TOKEN, READ_ONLY, ALLOW_EXEC, CMD_TIMEOUT, IGNORE_PATTERNS } = require("./lib/config");
@@ -400,11 +431,9 @@ console.log(`ReadOnly  : ${READ_ONLY}`);
 console.log(`Exec      : ${ALLOW_EXEC ? `enabled (timeout: ${CMD_TIMEOUT}s)` : "disabled"}`);
 console.log(`Ignore    : ${IGNORE_PATTERNS.join(", ")}`);
 console.log(`Port      : ${PORT}`);
-if (selectedCategories) {
-  console.log(`Categories: ${selectedCategories.join(", ")}`);
-} else {
-  console.log(`Categories: all (${Object.keys(CATEGORY_TOOLS).length})`);
-}
+if (selectedCategories) console.log(`Category  : ${selectedCategories.join(", ")}`);
+else if (!selectedTools)  console.log(`Category  : all (${Object.keys(CATEGORY_TOOLS).length})`);
+if (selectedTools)        console.log(`Tools +   : ${selectedTools.join(", ")}`);
 console.log(`Tools     : ${TOOLS.length} active`);
 console.log("---");
 
@@ -557,6 +586,7 @@ const server = http.createServer((req, res) => {
       execEnabled: ALLOW_EXEC,
       roots:       Object.fromEntries(ROOTS),
       categories:  selectedCategories || Object.keys(CATEGORY_TOOLS),
+      extraTools:  selectedTools || [],
       tools:       TOOLS.map(t => t.name),
       toolCount:   TOOLS.length,
     }));
