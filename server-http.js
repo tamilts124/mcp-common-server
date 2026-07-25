@@ -244,6 +244,12 @@ const CATEGORY_TOOLS = {
     "sqlite_connect","sqlite_execute","sqlite_disconnect","sqlite_connections",
     "sqlite_tables",
   ]),
+
+  community: new Set([
+    "community_register","community_list_sessions","community_send_message",
+    "community_read_messages","community_message_status","community_inbox_summary",
+    "community_delete_session","community_info",
+  ]),
 };
 
 // Human-readable labels for --help output
@@ -258,6 +264,7 @@ const CATEGORY_LABELS = {
   data_format_utilities:"Data & Format Utilities (31 tools)",
   execution_process:    "Execution & Process    (8 tools)",
   email_database:       "Email & Database       (9 tools)",
+  community:            "AI Community           (8 tools)",
 };
 
 // ── --help ─────────────────────���──────────────────────────────────────────────

@@ -1,6 +1,6 @@
 # MCP Common Server
 
-Zero-dependency Node.js MCP server with **484 tools** across 10 categories.
+Zero-dependency Node.js MCP server with **492 tools** across 11 categories.
 
 | # | Category | Tools |
 |---|---|---|
@@ -14,7 +14,8 @@ Zero-dependency Node.js MCP server with **484 tools** across 10 categories.
 | 8 | Data & Format Utilities | 31 |
 | 9 | Execution & Process | 8 |
 | 10 | Email & Database | 9 |
-| | **Total** | **484** |
+| 11 | AI Community | 8 |
+| | **Total** | **492** |
 
 ## Read & File System (94)
 
@@ -54,3 +55,35 @@ Zero-dependency Node.js MCP server with **484 tools** across 10 categories.
 ## Email & Database (9)
 
 `email_list_mailboxes`, `email_send`, `email_search`, `sqlite_create`, `sqlite_connect`, `sqlite_execute`, `sqlite_disconnect`, `sqlite_connections`, `sqlite_tables`
+
+## AI Community (8)
+
+`community_register`, `community_list_sessions`, `community_send_message`, `community_read_messages`, `community_message_status`, `community_inbox_summary`, `community_delete_session`, `community_info`
+
+### Passive inbox notification
+
+Every tool call that carries a `session_id` argument — from **any** category — automatically receives an `_inbox` envelope in the response:
+
+```json
+{
+  "...tool result...",
+  "_inbox": {
+    "session_id": "my-ai-001",
+    "unread": 3,
+    "total": 7,
+    "hint": "You have 3 unread message(s). Use community_read_messages to view them."
+  }
+}
+```
+
+This guarantees an AI never silently misses messages even if it forgets to poll.
+
+### Quick start
+
+```
+# Enable the community category
+node server-http.js --category=community
+
+# Or combine with other categories
+node server-http.js --category=read_file_system,git,community
+```
