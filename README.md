@@ -1,12 +1,12 @@
 # MCP Common Server
 
-Zero-dependency Node.js MCP server with **493 tools** across 12 categories.
+Zero-dependency Node.js MCP server with **493 tools** across 11 categories.
 
 | # | Category | Tools |
 |---|---|---|
 | 1 | Read & File System | 94 |
 | 2 | Write & Edit | 22 |
-| 3 | Git | 42 |
+| 3 | Git | 43 |
 | 4 | Code Analysis & Audit | 79 |
 | 5 | Security Scanning | 57 |
 | 6 | Browser Automation | 71 |
@@ -15,7 +15,6 @@ Zero-dependency Node.js MCP server with **493 tools** across 12 categories.
 | 9 | Execution & Process | 8 |
 | 10 | Email & Database | 9 |
 | 11 | AI Community | 8 |
-| 12 | GitHub CLI | 1 |
 | | **Total** | **493** |
 
 ## Read & File System (94)
@@ -26,9 +25,9 @@ Zero-dependency Node.js MCP server with **493 tools** across 12 categories.
 
 `write_file`, `write_files`, `create_file`, `create_files`, `replace_in_file`, `truncate_file`, `append_file`, `base64_decode`, `delete_file`, `delete_files`, `move_file`, `copy_file`, `move_directory`, `copy_directory`, `create_directory`, `delete_directory`, `gzip_compress`, `brotli_compress`, `md_to_docx`, `md_to_pdf`, `pdf_to_docx`, `json_path_set`
 
-## Git (42)
+## Git (43)
 
-`git_write_ops`, `find_stale_branches`, `check_branch_protection_hints`, `git_hooks_audit`, `git_status`, `git_log`, `git_blame`, `git_diff`, `git_stash_list`, `git_branch_list`, `git_worktree_list`, `git_worktree_prune_candidates`, `git_commit_message_lint`, `check_gitignore_coverage`, `git_diff_summary`, `git_show`, `git_tag_list`, `git_reflog`, `git_dangling_commits`, `git_object_count`, `git_untracked_size`, `git_cherry`, `git_contributors_summary`, `find_recent_force_pushes`, `check_stash_apply_risk`, `git_blame_ownership_diff`, `git_tag_annotate_audit`, `suggest_next_version`, `check_commit_signatures`, `git_commit_frequency`, `git_orphaned_branches`, `git_submodule_status`, `git_ownership`, `git_blame_hotspots`, `git_file_age`, `find_todo_owners`, `find_stale_todos`, `generate_pr_description`, `find_large_git_objects`, `check_dotenv_files_not_gitignored`, `check_lfs_coverage`, `merge_conflict_risk`
+`git_write_ops`, `find_stale_branches`, `check_branch_protection_hints`, `git_hooks_audit`, `git_status`, `git_log`, `git_blame`, `git_diff`, `git_stash_list`, `git_branch_list`, `git_worktree_list`, `git_worktree_prune_candidates`, `git_commit_message_lint`, `check_gitignore_coverage`, `git_diff_summary`, `git_show`, `git_tag_list`, `git_reflog`, `git_dangling_commits`, `git_object_count`, `git_untracked_size`, `git_cherry`, `git_contributors_summary`, `find_recent_force_pushes`, `check_stash_apply_risk`, `git_blame_ownership_diff`, `git_tag_annotate_audit`, `suggest_next_version`, `check_commit_signatures`, `git_commit_frequency`, `git_orphaned_branches`, `git_submodule_status`, `git_ownership`, `git_blame_hotspots`, `git_file_age`, `find_todo_owners`, `find_stale_todos`, `generate_pr_description`, `find_large_git_objects`, `check_dotenv_files_not_gitignored`, `check_lfs_coverage`, `merge_conflict_risk`, `gh_client`
 
 ## Code Analysis & Audit (79)
 
@@ -60,11 +59,3 @@ Zero-dependency Node.js MCP server with **493 tools** across 12 categories.
 ## AI Community (8)
 
 `community_register`, `community_list_sessions`, `community_send_message`, `community_read_messages`, `community_message_status`, `community_inbox_summary`, `community_delete_session`, `community_info`
-
-## AI Community
-
-`community_register`, `community_list_sessions`, `community_send_message`, `community_read_messages`, `community_message_status`, `community_inbox_summary`, `community_delete_session`, `community_info`
-
-## GitHub CLI (1)
-
-`gh_client`
