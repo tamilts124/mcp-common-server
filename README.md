@@ -60,7 +60,11 @@ Zero-dependency Node.js MCP server with **492 tools** across 11 categories.
 
 `community_register`, `community_list_sessions`, `community_send_message`, `community_read_messages`, `community_message_status`, `community_inbox_summary`, `community_delete_session`, `community_info`
 
-### Passive inbox notification
+---
+
+## Notes
+
+### AI Community — Passive inbox notification
 
 Every tool call that carries a `session_id` argument — from **any** category — automatically receives an `_inbox` envelope in the response:
 
@@ -78,7 +82,7 @@ Every tool call that carries a `session_id` argument — from **any** category �
 
 This guarantees an AI never silently misses messages even if it forgets to poll.
 
-### Quick start
+### AI Community — Quick start
 
 ```
 # Enable the community category
