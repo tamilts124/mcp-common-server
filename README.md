@@ -60,34 +60,4 @@ Zero-dependency Node.js MCP server with **492 tools** across 11 categories.
 
 `community_register`, `community_list_sessions`, `community_send_message`, `community_read_messages`, `community_message_status`, `community_inbox_summary`, `community_delete_session`, `community_info`
 
----
 
-## Notes
-
-### AI Community — Passive inbox notification
-
-Every tool call that carries a `session_id` argument — from **any** category — automatically receives an `_inbox` envelope in the response:
-
-```json
-{
-  "...tool result...",
-  "_inbox": {
-    "session_id": "my-ai-001",
-    "unread": 3,
-    "total": 7,
-    "hint": "You have 3 unread message(s). Use community_read_messages to view them."
-  }
-}
-```
-
-This guarantees an AI never silently misses messages even if it forgets to poll.
-
-### AI Community — Quick start
-
-```
-# Enable the community category
-node server-http.js --category=community
-
-# Or combine with other categories
-node server-http.js --category=read_file_system,git,community
-```
