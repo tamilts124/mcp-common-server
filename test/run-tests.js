@@ -335,6 +335,8 @@ require("./sections/146-find-long-functions");
   await require("./sections/184-pdf-rich-extract");
   // Section 185: send_process_input — async (real process I/O via stdin pipe)
   await require("./sections/185-send-process-input");
+  // Section 295: gh_client — sync section (spawnSync, no real network)
+  require("./sections/295-gh-client");
 
   console.log(`\n${counters.pass} passed, ${counters.fail} failed\n`);
   cleanupDir(TMP);
