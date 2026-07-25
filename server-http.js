@@ -64,7 +64,7 @@ const crypto = require("crypto");
 
 // ── TOOL CATEGORY MAP ─────────────────────────────────────────────────────────
 // Maps CLI flag names → canonical category keys → tool name sets
-// Derived directly from README.md categories (484 tools across 10 categories)
+// Derived directly from README.md categories (485 tools across 10 categories)
 
 const CATEGORY_TOOLS = {
   read_file_system: new Set([
@@ -112,6 +112,7 @@ const CATEGORY_TOOLS = {
     "git_blame_hotspots","git_file_age","find_todo_owners","find_stale_todos",
     "generate_pr_description","find_large_git_objects",
     "check_dotenv_files_not_gitignored","check_lfs_coverage","merge_conflict_risk",
+    "gh_client",
   ]),
 
   code_analysis_audit: new Set([
@@ -256,7 +257,7 @@ const CATEGORY_TOOLS = {
 const CATEGORY_LABELS = {
   read_file_system:     "Read & File System    (94 tools)",
   write_edit:           "Write & Edit          (22 tools)",
-  git:                  "Git                   (42 tools)",
+  git:                  "Git                   (43 tools)",
   code_analysis_audit:  "Code Analysis & Audit (79 tools)",
   security_scanning:    "Security Scanning     (57 tools)",
   browser_automation:   "Browser Automation    (71 tools)",
@@ -271,7 +272,7 @@ const CATEGORY_LABELS = {
 function printHelp() {
   console.log(`
 MCP Common Server v3.1.0 — HTTP + SSE Transport
-Zero-dependency Node.js MCP server with 484 tools across 10 categories.
+Zero-dependency Node.js MCP server with 485 tools across 10 categories.
 
 USAGE:
   node server-http.js [--tools=<categories>] [--help]
@@ -308,7 +309,7 @@ AVAILABLE CATEGORIES:
   email_database          ${CATEGORY_LABELS.email_database}
 
 EXAMPLES:
-  # Start with all 484 tools (default)
+  # Start with all 485 tools (default)
   node server-http.js
 
   # Load categories by name
