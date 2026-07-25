@@ -3,7 +3,7 @@
  * Section 293 — community_* tools tests
  *
  * A: community_register           (15 tests)
- * B: community_list_sessions      (12 tests)
+ * B: community_list_sessions      (17 tests)
  * C: community_send_message       (14 tests)
  * D: community_read_messages      (18 tests)
  * E: community_message_status     (10 tests)
@@ -14,7 +14,7 @@
  * J: security / guards            (14 tests)
  * K: concurrency / stress         (8  tests)
  *
- * Total: 131
+ * Total: 136
  */
 
 const assert  = require("assert");
@@ -240,6 +240,49 @@ test("B12 list shows description", () => {
   communityRegister({ session_id: "ai-desc", name: "D", description: "I audit code" });
   const r = communityListSessions({});
   assert.strictEqual(r.sessions[0].description, "I audit code");
+});
+
+test("B13 list includes status field", () => {
+  reset();
+  communityRegister({ session_id: "ai-status" });
+  const r = communityListSessions({});
+  assert.ok(typeof r.sessions[0].status === "string");
+});
+
+test("B14 status is 'active' immediately after register", () => {
+  reset();
+  communityRegister({ session_id: "ai-fresh" });
+  const r = communityListSessions({});
+  assert.strictEqual(r.sessions[0].status, "active");
+});
+
+test("B15 list includes unread_count field", () => {
+  reset();
+  communityRegister({ session_id: "ai-u1" });
+  communityRegister({ session_id: "ai-u2" });
+  const r = communityListSessions({});
+  assert.ok(r.sessions.every(s => typeof s.unread_count === "number"));
+});
+
+test("B16 unread_count increments when message sent", () => {
+  reset();
+  communityRegister({ session_id: "ai-sender" });
+  communityRegister({ session_id: "ai-recv" });
+  communitySendMessage({ from_session: "ai-sender", to_session: "ai-recv", body: "ping" });
+  const r = communityListSessions({});
+  const recv = r.sessions.find(s => s.session_id === "ai-recv");
+  assert.strictEqual(recv.unread_count, 1);
+});
+
+test("B17 unread_count drops to 0 after reading", () => {
+  reset();
+  communityRegister({ session_id: "ai-s" });
+  communityRegister({ session_id: "ai-r" });
+  communitySendMessage({ from_session: "ai-s", to_session: "ai-r", body: "hello" });
+  communityReadMessages({ session_id: "ai-r" });
+  const r = communityListSessions({});
+  const recv = r.sessions.find(s => s.session_id === "ai-r");
+  assert.strictEqual(recv.unread_count, 0);
 });
 
 // ── C: community_send_message ─────────────────────────────────────────────────
