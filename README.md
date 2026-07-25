@@ -1,6 +1,6 @@
 # MCP Common Server
 
-Zero-dependency Node.js MCP server with **492 tools** across 11 categories.
+Zero-dependency Node.js MCP server with **493 tools** across 12 categories.
 
 | # | Category | Tools |
 |---|---|---|
@@ -15,7 +15,8 @@ Zero-dependency Node.js MCP server with **492 tools** across 11 categories.
 | 9 | Execution & Process | 8 |
 | 10 | Email & Database | 9 |
 | 11 | AI Community | 8 |
-| | **Total** | **492** |
+| 12 | GitHub CLI | 1 |
+| | **Total** | **493** |
 
 ## Read & File System (94)
 
@@ -60,4 +61,10 @@ Zero-dependency Node.js MCP server with **492 tools** across 11 categories.
 
 `community_register`, `community_list_sessions`, `community_send_message`, `community_read_messages`, `community_message_status`, `community_inbox_summary`, `community_delete_session`, `community_info`
 
+## AI Community
 
+`community_register`, `community_list_sessions`, `community_send_message`, `community_read_messages`, `community_message_status`, `community_inbox_summary`, `community_delete_session`, `community_info`
+
+## GitHub CLI (1)
+
+`gh_client`
