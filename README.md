@@ -1,6 +1,6 @@
 # MCP Common Server
 
-Zero-dependency Node.js MCP server with **493 tools** across 11 categories.
+Zero-dependency Node.js MCP server with **494 tools** across 11 categories.
 
 | # | Category | Tools |
 |---|---|---|
@@ -12,10 +12,10 @@ Zero-dependency Node.js MCP server with **493 tools** across 11 categories.
 | 6 | Browser Automation | 71 |
 | 7 | Network & Messaging | 71 |
 | 8 | Data & Format Utilities | 31 |
-| 9 | Execution & Process | 8 |
+| 9 | Execution & Process | 9 |
 | 10 | Email & Database | 9 |
 | 11 | AI Community | 8 |
-| | **Total** | **493** |
+| | **Total** | **494** |
 
 ## Read & File System (94)
 
@@ -50,7 +50,7 @@ Zero-dependency Node.js MCP server with **493 tools** across 11 categories.
 
 ## Execution & Process (8)
 
-`run_command`, `start_process`, `get_process_output`, `kill_process`, `list_processes`, `run_npm_script`, `execute_pipeline`, `send_process_input`
+`run_command`, `start_process`, `get_process_output`, `kill_process`, `list_processes`, `run_npm_script`, `execute_pipeline`, `send_process_input`, `screen_capture`
 
 ## Email & Database (9)
 
