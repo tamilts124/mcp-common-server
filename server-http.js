@@ -94,9 +94,9 @@ const CATEGORY_TOOLS = {
     "write_file","write_files","create_file","create_files","replace_in_file",
     "truncate_file","append_file","base64_decode","delete_file","delete_files",
     "move_file","copy_file","move_directory","copy_directory","create_directory",
-    \"screen_capture\",\"run_command\",\"start_process\",\"get_process_output\",\"kill_process\",
-    \"list_processes\",\"run_npm_script\",\"execute_pipeline\",\"send_process_input\",
-    \"screen_capture\",
+    "screen_capture","run_command","start_process","get_process_output","kill_process",
+    "list_processes","run_npm_script","execute_pipeline","send_process_input",
+    "screen_capture",
 
     "pdf_to_docx","json_path_set",
   ]),
