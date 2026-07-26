@@ -48,9 +48,14 @@ Zero-dependency Node.js MCP server with **494 tools** across 11 categories.
 
 `json_schema_validate`, `env_diff`, `zip_directory`, `create_tar`, `read_archive`, `query_json`, `query_data`, `diff_files`, `query_path`, `json_patch_generate`, `json_diff`, `json_format`, `json_patch`, `apply_patch`, `unzip_archive`, `extract_tar`, `yaml_patch`, `yaml_merge`, `json_merge`, `convert_data`, `csv_convert`, `gzip_decompress`, `brotli_decompress`, `csv_diff`, `json_schema_generate`, `csv_query`, `json_unflatten`, `template_render`, `table_ops`, `graphql_query`, `jsonl_ops`
 
-## Execution & Process (8)
+## Execution & Process (9)
 
 `run_command`, `start_process`, `get_process_output`, `kill_process`, `list_processes`, `run_npm_script`, `execute_pipeline`, `send_process_input`, `screen_capture`
+
+> **`screen_capture` platform notes**
+> - **Capture** — Windows (PowerShell), macOS (`screencapture`), Linux (`scrot` / `import` / `gnome-screenshot`)
+> - **Mouse move / click** — Windows (user32.dll), macOS (`cliclick` — `brew install cliclick`), Linux (`xdotool`)
+> - **Send keys** — Windows (SendKeys), macOS (`osascript` / System Events), Linux (`xdotool`)
 
 ## Email & Database (9)
 
