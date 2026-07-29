@@ -158,9 +158,17 @@ function pixelAt(pngBuf, x, y) {
 
 // ── temp dir for output_path tests ───────────────────────────────────────────
 
-// Must stay inside the project root so resolveClientPath allows it
-const TMP_DIR = path.join(__dirname, "..", "..", "tmp", `test-183-image-${process.pid}`);
-fs.mkdirSync(TMP_DIR, { recursive: true });
+// Use os.tmpdir() so TMP_DIR is always inside the MCP_ROOTS sandbox.
+// We add os.tmpdir() to MCP_ROOTS (if not already covered) and re-call
+// buildRoots() so resolveClientPath() allows paths under os.tmpdir().
+const TMP_DIR = fs.mkdtempSync(path.join(os.tmpdir(), `test-183-image-`));
+const _tmpBase = os.tmpdir();
+const _existingRoots = (process.env.MCP_ROOTS || "").split(",").map(s => s.trim()).filter(Boolean);
+const _alreadyCovered = _existingRoots.some(r => TMP_DIR.startsWith(r === "." ? process.cwd() : r));
+if (!_alreadyCovered) {
+  process.env.MCP_ROOTS = [..._existingRoots, _tmpBase].join(",");
+  buildRoots(); // re-build to include os.tmpdir() as an allowed root
+}
 
 function tmpFile(name) { return path.join(TMP_DIR, name); }
 
