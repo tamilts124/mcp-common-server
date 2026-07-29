@@ -11,8 +11,11 @@ _update_readme.js
 # Standalone test scripts (test sections live under test/sections/)
 test/find-missing-remove-event-listener-tests.js
 
-# Backup files
+# Backup files (replace_in_file creates .bak, .bak2, .bak3, etc.)
 *.bak
+*.bak[0-9]
+*.bak[0-9][0-9]
+
 
 # Environment secrets
 .env
