@@ -52,11 +52,6 @@ Zero-dependency Node.js MCP server with **494 tools** across 11 categories.
 
 `run_command`, `start_process`, `get_process_output`, `kill_process`, `list_processes`, `run_npm_script`, `execute_pipeline`, `send_process_input`, `screen_capture`
 
-> **`screen_capture` platform notes**
-> - **Capture** — Windows (PowerShell/Win32), macOS (`screencapture`), Linux (`scrot` / `import` / `gnome-screenshot`)
-> - **Mouse move / click** — Windows only (Win32 / user32.dll)
-> - **Send keys** — Windows only (Win32 SendKeys syntax)
-
 ## Email & Database (9)
 
 `email_list_mailboxes`, `email_send`, `email_search`, `sqlite_create`, `sqlite_connect`, `sqlite_execute`, `sqlite_disconnect`, `sqlite_connections`, `sqlite_tables`
