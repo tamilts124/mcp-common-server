@@ -575,7 +575,8 @@ const server = http.createServer((req, res) => {
   }
 
   // ── POST Handlers (Streamable HTTP & Legacy SSE) ──────────────────────────
-  if (req.method === "POST" && ["/message", "/sse", "/", "/mcp"].includes(url.pathname)) {
+  const cleanPath = url.pathname.replace(/\/+$/, "") || "/";
+  if (req.method === "POST" && ["/message", "/sse", "/", "/mcp"].includes(cleanPath)) {
     const sessionId = url.searchParams.get("sessionId");
     const session   = sessionId ? sessions.get(sessionId) : null;
     if (session) session.lastSeen = Date.now();
@@ -651,7 +652,7 @@ const server = http.createServer((req, res) => {
 
 server.listen(PORT, () => {
   console.log(`✅ Server running on http://localhost:${PORT}`);
-  console.log(`   Streamable HTTP : http://localhost:${PORT}/sse (or /)`);
+  console.log(`   Streamable HTTP : http://localhost:${PORT}/ (or /sse)`);
   console.log(`   Legacy SSE      : http://localhost:${PORT}/sse`);
   console.log(`   Health check    : http://localhost:${PORT}/`);
   console.log(`\nNow run: ngrok http ${PORT} (or serveo / tunnelmole)`);
