@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * MCP File Server — HTTP + SSE Transport  v3.1.0
+ * MCP File Server — Streamable HTTP + SSE Transport  v3.2.0
  * For Claude Web (claude.ai) via ngrok or any public HTTPS URL
  * Zero npm dependencies — pure Node.js built-ins only
  *
@@ -274,7 +274,7 @@ const CATEGORY_LABELS = {
 // ── --help ─────────────────────���──────────────────────────────────────────────
 function printHelp() {
   console.log(`
-MCP Common Server v3.1.0 — HTTP + SSE Transport
+MCP Common Server v3.2.0 — Streamable HTTP + SSE Transport
 Zero-dependency Node.js MCP server with 485 tools across 10 categories.
 
 USAGE:
@@ -434,7 +434,7 @@ const TOOLS = ALLOWED_TOOLS
   : ALL_TOOLS;
 
 // ── STARTUP BANNER ─────────────────────────────────────────────────────────────
-console.log(`MCP Common Server (HTTP+SSE) v3.1.0`);
+console.log(`MCP Common Server (Streamable HTTP + SSE) v3.2.0`);
 console.log(`Roots:`);
 for (const [alias, abs] of ROOTS) console.log(`  [${alias}] ${abs}`);
 console.log(`Auth      : ${AUTH_TOKEN ? "enabled (token set)" : "disabled (open)"}`);
@@ -509,78 +509,120 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // ── POST /message ──────────────────────────────────────────────────────────
-  if (req.method === "POST" && url.pathname === "/message") {
+  // ── JSON-RPC 2.0 Dispatcher (Shared by Streamable HTTP and Legacy SSE) ───
+  async function processJsonRpc(msg) {
+    const { id, method, params } = msg || {};
+
+    if (method === "initialize") {
+      return {
+        jsonrpc: "2.0",
+        id,
+        result: {
+          protocolVersion: "2024-11-05",
+          capabilities: { tools: {} },
+          serverInfo: { name: "mcp-common-server", version: "3.2.0" },
+        }
+      };
+    }
+
+    if (method === "notifications/initialized") return null;
+    if (method === "ping") return { jsonrpc: "2.0", id, result: {} };
+
+    if (method === "tools/list") {
+      return { jsonrpc: "2.0", id, result: { tools: TOOLS } };
+    }
+
+    if (method === "tools/call") {
+      const { name, arguments: args } = params || {};
+      try {
+        const result = await executeTool(name, args || {});
+        const label = args?.path || args?.command || args?.id ||
+          (args?.files?.length ? `(${args.files.length} files)` : "") ||
+          (args?.steps?.length ? `(${args.steps.length} steps)` : "") || "";
+        const { text, truncated, originalBytes } = serializeResult(result);
+        if (truncated) {
+          console.error(`[TOOL] ${name} ${label} — response truncated (${originalBytes} bytes > 3.5 MB limit)`);
+        } else {
+          console.log(`[TOOL] ${name}`, label);
+        }
+        return {
+          jsonrpc: "2.0",
+          id,
+          result: {
+            content: [{ type: "text", text }],
+          }
+        };
+      } catch (e) {
+        const code = getErrorCode(e);
+        const detail = formatError(e, name);
+        console.error(`[TOOL ERROR] ${detail}`);
+        return {
+          jsonrpc: "2.0",
+          id,
+          error: { code, message: e.message, data: { tool: name, stack: e.stack || null } },
+          result: {
+            content: [{ type: "text", text: detail }],
+            isError: true,
+          },
+        };
+      }
+    }
+
+    if (id !== undefined) {
+      return { jsonrpc: "2.0", id, error: { code: -32601, message: "Method not found" } };
+    }
+    return null;
+  }
+
+  // ── POST Handlers (Streamable HTTP & Legacy SSE) ──────────────────────────
+  if (req.method === "POST" && ["/message", "/sse", "/", "/mcp"].includes(url.pathname)) {
     const sessionId = url.searchParams.get("sessionId");
-    const session   = sessions.get(sessionId);
+    const session   = sessionId ? sessions.get(sessionId) : null;
     if (session) session.lastSeen = Date.now();
 
     let body = "";
     req.on("data", d => body += d);
-    req.on("end", () => {
+    req.on("end", async () => {
       let msg;
-      try { msg = JSON.parse(body); } catch {
-        res.writeHead(400); res.end("Bad JSON"); return;
-      }
-
-      res.writeHead(202, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ ok: true }));
-
-      const respond = (payload) => {
-        if (!session) return;
-        session.res.write(`event: message\ndata: ${JSON.stringify(payload)}\n\n`);
-      };
-
-      const { id, method, params } = msg;
-
-      if (method === "initialize") {
-        return respond({ jsonrpc: "2.0", id, result: {
-          protocolVersion: "2024-11-05",
-          capabilities: { tools: {} },
-          serverInfo: { name: "mcp-common-server", version: "3.1.0" },
-        }});
-      }
-      if (method === "notifications/initialized") return;
-      if (method === "ping") return respond({ jsonrpc: "2.0", id, result: {} });
-
-      if (method === "tools/list")
-        return respond({ jsonrpc: "2.0", id, result: { tools: TOOLS } });
-
-      if (method === "tools/call") {
-        const { name, arguments: args } = params;
-        Promise.resolve()
-          .then(() => executeTool(name, args || {}))
-          .then((result) => {
-            const label = args?.path || args?.command || args?.id ||
-              (args?.files?.length ? `(${args.files.length} files)` : "") ||
-              (args?.steps?.length ? `(${args.steps.length} steps)` : "") || "";
-            const { text, truncated, originalBytes } = serializeResult(result);
-            if (truncated) {
-              console.error(`[TOOL] ${name} ${label} — response truncated (${originalBytes} bytes > 3.5 MB limit)`);
-            } else {
-              console.log(`[TOOL] ${name}`, label);
-            }
-            respond({ jsonrpc: "2.0", id, result: {
-              content: [{ type: "text", text }],
-            }});
-          })
-          .catch((e) => {
-            const code = getErrorCode(e);
-            const detail = formatError(e, name);
-            console.error(`[TOOL ERROR] ${detail}`);
-            respond({ jsonrpc: "2.0", id,
-              error: { code, message: e.message, data: { tool: name, stack: e.stack || null } },
-              result: {
-                content: [{ type: "text", text: detail }],
-                isError: true,
-              },
-            });
-          });
+      try {
+        msg = JSON.parse(body);
+      } catch {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ jsonrpc: "2.0", error: { code: -32700, message: "Bad JSON" } }));
         return;
       }
 
-      if (id !== undefined)
-        respond({ jsonrpc: "2.0", id, error: { code: -32601, message: "Method not found" } });
+      // Legacy SSE Transport: if client has an active SSE stream, acknowledge and stream response
+      if (session) {
+        res.writeHead(202, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ ok: true }));
+
+        const reply = await processJsonRpc(msg);
+        if (reply) {
+          try {
+            session.res.write(`event: message\ndata: ${JSON.stringify(reply)}\n\n`);
+          } catch (err) {
+            console.error(`[SSE ERROR] Failed writing to session ${sessionId}:`, err);
+          }
+        }
+        return;
+      }
+
+      // Modern Streamable HTTP Transport: respond directly in the HTTP response body
+      const reply = await processJsonRpc(msg);
+      const incomingMcpSessionId = req.headers["mcp-session-id"] || crypto.randomUUID();
+      res.setHeader("mcp-session-id", incomingMcpSessionId);
+      res.setHeader("Access-Control-Expose-Headers", "mcp-session-id");
+
+      if (!reply) {
+        // Notification (e.g. notifications/initialized) -> 200 { ok: true }
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ ok: true }));
+        return;
+      }
+
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify(reply));
     });
     return;
   }
@@ -591,7 +633,7 @@ const server = http.createServer((req, res) => {
     res.end(JSON.stringify({
       status:      "ok",
       server:      "mcp-common-server",
-      version:     "3.1.0",
+      version:     "3.2.0",
       readOnly:    READ_ONLY,
       auth:        !!AUTH_TOKEN,
       execEnabled: ALLOW_EXEC,
@@ -609,8 +651,9 @@ const server = http.createServer((req, res) => {
 
 server.listen(PORT, () => {
   console.log(`✅ Server running on http://localhost:${PORT}`);
-  console.log(`   SSE endpoint : http://localhost:${PORT}/sse`);
-  console.log(`   Health check : http://localhost:${PORT}/`);
-  console.log(`\nNow run: ngrok http ${PORT}`);
-  console.log(`Then add https://xxxx.ngrok-free.app/sse to Claude Web integrations\n`);
+  console.log(`   Streamable HTTP : http://localhost:${PORT}/sse (or /)`);
+  console.log(`   Legacy SSE      : http://localhost:${PORT}/sse`);
+  console.log(`   Health check    : http://localhost:${PORT}/`);
+  console.log(`\nNow run: ngrok http ${PORT} (or serveo / tunnelmole)`);
+  console.log(`Then add the HTTPS URL to Claude Web integrations\n`);
 });
